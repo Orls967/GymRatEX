@@ -14,7 +14,12 @@ interface Props<T extends string> {
 /** Kontrol pilihan tunggal bergaya tombol berjajar (radiogroup yang bisa dinavigasi keyboard). */
 export function Segmented<T extends string>({ label, value, options, onChange, testId }: Props<T>) {
   return (
-    <div role="radiogroup" aria-label={label} className="flex border border-line" data-testid={testId}>
+    <div
+      role="radiogroup"
+      aria-label={label}
+      className="flex border border-line"
+      data-testid={testId}
+    >
       {options.map((o, i) => (
         <button
           key={o.value}
@@ -29,8 +34,9 @@ export function Segmented<T extends string>({ label, value, options, onChange, t
               const d = e.key === 'ArrowRight' ? 1 : -1;
               const next = options[(i + d + options.length) % options.length];
               if (next) onChange(next.value);
-              const sib = (e.currentTarget.parentElement?.children[(i + d + options.length) % options.length] ??
-                null) as HTMLElement | null;
+              const sib = (e.currentTarget.parentElement?.children[
+                (i + d + options.length) % options.length
+              ] ?? null) as HTMLElement | null;
               sib?.focus();
             }
           }}

@@ -11,7 +11,10 @@ describe('auto-link glosarium', () => {
 
   it('menautkan istilah dengan batas kata dan frasa terpanjang', () => {
     const c = splitTerms('Hip hinge memakai fleksi pinggul.', m);
-    expect(c.filter((x) => x.kind === 'term').map((x) => x.kind === 'term' && x.id)).toEqual(['hip-hinge', 'flexion']);
+    expect(c.filter((x) => x.kind === 'term').map((x) => x.kind === 'term' && x.id)).toEqual([
+      'hip-hinge',
+      'flexion',
+    ]);
   });
 
   it('tidak menautkan potongan kata (dorsofleksi ≠ fleksi)', () => {
@@ -26,8 +29,13 @@ describe('auto-link glosarium', () => {
 
   it('bekerja di kedua bahasa dengan data glosarium nyata', () => {
     for (const lang of ['id', 'en'] as const) {
-      const matcher = buildMatcher(GLOSSARY.map((g) => ({ id: g.id, phrases: [g.term[lang], ...g.aliases[lang]] })));
-      const text = lang === 'id' ? 'Gunakan bracing dan jaga punggung netral.' : 'Use bracing and keep a neutral spine.';
+      const matcher = buildMatcher(
+        GLOSSARY.map((g) => ({ id: g.id, phrases: [g.term[lang], ...g.aliases[lang]] })),
+      );
+      const text =
+        lang === 'id'
+          ? 'Gunakan bracing dan jaga punggung netral.'
+          : 'Use bracing and keep a neutral spine.';
       const ids = splitTerms(text, matcher).flatMap((c) => (c.kind === 'term' ? [c.id] : []));
       expect(ids).toContain('bracing');
       expect(ids).toContain('neutral-spine');

@@ -19,16 +19,30 @@ interface Props {
 }
 
 /** Kamera orbit dengan transisi mulus ke fokus baru (dimatikan bila prefers-reduced-motion). */
-export function CameraRig({ target, direction, distance, nonce, minDistance = 0.6, maxDistance = 6, enablePan = false }: Props) {
+export function CameraRig({
+  target,
+  direction,
+  distance,
+  nonce,
+  minDistance = 0.6,
+  maxDistance = 6,
+  enablePan = false,
+}: Props) {
   const controls = useRef<OrbitControlsImpl | null>(null);
   const camera = useThree((s) => s.camera);
   const invalidate = useThree((s) => s.invalidate);
   const reduced = useReducedMotion();
   const goal = useRef({ target: new Vector3(...target), pos: new Vector3(), active: true });
 
+  // kunci nilai (bukan identitas array) agar animasi hanya diulang saat fokus benar-benar berubah
+  const key = `${target.join(',')}|${direction.join(',')}|${distance}|${nonce ?? ''}|${reduced}`;
+  const latest = useRef({ target, direction, distance });
+  latest.current = { target, direction, distance };
+
   useEffect(() => {
-    const t = new Vector3(...target);
-    const pos = new Vector3(...direction).normalize().multiplyScalar(distance).add(t);
+    const { target: tg, direction: dir, distance: dist } = latest.current;
+    const t = new Vector3(...tg);
+    const pos = new Vector3(...dir).normalize().multiplyScalar(dist).add(t);
     goal.current = { target: t, pos, active: true };
     if (reduced && controls.current) {
       controls.current.target.copy(t);
@@ -37,8 +51,7 @@ export function CameraRig({ target, direction, distance, nonce, minDistance = 0.
       goal.current.active = false;
     }
     invalidate();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [target[0], target[1], target[2], direction[0], direction[1], direction[2], distance, nonce, reduced]);
+  }, [key, reduced, camera, invalidate]);
 
   useFrame((_, dt) => {
     const c = controls.current;
@@ -48,7 +61,8 @@ export function CameraRig({ target, direction, distance, nonce, minDistance = 0.
     c.target.lerp(g.target, k);
     camera.position.lerp(g.pos, k);
     c.update();
-    if (c.target.distanceTo(g.target) < 0.002 && camera.position.distanceTo(g.pos) < 0.004) g.active = false;
+    if (c.target.distanceTo(g.target) < 0.002 && camera.position.distanceTo(g.pos) < 0.004)
+      g.active = false;
     invalidate();
   });
 

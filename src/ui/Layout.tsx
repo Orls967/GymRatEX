@@ -46,7 +46,9 @@ export function Layout() {
                     to={item.path}
                     className={({ isActive }) =>
                       `block px-2.5 py-1.5 font-display text-[1.02rem] font-semibold uppercase tracking-wide ${
-                        isActive ? 'text-ink shadow-[inset_0_-2px_0_var(--c-accent)]' : 'text-ink-muted hover:text-ink'
+                        isActive
+                          ? 'text-ink shadow-[inset_0_-2px_0_var(--c-accent)]'
+                          : 'text-ink-muted hover:text-ink'
                       }`
                     }
                   >

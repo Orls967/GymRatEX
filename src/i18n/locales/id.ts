@@ -44,7 +44,8 @@ const id = {
     start: 'Mulai dari Peta Otot',
     modules: 'Modul',
     flow: 'Alur belajar',
-    flowText: 'Otot → latihan yang melatihnya → peragaan di Studio Form → cek form Anda sendiri lewat kamera.',
+    flowText:
+      'Otot → latihan yang melatihnya → peragaan di Studio Form → cek form Anda sendiri lewat kamera.',
     desc: {
       muscles: 'Klik otot pada tubuh 3D. Kupas lapisan dari superfisial hingga dalam.',
       exercises: '{{count}} latihan. Lihat otot utama, sinergis, dan stabilisator menyala.',
@@ -141,7 +142,8 @@ const id = {
     pause: 'Jeda',
     phase: 'Fase',
     chartTitle: 'Momen sendi (estimasi)',
-    chartNote: 'Model statis bidang sagital: beban × lengan momen horizontal. Mengabaikan percepatan, gaya geser, dan otot ko-kontraksi. Estimasi edukatif, bukan pengukuran.',
+    chartNote:
+      'Model statis bidang sagital: beban × lengan momen horizontal. Mengabaikan percepatan, gaya geser, dan otot ko-kontraksi. Estimasi edukatif, bukan pengukuran.',
     knee: 'Lutut',
     hip: 'Pinggul',
     lumbar: 'Punggung bawah',
@@ -179,14 +181,21 @@ const id = {
     momentCompare: 'Momen punggung bawah di posisi bawah (estimasi)',
     pick: 'Pilih kesalahan',
     views: { front: 'Tampak depan', side: 'Tampak samping', top: 'Tampak atas' },
-    zoneNames: { knee: 'Lutut', lumbar: 'Punggung bawah', shoulder: 'Bahu', elbow: 'Siku', hip: 'Pinggul' },
+    zoneNames: {
+      knee: 'Lutut',
+      lumbar: 'Punggung bawah',
+      shoulder: 'Bahu',
+      elbow: 'Siku',
+      hip: 'Pinggul',
+    },
     severity: 'Penekanan',
   },
   webcam: {
     title: 'Cek Form Webcam',
     lead: 'Deteksi pose berjalan di perangkat Anda. Sudut sendi dihitung per frame.',
     privacyTitle: 'Privasi',
-    privacy: 'Video tidak pernah dikirim ke mana pun. Model pose dan WebAssembly dimuat dari situs ini dan berjalan sepenuhnya di browser Anda. Tidak ada rekaman yang disimpan.',
+    privacy:
+      'Video tidak pernah dikirim ke mana pun. Model pose dan WebAssembly dimuat dari situs ini dan berjalan sepenuhnya di browser Anda. Tidak ada rekaman yang disimpan.',
     start: 'Nyalakan kamera',
     stop: 'Matikan kamera',
     loadingModel: 'Memuat model pose…',
@@ -211,7 +220,8 @@ const id = {
       fullRange: 'Gunakan rentang gerak penuh.',
       swing: 'Badan berayun — kunci siku di samping tubuh.',
     },
-    limitation: 'Estimasi 2D dari satu kamera: sudut bisa meleset bila tubuh tidak tegak lurus kamera.',
+    limitation:
+      'Estimasi 2D dari satu kamera: sudut bisa meleset bila tubuh tidak tegak lurus kamera.',
   },
   glossary: {
     title: 'Glosarium',
@@ -251,7 +261,8 @@ const id = {
   },
   errors: {
     webglTitle: '3D tidak tersedia',
-    webglText: 'Perangkat atau browser ini tidak dapat menjalankan WebGL. Konten teks tetap bisa dibaca.',
+    webglText:
+      'Perangkat atau browser ini tidak dapat menjalankan WebGL. Konten teks tetap bisa dibaca.',
     genericTitle: 'Terjadi kesalahan',
     genericText: 'Bagian ini gagal dimuat. Coba muat ulang halaman.',
     retry: 'Coba lagi',

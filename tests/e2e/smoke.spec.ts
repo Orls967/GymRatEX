@@ -41,7 +41,15 @@ test.describe('smoke', () => {
   });
 
   test('semua modul bisa dibuka lewat routing hash', async ({ page }) => {
-    for (const path of ['otot', 'latihan', 'studio', 'benar-salah', 'webcam', 'glosarium', 'tentang']) {
+    for (const path of [
+      'otot',
+      'latihan',
+      'studio',
+      'benar-salah',
+      'webcam',
+      'glosarium',
+      'tentang',
+    ]) {
       await page.goto(`./#/${path}`);
       await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
     }
@@ -83,7 +91,11 @@ test.describe('pustaka latihan', () => {
     expect(all).toBeGreaterThan(28);
     await page.getByTestId('filter-muscle').selectOption('triceps-brachii');
     await expect.poll(() => items.count()).toBeLessThan(all);
-    await page.getByTestId('exercise-list').getByRole('link', { name: /Bench press/i }).first().click();
+    await page
+      .getByTestId('exercise-list')
+      .getByRole('link', { name: /Bench press/i })
+      .first()
+      .click();
     await expect(page.getByTestId('exercise-detail')).toContainText('Triceps brachii');
   });
 });
@@ -101,8 +113,13 @@ test.describe('studio form', () => {
 
   test('ganti pola gerak ke deadlift', async ({ page }) => {
     await page.goto('./#/studio');
-    await page.getByTestId('pattern-toggle').getByRole('radio', { name: /Deadlift/ }).click();
-    await expect(page.getByTestId('pattern-toggle').getByRole('radio', { name: /Deadlift/ })).toHaveAttribute('aria-checked', 'true');
+    await page
+      .getByTestId('pattern-toggle')
+      .getByRole('radio', { name: /Deadlift/ })
+      .click();
+    await expect(
+      page.getByTestId('pattern-toggle').getByRole('radio', { name: /Deadlift/ }),
+    ).toHaveAttribute('aria-checked', 'true');
   });
 });
 
@@ -114,4 +131,49 @@ test.describe('benar vs salah', () => {
     await expect(page.getByTestId('error-detail')).toContainText(/Punggung membulat/);
     await expect(page.getByTestId('three-canvas').locator('canvas')).toBeVisible();
   });
+});
+
+test.describe('glosarium & tentang', () => {
+  test('glosarium bisa disaring dan auto-link membuka istilah', async ({ page }) => {
+    await page.goto('./#/glosarium');
+    await page.getByTestId('glossary-filter').fill('valgus');
+    await expect(page.getByTestId('glossary-list').locator('dt')).toHaveCount(1);
+    await page.goto('./#/benar-salah/rounded-back');
+    await page
+      .getByTestId('error-detail')
+      .getByRole('link', { name: /lengan momen/i })
+      .click();
+    await expect(page).toHaveURL(/#\/glosarium\/moment-arm/);
+  });
+
+  test('halaman Tentang memuat disclaimer di kedua bahasa', async ({ page }) => {
+    await page.goto('./#/tentang');
+    await expect(page.getByTestId('disclaimer')).toContainText('bukan pengganti');
+    await page.getByTestId('menu-toggle').click();
+    await page.locator('#mobile-menu').getByTestId('lang-en').click();
+    await expect(page.getByTestId('disclaimer')).toContainText('not a substitute');
+  });
+});
+
+test('offline setelah dimuat (service worker)', async ({ page, context }) => {
+  await page.goto('./');
+  await page.evaluate(async () => {
+    const reg = await navigator.serviceWorker.ready;
+    return reg.active?.state;
+  });
+  // tunggu pra-cache selesai (semua chunk halaman ada di cache)
+  await page.waitForFunction(
+    async () => {
+      const keys = await caches.keys();
+      if (!keys[0]) return false;
+      const reqs = await (await caches.open(keys[0])).keys();
+      return reqs.some((r) => r.url.includes('ExerciseLibraryPage'));
+    },
+    undefined,
+    { timeout: 20_000 },
+  );
+  await context.setOffline(true);
+  await page.goto('./#/latihan/back-squat');
+  await expect(page.getByTestId('exercise-detail')).toContainText('Back squat');
+  await context.setOffline(false);
 });

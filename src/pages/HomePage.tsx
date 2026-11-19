@@ -22,7 +22,9 @@ export default function HomePage() {
           </div>
           <aside className="border-l-4 border-accent pl-4 md:col-span-4 md:self-end">
             <p className="label-mono">{t('home.flow')}</p>
-            <p className="mt-1 font-display text-2xl font-semibold uppercase leading-tight">{t('home.flowText')}</p>
+            <p className="mt-1 font-display text-2xl font-semibold uppercase leading-tight">
+              {t('home.flowText')}
+            </p>
           </aside>
         </div>
       </section>
@@ -30,12 +32,19 @@ export default function HomePage() {
         <h2 className="label-mono mb-3">{t('home.modules')}</h2>
         <ol className="grid border-t border-line sm:grid-cols-2 lg:grid-cols-3">
           {MODULES.map((m) => (
-            <li key={m.key} className="border-b border-line sm:odd:border-r lg:border-r lg:[&:nth-child(3n)]:border-r-0">
+            <li
+              key={m.key}
+              className="border-b border-line sm:odd:border-r lg:border-r lg:[&:nth-child(3n)]:border-r-0"
+            >
               <Link to={m.path} className="group flex h-full gap-4 p-4 hover:bg-surface">
                 <span className="font-mono text-sm text-accent">{m.num}</span>
                 <span>
                   <span className="flex items-center gap-2 font-display text-2xl font-bold uppercase">
-                    <m.icon size={20} aria-hidden className="text-ink-muted group-hover:text-accent" />
+                    <m.icon
+                      size={20}
+                      aria-hidden
+                      className="text-ink-muted group-hover:text-accent"
+                    />
                     {t(`nav.${m.key}`)}
                   </span>
                   <span className="mt-1 block text-sm text-ink-muted">

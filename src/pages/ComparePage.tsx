@@ -5,7 +5,14 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { Check, X } from 'lucide-react';
 import { EXERCISE_BY_ID, FORM_ERRORS, FORM_ERROR_BY_ID, type FormError } from '../content';
 import { computeMoments } from '../lib/biomech';
-import { DEFAULT_PARAMS, movementFrame, phaseAt, type Faults, type MovementFrame, type MovementParams } from '../lib/movements';
+import {
+  DEFAULT_PARAMS,
+  movementFrame,
+  phaseAt,
+  type Faults,
+  type MovementFrame,
+  type MovementParams,
+} from '../lib/movements';
 import { useReducedMotion } from '../lib/reducedMotion';
 import type { Skeleton } from '../lib/rig';
 import { Stage } from '../scene/Stage';
@@ -51,8 +58,22 @@ function Pair({ fe }: { fe: FormError }) {
   const faults = FAULTS[fe.id] ?? {};
   const good = useRef<MovementFrame>(movementFrame(fe.demo, params, 0.9));
   const bad = useRef<MovementFrame>(movementFrame(fe.demo, params, 0.9, faults));
-  const goodSk = useMemo(() => ({ get current(): Skeleton { return good.current.skeleton; } }), []);
-  const badSk = useMemo(() => ({ get current(): Skeleton { return bad.current.skeleton; } }), []);
+  const goodSk = useMemo(
+    () => ({
+      get current(): Skeleton {
+        return good.current.skeleton;
+      },
+    }),
+    [],
+  );
+  const badSk = useMemo(
+    () => ({
+      get current(): Skeleton {
+        return bad.current.skeleton;
+      },
+    }),
+    [],
+  );
   useFrame(({ clock }) => {
     const ph = reduced ? 0.95 : 0.15 + 0.85 * phaseAt(clock.elapsedTime, 3.4);
     good.current = movementFrame(fe.demo, params, ph);
@@ -102,16 +123,28 @@ export default function ComparePage() {
     if (!fe || fe.demo === 'bench') return null;
     const params = demoParams(fe);
     const calc = (f: Faults) =>
-      computeMoments({ frame: movementFrame(fe.demo, params, 1, f), pattern: fe.demo, loadKg: params.load, bodyMass: params.bodyMass })
-        .lumbar;
+      computeMoments({
+        frame: movementFrame(fe.demo, params, 1, f),
+        pattern: fe.demo,
+        loadKg: params.load,
+        bodyMass: params.bodyMass,
+      }).lumbar;
     return { ok: calc({}), bad: calc(FAULTS[fe.id] ?? {}) };
   }, [fe]);
 
   if (!fe) return null;
   const cam =
     fe.view === 'top'
-      ? { target: [0, 0.55, 0.1] as [number, number, number], dir: [0, 1, 0.45] as [number, number, number], dist: narrow ? 4.6 : 3.4 }
-      : { target: [0, 0.75, 0] as [number, number, number], dir: [0, 0.12, 1] as [number, number, number], dist: narrow ? 5.2 : 3.9 };
+      ? {
+          target: [0, 0.55, 0.1] as [number, number, number],
+          dir: [0, 1, 0.45] as [number, number, number],
+          dist: narrow ? 4.6 : 3.4,
+        }
+      : {
+          target: [0, 0.75, 0] as [number, number, number],
+          dir: [0, 0.12, 1] as [number, number, number],
+          dist: narrow ? 5.2 : 3.9,
+        };
 
   return (
     <div>
@@ -137,7 +170,10 @@ export default function ComparePage() {
       </div>
       <div className="mx-auto grid max-w-7xl gap-6 px-0 py-4 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:px-4">
         <section className="relative" aria-label={t('compare.title')}>
-          <Stage className="h-[50dvh] min-h-[320px] w-full border-y border-line lg:h-[62dvh] lg:border" label={`${L(fe.title)} — ${t('compare.correct')} / ${t('compare.wrong')}`}>
+          <Stage
+            className="h-[50dvh] min-h-[320px] w-full border-y border-line lg:h-[62dvh] lg:border"
+            label={`${L(fe.title)} — ${t('compare.correct')} / ${t('compare.wrong')}`}
+          >
             <Pair key={fe.id} fe={fe} />
             <CameraRig target={cam.target} direction={cam.dir} distance={cam.dist} nonce={fe.id} />
           </Stage>
@@ -165,7 +201,10 @@ export default function ComparePage() {
           <h3 className="label-mono mt-5">{t('compare.zones')}</h3>
           <ul className="mt-1 flex flex-wrap gap-1.5">
             {fe.zones.map((z) => (
-              <li key={z} className="flex items-center gap-1.5 border border-danger px-2 py-1 text-sm">
+              <li
+                key={z}
+                className="flex items-center gap-1.5 border border-danger px-2 py-1 text-sm"
+              >
                 <span aria-hidden className="h-2.5 w-2.5 rounded-full bg-danger" />
                 {t(`compare.zoneNames.${z}`)}
               </li>

@@ -1,7 +1,16 @@
 import type { LucideIcon } from 'lucide-react';
-import { Activity, BookOpen, Camera, Dumbbell, Info, ScanLine, SplitSquareHorizontal } from 'lucide-react';
+import {
+  Activity,
+  BookOpen,
+  Camera,
+  Dumbbell,
+  Info,
+  ScanLine,
+  SplitSquareHorizontal,
+} from 'lucide-react';
 
-export type NavKey = 'muscles' | 'exercises' | 'studio' | 'compare' | 'webcam' | 'glossary' | 'about';
+export type NavKey =
+  'muscles' | 'exercises' | 'studio' | 'compare' | 'webcam' | 'glossary' | 'about';
 
 export const NAV_ITEMS: readonly { key: NavKey; path: string; icon: LucideIcon; num: string }[] = [
   { key: 'muscles', path: '/otot', icon: ScanLine, num: '01' },

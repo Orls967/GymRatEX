@@ -22,7 +22,9 @@ describe('search', () => {
     const idx = buildSearchIndex('id', tStub);
     expect(search(idx, 'hamstrings').some((d) => d.key === 'muscle:hamstrings')).toBe(true);
     expect(search(idx, 'paha belakang').some((d) => d.key === 'muscle:hamstrings')).toBe(true);
-    expect(search(idx, 'gluteus maximus').some((d) => d.key === 'muscle:gluteus-maximus')).toBe(true);
+    expect(search(idx, 'gluteus maximus').some((d) => d.key === 'muscle:gluteus-maximus')).toBe(
+      true,
+    );
     const en = buildSearchIndex('en', tStub);
     expect(search(en, 'lutut masuk').some((d) => d.key === 'term:knee-valgus')).toBe(true);
   });

@@ -109,7 +109,9 @@ export function SearchDialog({ open, onClose }: Props) {
                 <span className="label-mono w-20 shrink-0">{t(`search.groups.${r.group}`)}</span>
                 <span className="min-w-0">
                   <span className="block font-medium">{r.title}</span>
-                  {r.subtitle && <span className="block truncate text-sm text-ink-muted">{r.subtitle}</span>}
+                  {r.subtitle && (
+                    <span className="block truncate text-sm text-ink-muted">{r.subtitle}</span>
+                  )}
                 </span>
               </li>
             ))}

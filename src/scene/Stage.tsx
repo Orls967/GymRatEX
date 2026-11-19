@@ -23,7 +23,12 @@ function Lights() {
     <>
       <color attach="background" args={[t.bg]} />
       <hemisphereLight args={[t.light.hemiSky, t.light.hemiGround, t.light.ambient]} />
-      <directionalLight position={[2.5, 4, 3]} intensity={t.light.key} castShadow={!isLowPower()} shadow-mapSize={[1024, 1024]} />
+      <directionalLight
+        position={[2.5, 4, 3]}
+        intensity={t.light.key}
+        castShadow={!isLowPower()}
+        shadow-mapSize={[1024, 1024]}
+      />
       <directionalLight position={[-3, 2.5, -3]} intensity={t.light.rim} />
       <ambientLight intensity={t.light.ambient * 0.5} />
     </>
@@ -60,13 +65,23 @@ function Effects() {
   );
 }
 
-export function Stage({ children, camera, frameloop = 'demand', label, className, showGrid = true }: StageProps) {
+export function Stage({
+  children,
+  camera,
+  frameloop = 'demand',
+  label,
+  className,
+  showGrid = true,
+}: StageProps) {
   const { t } = useTranslation();
   const webgl = useMemo(() => hasWebGL(), []);
   const dpr = useMemo(() => dprRange(), []);
   if (!webgl) {
     return (
-      <div role="alert" className={`grid place-items-center border border-line bg-surface p-6 text-center ${className ?? ''}`}>
+      <div
+        role="alert"
+        className={`grid place-items-center border border-line bg-surface p-6 text-center ${className ?? ''}`}
+      >
         <div>
           <p className="font-display text-xl font-bold uppercase">{t('errors.webglTitle')}</p>
           <p className="mt-1 text-sm text-ink-muted">{t('errors.webglText')}</p>
@@ -81,8 +96,17 @@ export function Stage({ children, camera, frameloop = 'demand', label, className
           frameloop={frameloop}
           dpr={dpr}
           shadows={!isLowPower()}
-          camera={{ position: camera?.position ?? [0, 1.2, 3.2], fov: camera?.fov ?? 35, near: 0.05, far: 40 }}
-          gl={{ antialias: isLowPower(), powerPreference: 'high-performance', toneMapping: ACESFilmicToneMapping }}
+          camera={{
+            position: camera?.position ?? [0, 1.2, 3.2],
+            fov: camera?.fov ?? 35,
+            near: 0.05,
+            far: 40,
+          }}
+          gl={{
+            antialias: isLowPower(),
+            powerPreference: 'high-performance',
+            toneMapping: ACESFilmicToneMapping,
+          }}
           data-testid="three-canvas"
         >
           <Lights />

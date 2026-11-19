@@ -47,7 +47,8 @@ const en: LocaleShape<typeof id> = {
     start: 'Start with the Muscle Map',
     modules: 'Modules',
     flow: 'Learning path',
-    flowText: 'Muscle → exercises that train it → demonstration in the Form Studio → check your own form with the camera.',
+    flowText:
+      'Muscle → exercises that train it → demonstration in the Form Studio → check your own form with the camera.',
     desc: {
       muscles: 'Tap muscles on a 3D body. Peel layers from superficial to deep.',
       exercises: '{{count}} exercises. See primary, synergist and stabilizer muscles light up.',
@@ -144,7 +145,8 @@ const en: LocaleShape<typeof id> = {
     pause: 'Pause',
     phase: 'Phase',
     chartTitle: 'Joint moments (estimate)',
-    chartNote: 'Static sagittal-plane model: load × horizontal moment arm. Ignores acceleration, shear forces and muscle co-contraction. An educational estimate, not a measurement.',
+    chartNote:
+      'Static sagittal-plane model: load × horizontal moment arm. Ignores acceleration, shear forces and muscle co-contraction. An educational estimate, not a measurement.',
     knee: 'Knee',
     hip: 'Hip',
     lumbar: 'Lower back',
@@ -182,14 +184,21 @@ const en: LocaleShape<typeof id> = {
     momentCompare: 'Lower-back moment at the bottom (estimate)',
     pick: 'Choose an error',
     views: { front: 'Front view', side: 'Side view', top: 'Top view' },
-    zoneNames: { knee: 'Knee', lumbar: 'Lower back', shoulder: 'Shoulder', elbow: 'Elbow', hip: 'Hip' },
+    zoneNames: {
+      knee: 'Knee',
+      lumbar: 'Lower back',
+      shoulder: 'Shoulder',
+      elbow: 'Elbow',
+      hip: 'Hip',
+    },
     severity: 'Emphasis',
   },
   webcam: {
     title: 'Webcam Form Check',
     lead: 'Pose detection runs on your device. Joint angles are computed per frame.',
     privacyTitle: 'Privacy',
-    privacy: 'Video is never sent anywhere. The pose model and WebAssembly are loaded from this site and run entirely in your browser. Nothing is recorded.',
+    privacy:
+      'Video is never sent anywhere. The pose model and WebAssembly are loaded from this site and run entirely in your browser. Nothing is recorded.',
     start: 'Turn camera on',
     stop: 'Turn camera off',
     loadingModel: 'Loading pose model…',
@@ -214,7 +223,8 @@ const en: LocaleShape<typeof id> = {
       fullRange: 'Use the full range of motion.',
       swing: 'Body swinging — pin your elbows to your sides.',
     },
-    limitation: '2D estimate from one camera: angles can be off when the body is not square to the camera.',
+    limitation:
+      '2D estimate from one camera: angles can be off when the body is not square to the camera.',
   },
   glossary: {
     title: 'Glossary',
@@ -237,7 +247,8 @@ const en: LocaleShape<typeof id> = {
     sourcesTitle: 'Sources',
     licensesTitle: 'Asset licences',
     verifyTitle: 'Verification status',
-    verifyText: 'Entries marked “needs verification” have not yet been cross-checked against primary sources.',
+    verifyText:
+      'Entries marked “needs verification” have not yet been cross-checked against primary sources.',
     verifiedCount: '{{count}} entries need verification',
   },
   common: {

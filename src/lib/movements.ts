@@ -1,5 +1,12 @@
 import { Vector3 } from 'three';
-import { BONE_LENGTH as L, computeSkeleton, neutralPose, type Pose, type Side, type Skeleton } from './rig';
+import {
+  BONE_LENGTH as L,
+  computeSkeleton,
+  neutralPose,
+  type Pose,
+  type Side,
+  type Skeleton,
+} from './rig';
 import { angleFromDown, solveTwoBone2D, type P2 } from './ik';
 
 /**
@@ -48,7 +55,10 @@ export interface SliderRange {
   step: number;
 }
 
-export const PARAM_RANGES: Record<StudioPattern, Record<'depth' | 'torso' | 'stance' | 'load', SliderRange>> = {
+export const PARAM_RANGES: Record<
+  StudioPattern,
+  Record<'depth' | 'torso' | 'stance' | 'load', SliderRange>
+> = {
   squat: {
     depth: { min: 0.3, max: 1, step: 0.01 },
     torso: { min: 10, max: 60, step: 1 },
@@ -117,7 +127,12 @@ function stanceAbduction(stance: number, legLen: number): number {
   return Math.asin(clamp((stance / 2 - L.hipHalfWidth) / legLen, -0.2, 0.8));
 }
 
-function finish(pose: Pose, bar: Vector3 | null, balanced: boolean, midfootZ: number): MovementFrame {
+function finish(
+  pose: Pose,
+  bar: Vector3 | null,
+  balanced: boolean,
+  midfootZ: number,
+): MovementFrame {
   return {
     pose,
     skeleton: computeSkeleton(pose),
@@ -135,7 +150,7 @@ function squat(prm: MovementParams, phase: number, f: Faults): MovementFrame {
   const Ls = L.shank * c;
   const t = phase * prm.depth * 118 * DEG; // sudut paha dari vertikal
   const kTotal = lerp(4 * DEG, prm.torso * DEG, Math.min(1, phase * 1.15));
-  const wink = (f.buttWink ?? 0) * Math.max(0, phase - 0.6) / 0.4;
+  const wink = ((f.buttWink ?? 0) * Math.max(0, phase - 0.6)) / 0.4;
   pose.lumbarFlex = wink * 0.5;
   pose.thoracicFlex = 0.04;
   pose.pelvisTilt = kTotal - pose.lumbarFlex - pose.thoracicFlex;
@@ -215,7 +230,11 @@ function hinge(prm: MovementParams, phase: number, f: Faults): MovementFrame {
   const fr = finish(pose, null, sol.reachable, xm);
   const hl = fr.skeleton.hand_l;
   const hr = fr.skeleton.hand_r;
-  const bar = hl.start.clone().lerp(hl.end, 0.5).add(hr.start.clone().lerp(hr.end, 0.5)).multiplyScalar(0.5);
+  const bar = hl.start
+    .clone()
+    .lerp(hl.end, 0.5)
+    .add(hr.start.clone().lerp(hr.end, 0.5))
+    .multiplyScalar(0.5);
   bar.x = 0;
   fr.bar = prm.load > 0 ? bar : null;
   fr.balanced = Math.abs(bar.z - xm) < 0.05;
@@ -291,7 +310,10 @@ function ohp(prm: MovementParams, phase: number): MovementFrame {
   const ca = Math.cos(armAbd);
   const lo = { z: shoulder.z + 0.1, y: shoulder.y + 0.02 };
   const topReach = (L.upperArm + L.forearm) * ca * 0.995;
-  const hi = { z: xm, y: shoulder.y + Math.sqrt(Math.max(topReach ** 2 - (xm - shoulder.z) ** 2, 0)) };
+  const hi = {
+    z: xm,
+    y: shoulder.y + Math.sqrt(Math.max(topReach ** 2 - (xm - shoulder.z) ** 2, 0)),
+  };
   const p = phase * prm.depth;
   const hand: P2 = { z: lerp(lo.z, hi.z, p), y: lerp(lo.y, hi.y, p) };
   const arm = solveTwoBone2D(shoulder, hand, L.upperArm * ca, L.forearm * ca, -1);
@@ -363,7 +385,7 @@ export function movementFrame(
  * dengan easing halus. Untuk OHP arah dibalik karena posisi awal di bawah.
  */
 export function phaseAt(timeSec: number, tempo: number): number {
-  const cyc = ((timeSec % tempo) + tempo) % tempo / tempo;
+  const cyc = (((timeSec % tempo) + tempo) % tempo) / tempo;
   const down = 0.55;
   const raw = cyc < down ? cyc / down : 1 - (cyc - down) / (1 - down);
   return 0.5 - 0.5 * Math.cos(raw * Math.PI);

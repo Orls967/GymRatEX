@@ -27,7 +27,10 @@ export class ErrorBoundary extends Component<Props, State> {
     if (this.props.fallback) return this.props.fallback;
     const k = this.props.kind === 'webgl' ? 'webgl' : 'generic';
     return (
-      <div role="alert" className="m-4 border border-line border-l-4 border-l-danger bg-surface p-4">
+      <div
+        role="alert"
+        className="m-4 border border-line border-l-4 border-l-danger bg-surface p-4"
+      >
         <p className="font-display text-xl font-bold uppercase">
           <Trans i18nKey={`errors.${k}Title`} />
         </p>

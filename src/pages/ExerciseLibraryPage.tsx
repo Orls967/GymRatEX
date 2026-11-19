@@ -44,12 +44,24 @@ function dominantSide(ex: Exercise): View {
   return back > front ? 'back' : 'front';
 }
 
-function MuscleRoleList({ ids, lvl, title }: { ids: readonly string[]; lvl: 1 | 2 | 3; title: string }) {
+function MuscleRoleList({
+  ids,
+  lvl,
+  title,
+}: {
+  ids: readonly string[];
+  lvl: 1 | 2 | 3;
+  title: string;
+}) {
   if (ids.length === 0) return null;
   return (
     <div className="border-t border-line pt-2">
       <h3 className="label-mono flex items-center gap-2">
-        <span aria-hidden className="inline-block h-2.5 w-5" style={{ background: `var(--c-int-${lvl})` }} />
+        <span
+          aria-hidden
+          className="inline-block h-2.5 w-5"
+          style={{ background: `var(--c-int-${lvl})` }}
+        />
         {title}
       </h3>
       <ul className="mt-1 grid gap-0.5">
@@ -80,9 +92,22 @@ function ExerciseDetail({ ex }: { ex: Exercise }) {
   return (
     <article data-testid="exercise-detail">
       <div className="relative">
-        <Stage className="h-[52dvh] min-h-[320px] w-full border-y border-line lg:border" label={L(ex.name)}>
-          <BodyModel skeleton={SKELETON} intensities={intensities} dimInactive interactive={false} />
-          <CameraRig target={[0, 0.98, 0]} direction={[0, 0.06, dirZ]} distance={narrow ? 4.1 : 3.2} nonce={`${ex.id}-${view}`} />
+        <Stage
+          className="h-[52dvh] min-h-[320px] w-full border-y border-line lg:border"
+          label={L(ex.name)}
+        >
+          <BodyModel
+            skeleton={SKELETON}
+            intensities={intensities}
+            dimInactive
+            interactive={false}
+          />
+          <CameraRig
+            target={[0, 0.98, 0]}
+            direction={[0, 0.06, dirZ]}
+            distance={narrow ? 4.1 : 3.2}
+            nonce={`${ex.id}-${view}`}
+          />
         </Stage>
         <div className="absolute right-3 top-3 w-44">
           <Segmented
@@ -99,7 +124,8 @@ function ExerciseDetail({ ex }: { ex: Exercise }) {
       <div className="px-4 py-4 lg:px-0">
         <IntensityLegend />
         <p className="label-mono mt-4">
-          {t(`exercises.patterns.${ex.pattern}`)} · {ex.equipment.map((e) => t(`exercises.equipment.${e}`)).join(' / ')}
+          {t(`exercises.patterns.${ex.pattern}`)} ·{' '}
+          {ex.equipment.map((e) => t(`exercises.equipment.${e}`)).join(' / ')}
         </p>
         <h2 className="mt-1 text-4xl">{L(ex.name)}</h2>
         {ex.needsVerification && (
@@ -134,7 +160,9 @@ function ExerciseDetail({ ex }: { ex: Exercise }) {
         <ol className="mt-2 grid gap-2">
           {ex.cues.map((c, i) => (
             <li key={i} className="grid grid-cols-[2rem_1fr] border-t border-line pt-2">
-              <span className="font-mono text-sm text-accent">{String(i + 1).padStart(2, '0')}</span>
+              <span className="font-mono text-sm text-accent">
+                {String(i + 1).padStart(2, '0')}
+              </span>
               <span>
                 <AutoLinkText text={L(c)} />
               </span>
@@ -182,8 +210,10 @@ export default function ExerciseLibraryPage() {
   const list = useMemo(
     () =>
       EXERCISES.filter((e) => {
-        if (muscleFilter && ![...e.primary, ...e.synergist, ...e.stabilizer].includes(muscleFilter)) return false;
-        if (equipFilter && !e.equipment.includes(equipFilter as Exercise['equipment'][number])) return false;
+        if (muscleFilter && ![...e.primary, ...e.synergist, ...e.stabilizer].includes(muscleFilter))
+          return false;
+        if (equipFilter && !e.equipment.includes(equipFilter as Exercise['equipment'][number]))
+          return false;
         return true;
       }),
     [muscleFilter, equipFilter],
@@ -197,15 +227,26 @@ export default function ExerciseLibraryPage() {
   };
 
   const roleOf = (e: Exercise): 1 | 2 | 3 | 0 =>
-    !muscleFilter ? 0 : e.primary.includes(muscleFilter) ? 3 : e.synergist.includes(muscleFilter) ? 2 : 1;
+    !muscleFilter
+      ? 0
+      : e.primary.includes(muscleFilter)
+        ? 3
+        : e.synergist.includes(muscleFilter)
+          ? 2
+          : 1;
 
-  const sortedMuscles = useMemo(() => [...MUSCLES].sort((a, b) => L(a.name).localeCompare(L(b.name))), [L]);
+  const sortedMuscles = useMemo(
+    () => [...MUSCLES].sort((a, b) => L(a.name).localeCompare(L(b.name))),
+    [L],
+  );
 
   return (
     <div>
       <PageHeader num="02" title={t('exercises.title')} lead={t('exercises.lead')} />
       <div className="mx-auto grid max-w-7xl lg:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)] lg:gap-6 lg:px-4 lg:py-4">
-        <section className={`order-2 px-4 py-4 lg:order-1 lg:px-0 lg:py-0 ${selected ? 'hidden lg:block' : ''}`}>
+        <section
+          className={`order-2 px-4 py-4 lg:order-1 lg:px-0 lg:py-0 ${selected ? 'hidden lg:block' : ''}`}
+        >
           <div className="grid gap-3">
             <label className="grid gap-1">
               <span className="label-mono">{t('exercises.filterMuscle')}</span>
@@ -226,7 +267,12 @@ export default function ExerciseLibraryPage() {
             <fieldset className="min-w-0">
               <legend className="label-mono mb-1">{t('exercises.filterEquipment')}</legend>
               <div className="flex flex-wrap gap-1.5">
-                <button type="button" className="chip" aria-pressed={!equipFilter} onClick={() => setFilter('alat', '')}>
+                <button
+                  type="button"
+                  className="chip"
+                  aria-pressed={!equipFilter}
+                  onClick={() => setFilter('alat', '')}
+                >
                   {t('exercises.all')}
                 </button>
                 {EQUIPMENT.map((eq) => (
@@ -255,18 +301,33 @@ export default function ExerciseLibraryPage() {
                     to={`/latihan/${e.id}${params.toString() ? `?${params.toString()}` : ''}`}
                     aria-current={selected?.id === e.id ? 'true' : undefined}
                     className={`flex min-h-14 items-center gap-3 py-2 pr-2 ${
-                      selected?.id === e.id ? 'shadow-[inset_3px_0_0_var(--c-accent)] pl-3' : 'pl-0 hover:pl-1'
+                      selected?.id === e.id
+                        ? 'shadow-[inset_3px_0_0_var(--c-accent)] pl-3'
+                        : 'pl-0 hover:pl-1'
                     } transition-[padding]`}
                   >
-                    {role > 0 && <span aria-hidden className="h-8 w-1.5 shrink-0" style={{ background: `var(--c-int-${role})` }} />}
+                    {role > 0 && (
+                      <span
+                        aria-hidden
+                        className="h-8 w-1.5 shrink-0"
+                        style={{ background: `var(--c-int-${role})` }}
+                      />
+                    )}
                     <span className="flex-1">
-                      <span className="block font-display text-xl font-semibold uppercase leading-tight">{L(e.name)}</span>
+                      <span className="block font-display text-xl font-semibold uppercase leading-tight">
+                        {L(e.name)}
+                      </span>
                       <span className="block text-xs text-ink-muted">
-                        {t(`exercises.patterns.${e.pattern}`)} · {e.equipment.map((q) => t(`exercises.equipment.${q}`)).join(' / ')}
+                        {t(`exercises.patterns.${e.pattern}`)} ·{' '}
+                        {e.equipment.map((q) => t(`exercises.equipment.${q}`)).join(' / ')}
                       </span>
                     </span>
-                    {e.studio && <Activity size={15} aria-label={t('nav.studio')} className="text-ink-muted" />}
-                    {e.webcam && <Camera size={15} aria-label={t('nav.webcam')} className="text-ink-muted" />}
+                    {e.studio && (
+                      <Activity size={15} aria-label={t('nav.studio')} className="text-ink-muted" />
+                    )}
+                    {e.webcam && (
+                      <Camera size={15} aria-label={t('nav.webcam')} className="text-ink-muted" />
+                    )}
                   </Link>
                 </li>
               );
@@ -278,7 +339,9 @@ export default function ExerciseLibraryPage() {
             <>
               <button
                 type="button"
-                onClick={() => navigate(`/latihan${params.toString() ? `?${params.toString()}` : ''}`)}
+                onClick={() =>
+                  navigate(`/latihan${params.toString() ? `?${params.toString()}` : ''}`)
+                }
                 className="flex min-h-11 items-center gap-2 px-4 font-mono text-xs uppercase tracking-wider text-ink-muted hover:text-ink lg:hidden"
               >
                 <ArrowLeft size={14} aria-hidden /> {t('exercises.back')}

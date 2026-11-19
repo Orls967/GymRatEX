@@ -11,7 +11,13 @@ export function buildSearchIndex(lang: LangCode, t: TFunction): SearchDoc[] {
   const o = other(lang);
   const docs: SearchDoc[] = [];
   for (const n of NAV_ITEMS) {
-    docs.push({ key: `page:${n.key}`, group: 'page', title: t(`nav.${n.key}`), extra: [], path: n.path });
+    docs.push({
+      key: `page:${n.key}`,
+      group: 'page',
+      title: t(`nav.${n.key}`),
+      extra: [],
+      path: n.path,
+    });
   }
   for (const m of MUSCLES) {
     docs.push({

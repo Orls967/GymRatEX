@@ -30,18 +30,70 @@ export const ABOUT = AboutContent.parse({
     },
   ],
   sources: [
-    { label: "Gray's Anatomy, 42nd ed. (Standring, 2020)", note: { id: 'Origo, insersio, dan fungsi otot.', en: 'Muscle origins, insertions and functions.' } },
-    { label: 'OpenStax — Anatomy & Physiology 2e (CC BY 4.0)', note: { id: 'Referensi terbuka untuk anatomi otot rangka.', en: 'Open reference for skeletal muscle anatomy.' } },
-    { label: 'Moore — Clinically Oriented Anatomy, 8th ed.', note: { id: 'Otot dalam dan otot inti.', en: 'Deep and core muscles.' } },
-    { label: 'Winter — Biomechanics and Motor Control of Human Movement, 4th ed.', note: { id: 'Tabel massa & pusat massa segmen tubuh.', en: 'Body segment mass & centre-of-mass tables.' } },
-    { label: 'Escamilla (2001), Knee biomechanics of the dynamic squat exercise, MSSE 33(1)', note: { id: 'Konteks momen lutut dan pinggul pada squat.', en: 'Context for knee and hip moments in the squat.' } },
-    { label: 'Google MediaPipe Pose Landmarker', note: { id: 'Model deteksi pose 33 titik.', en: '33-landmark pose detection model.' } },
+    {
+      label: "Gray's Anatomy, 42nd ed. (Standring, 2020)",
+      note: {
+        id: 'Origo, insersio, dan fungsi otot.',
+        en: 'Muscle origins, insertions and functions.',
+      },
+    },
+    {
+      label: 'OpenStax — Anatomy & Physiology 2e (CC BY 4.0)',
+      note: {
+        id: 'Referensi terbuka untuk anatomi otot rangka.',
+        en: 'Open reference for skeletal muscle anatomy.',
+      },
+    },
+    {
+      label: 'Moore — Clinically Oriented Anatomy, 8th ed.',
+      note: { id: 'Otot dalam dan otot inti.', en: 'Deep and core muscles.' },
+    },
+    {
+      label: 'Winter — Biomechanics and Motor Control of Human Movement, 4th ed.',
+      note: {
+        id: 'Tabel massa & pusat massa segmen tubuh.',
+        en: 'Body segment mass & centre-of-mass tables.',
+      },
+    },
+    {
+      label: 'Escamilla (2001), Knee biomechanics of the dynamic squat exercise, MSSE 33(1)',
+      note: {
+        id: 'Konteks momen lutut dan pinggul pada squat.',
+        en: 'Context for knee and hip moments in the squat.',
+      },
+    },
+    {
+      label: 'Google MediaPipe Pose Landmarker',
+      note: { id: 'Model deteksi pose 33 titik.', en: '33-landmark pose detection model.' },
+    },
   ],
   licenses: [
-    { name: 'three.js, @react-three/fiber, @react-three/drei', license: 'MIT', note: { id: 'Render 3D.', en: '3D rendering.' } },
-    { name: 'MediaPipe Tasks Vision + pose_landmarker_lite.task', license: 'Apache-2.0', note: { id: 'Di-host lokal di /mediapipe. Ping telemetri bawaan pustaka ini (ke odml.pa.googleapis.com) diblokir oleh Content-Security-Policy situs.', en: 'Hosted locally under /mediapipe. The library’s built-in telemetry ping (to odml.pa.googleapis.com) is blocked by the site’s Content-Security-Policy.' } },
-    { name: 'Barlow Condensed, Archivo, IBM Plex Mono (@fontsource)', license: 'SIL OFL 1.1', note: { id: 'Font di-host sendiri.', en: 'Self-hosted fonts.' } },
+    {
+      name: 'three.js, @react-three/fiber, @react-three/drei',
+      license: 'MIT',
+      note: { id: 'Render 3D.', en: '3D rendering.' },
+    },
+    {
+      name: 'MediaPipe Tasks Vision + pose_landmarker_lite.task',
+      license: 'Apache-2.0',
+      note: {
+        id: 'Di-host lokal di /mediapipe. Ping telemetri bawaan pustaka ini (ke odml.pa.googleapis.com) diblokir oleh Content-Security-Policy situs.',
+        en: 'Hosted locally under /mediapipe. The library’s built-in telemetry ping (to odml.pa.googleapis.com) is blocked by the site’s Content-Security-Policy.',
+      },
+    },
+    {
+      name: 'Barlow Condensed, Archivo, IBM Plex Mono (@fontsource)',
+      license: 'SIL OFL 1.1',
+      note: { id: 'Font di-host sendiri.', en: 'Self-hosted fonts.' },
+    },
     { name: 'lucide-react', license: 'ISC', note: { id: 'Ikon.', en: 'Icons.' } },
-    { name: 'Model tubuh prosedural OtotLapis', license: 'MIT', note: { id: 'Dibuat lewat kode di proyek ini, tanpa aset eksternal.', en: 'Generated in code in this project, no external assets.' } },
+    {
+      name: 'Model tubuh prosedural OtotLapis',
+      license: 'MIT',
+      note: {
+        id: 'Dibuat lewat kode di proyek ini, tanpa aset eksternal.',
+        en: 'Generated in code in this project, no external assets.',
+      },
+    },
   ],
 });

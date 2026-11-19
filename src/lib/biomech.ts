@@ -26,7 +26,14 @@ export const SEGMENT_MASS = {
 } as const;
 
 /** Lokasi pusat massa dari ujung proksimal (fraksi panjang segmen). */
-const COM_FRACTION = { upperArm: 0.436, forearm: 0.43, hand: 0.506, thigh: 0.433, shank: 0.433, foot: 0.5 } as const;
+const COM_FRACTION = {
+  upperArm: 0.436,
+  forearm: 0.43,
+  hand: 0.506,
+  thigh: 0.433,
+  shank: 0.433,
+  foot: 0.5,
+} as const;
 
 export interface MassPoint {
   name: string;
@@ -34,7 +41,8 @@ export interface MassPoint {
   pos: Vector3;
 }
 
-const lerpSeg = (sk: Skeleton, name: keyof Skeleton, t: number) => sk[name].start.clone().lerp(sk[name].end, t);
+const lerpSeg = (sk: Skeleton, name: keyof Skeleton, t: number) =>
+  sk[name].start.clone().lerp(sk[name].end, t);
 
 export function segmentMasses(sk: Skeleton, bodyMass: number) {
   const m = (f: number) => f * bodyMass;
@@ -45,20 +53,44 @@ export function segmentMasses(sk: Skeleton, bodyMass: number) {
   ];
   for (const s of ['l', 'r'] as Side[]) {
     upper.push(
-      { name: `upperArm_${s}`, mass: m(SEGMENT_MASS.upperArm), pos: lerpSeg(sk, `upperArm_${s}`, COM_FRACTION.upperArm) },
-      { name: `forearm_${s}`, mass: m(SEGMENT_MASS.forearm), pos: lerpSeg(sk, `forearm_${s}`, COM_FRACTION.forearm) },
-      { name: `hand_${s}`, mass: m(SEGMENT_MASS.hand), pos: lerpSeg(sk, `hand_${s}`, COM_FRACTION.hand) },
+      {
+        name: `upperArm_${s}`,
+        mass: m(SEGMENT_MASS.upperArm),
+        pos: lerpSeg(sk, `upperArm_${s}`, COM_FRACTION.upperArm),
+      },
+      {
+        name: `forearm_${s}`,
+        mass: m(SEGMENT_MASS.forearm),
+        pos: lerpSeg(sk, `forearm_${s}`, COM_FRACTION.forearm),
+      },
+      {
+        name: `hand_${s}`,
+        mass: m(SEGMENT_MASS.hand),
+        pos: lerpSeg(sk, `hand_${s}`, COM_FRACTION.hand),
+      },
     );
   }
-  const pelvis: MassPoint = { name: 'pelvis', mass: m(SEGMENT_MASS.pelvis), pos: lerpSeg(sk, 'pelvis', 0.3) };
+  const pelvis: MassPoint = {
+    name: 'pelvis',
+    mass: m(SEGMENT_MASS.pelvis),
+    pos: lerpSeg(sk, 'pelvis', 0.3),
+  };
   const thighs: MassPoint[] = (['l', 'r'] as Side[]).map((s) => ({
     name: `thigh_${s}`,
     mass: m(SEGMENT_MASS.thigh),
     pos: lerpSeg(sk, `thigh_${s}`, COM_FRACTION.thigh),
   }));
   const lower: MassPoint[] = (['l', 'r'] as Side[]).flatMap((s) => [
-    { name: `shank_${s}`, mass: m(SEGMENT_MASS.shank), pos: lerpSeg(sk, `shank_${s}`, COM_FRACTION.shank) },
-    { name: `foot_${s}`, mass: m(SEGMENT_MASS.foot), pos: lerpSeg(sk, `foot_${s}`, COM_FRACTION.foot) },
+    {
+      name: `shank_${s}`,
+      mass: m(SEGMENT_MASS.shank),
+      pos: lerpSeg(sk, `shank_${s}`, COM_FRACTION.shank),
+    },
+    {
+      name: `foot_${s}`,
+      mass: m(SEGMENT_MASS.foot),
+      pos: lerpSeg(sk, `foot_${s}`, COM_FRACTION.foot),
+    },
   ]);
   return { upper, pelvis, thighs, lower };
 }
@@ -100,10 +132,17 @@ export interface BiomechInput {
 
 const mid = (a: Vector3, b: Vector3) => a.clone().add(b).multiplyScalar(0.5);
 
-export function computeMoments({ frame, pattern, loadKg, bodyMass, frontShare = 0.8 }: BiomechInput): JointMoments {
+export function computeMoments({
+  frame,
+  pattern,
+  loadKg,
+  bodyMass,
+  frontShare = 0.8,
+}: BiomechInput): JointMoments {
   const sk = frame.skeleton;
   const { upper, pelvis, thighs, lower } = segmentMasses(sk, bodyMass);
-  const load: MassPoint[] = frame.bar && loadKg > 0 ? [{ name: 'load', mass: loadKg, pos: frame.bar }] : [];
+  const load: MassPoint[] =
+    frame.bar && loadKg > 0 ? [{ name: 'load', mass: loadKg, pos: frame.bar }] : [];
 
   const lumbarJ = sk.pelvis.end; // ≈ L5/S1
   const hipJ = mid(sk.thigh_l.start, sk.thigh_r.start);

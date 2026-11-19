@@ -7,7 +7,7 @@ import { computeSkeleton, neutralPose } from '../lib/rig';
 import { Stage } from '../scene/Stage';
 import { CameraRig } from '../scene/CameraRig';
 import { BodyModel } from '../scene/body/BodyModel';
-import { muscleCentroid } from '../scene/body/ProceduralBody';
+import { muscleCentroid } from '../scene/body/muscleMeshes';
 import { PageHeader } from '../ui/PageHeader';
 import { Segmented } from '../ui/Segmented';
 import { MuscleName } from '../ui/MuscleName';
@@ -32,16 +32,29 @@ export default function MuscleMapPage() {
   const selected = getMuscle(muscleId);
   const [hovered, setHovered] = useState<string | null>(null);
   const [layer, setLayer] = useState<'1' | '2' | '3'>('1');
-  const [viewOverride, setViewOverride] = useState<{ id: string | undefined; view: View } | null>(null);
+  const [viewOverride, setViewOverride] = useState<{ id: string | undefined; view: View } | null>(
+    null,
+  );
   const view: View =
-    viewOverride && viewOverride.id === selected?.id ? viewOverride.view : (selected?.side ?? viewOverride?.view ?? 'front');
+    viewOverride && viewOverride.id === selected?.id
+      ? viewOverride.view
+      : (selected?.side ?? viewOverride?.view ?? 'front');
 
   const focus = useMemo(() => {
     const c = selected ? muscleCentroid(SKELETON.current, selected.id) : null;
     const dirZ = view === 'front' ? 1 : -1;
     const narrow = typeof window !== 'undefined' && window.innerWidth < 640;
-    if (c) return { target: [c.x * 0.6, c.y, 0] as [number, number, number], distance: narrow ? 2.2 : 1.55, dir: [0.15 * dirZ, 0.1, dirZ] as [number, number, number] };
-    return { target: [0, 0.98, 0] as [number, number, number], distance: narrow ? 4.2 : 3.3, dir: [0, 0.08, dirZ] as [number, number, number] };
+    if (c)
+      return {
+        target: [c.x * 0.6, c.y, 0] as [number, number, number],
+        distance: narrow ? 2.2 : 1.55,
+        dir: [0.15 * dirZ, 0.1, dirZ] as [number, number, number],
+      };
+    return {
+      target: [0, 0.98, 0] as [number, number, number],
+      distance: narrow ? 4.2 : 3.3,
+      dir: [0, 0.08, dirZ] as [number, number, number],
+    };
   }, [selected, view]);
 
   const related = useMemo(() => (selected ? exercisesForMuscle(selected.id) : []), [selected]);
@@ -66,7 +79,12 @@ export default function MuscleMapPage() {
               onHover={setHovered}
               onSelect={select}
             />
-            <CameraRig target={focus.target} direction={focus.dir} distance={focus.distance} nonce={`${selected?.id}-${view}`} />
+            <CameraRig
+              target={focus.target}
+              direction={focus.dir}
+              distance={focus.distance}
+              nonce={`${selected?.id}-${view}`}
+            />
           </Stage>
           <div className="pointer-events-none absolute left-3 top-3 max-w-[70%]">
             {hoveredMuscle && (
@@ -95,7 +113,10 @@ export default function MuscleMapPage() {
                 label={t('muscles.layer')}
                 value={layer}
                 onChange={setLayer}
-                options={(['1', '2', '3'] as const).map((l) => ({ value: l, label: t(`muscles.layers.${l}`) }))}
+                options={(['1', '2', '3'] as const).map((l) => ({
+                  value: l,
+                  label: t(`muscles.layers.${l}`),
+                }))}
                 testId="layer-toggle"
               />
             </div>
@@ -108,13 +129,17 @@ export default function MuscleMapPage() {
               <div className="flex items-start justify-between gap-2">
                 <div>
                   <p className="label-mono">
-                    {t(`muscles.regions.${selected.region}`)} · {t('muscles.layer')} {selected.layer} —{' '}
-                    {t(`muscles.layers.${String(selected.layer) as '1'}`)}
+                    {t(`muscles.regions.${selected.region}`)} · {t('muscles.layer')}{' '}
+                    {selected.layer} — {t(`muscles.layers.${String(selected.layer) as '1'}`)}
                   </p>
                   <h2 className="mt-1 text-3xl">{L(selected.name)}</h2>
                   <p className="font-mono text-sm italic text-ink-muted">{selected.latin}</p>
                 </div>
-                <Link to="/otot" className="grid min-h-10 min-w-10 place-items-center border border-line" aria-label={t('muscles.clear')}>
+                <Link
+                  to="/otot"
+                  className="grid min-h-10 min-w-10 place-items-center border border-line"
+                  aria-label={t('muscles.clear')}
+                >
                   <X size={16} aria-hidden />
                 </Link>
               </div>
@@ -125,7 +150,10 @@ export default function MuscleMapPage() {
               )}
               <dl className="mt-4 grid gap-3 text-[0.95rem]">
                 {(['origin', 'insertion', 'function'] as const).map((k) => (
-                  <div key={k} className="grid gap-0.5 border-t border-line pt-2 sm:grid-cols-[7rem_1fr]">
+                  <div
+                    key={k}
+                    className="grid gap-0.5 border-t border-line pt-2 sm:grid-cols-[7rem_1fr]"
+                  >
                     <dt className="label-mono pt-0.5">{t(`muscles.${k}`)}</dt>
                     <dd>
                       <AutoLinkText text={L(selected[k])} />
@@ -137,14 +165,23 @@ export default function MuscleMapPage() {
               <ul className="mt-2 divide-y divide-line border-y border-line">
                 {related.map(({ exercise, role }) => (
                   <li key={exercise.id}>
-                    <Link to={`/latihan/${exercise.id}`} className="flex min-h-11 items-center gap-3 py-2 hover:text-accent">
+                    <Link
+                      to={`/latihan/${exercise.id}`}
+                      className="flex min-h-11 items-center gap-3 py-2 hover:text-accent"
+                    >
                       <span
                         aria-hidden
                         className="h-3 w-3 shrink-0"
-                        style={{ background: `var(--c-int-${role === 'primary' ? 3 : role === 'synergist' ? 2 : 1})` }}
+                        style={{
+                          background: `var(--c-int-${role === 'primary' ? 3 : role === 'synergist' ? 2 : 1})`,
+                        }}
                       />
                       <span className="flex-1">{L(exercise.name)}</span>
-                      <span className="label-mono">{t(`muscles.as${role === 'primary' ? 'Primary' : role === 'synergist' ? 'Synergist' : 'Stabilizer'}`)}</span>
+                      <span className="label-mono">
+                        {t(
+                          `muscles.as${role === 'primary' ? 'Primary' : role === 'synergist' ? 'Synergist' : 'Stabilizer'}`,
+                        )}
+                      </span>
                       <ArrowRight size={14} aria-hidden />
                     </Link>
                   </li>
@@ -162,7 +199,9 @@ export default function MuscleMapPage() {
             <h2 className="label-mono">{t('muscles.list')}</h2>
             {MUSCLE_REGIONS.filter((r) => MUSCLES.some((m) => m.region === r)).map((region) => (
               <div key={region} className="mt-3">
-                <h3 className="font-display text-lg font-semibold uppercase text-ink-muted">{t(`muscles.regions.${region}`)}</h3>
+                <h3 className="font-display text-lg font-semibold uppercase text-ink-muted">
+                  {t(`muscles.regions.${region}`)}
+                </h3>
                 <ul className="mt-1 flex flex-wrap gap-1.5">
                   {MUSCLES.filter((m) => m.region === region).map((m) => (
                     <li key={m.id}>

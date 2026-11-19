@@ -183,7 +183,9 @@ export function computeSkeleton(pose: Pose): Skeleton {
 
 /** Titik pada tulang: t = 0..1 dari pangkal ke ujung, offset dalam kerangka lokal tulang (x lateral, z anterior), meter. */
 export function boneLocalPoint(seg: Segment, t: number, off: [number, number]): Vector3 {
-  return new Vector3(off[0], 0, off[1]).applyQuaternion(seg.quat).add(seg.start.clone().lerp(seg.end, t));
+  return new Vector3(off[0], 0, off[1])
+    .applyQuaternion(seg.quat)
+    .add(seg.start.clone().lerp(seg.end, t));
 }
 
 /** Sudut (rad) antara vektor a→b dan a→c, mis. sudut lutut dari pinggul–lutut–pergelangan. */

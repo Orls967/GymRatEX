@@ -8,7 +8,9 @@ export type Chunk = { kind: 'text'; text: string } | { kind: 'term'; text: strin
 
 const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-export function buildMatcher(terms: readonly TermPattern[]): { re: RegExp; lookup: Map<string, string> } | null {
+export function buildMatcher(
+  terms: readonly TermPattern[],
+): { re: RegExp; lookup: Map<string, string> } | null {
   const lookup = new Map<string, string>();
   const phrases: string[] = [];
   for (const t of terms) {
@@ -22,7 +24,10 @@ export function buildMatcher(terms: readonly TermPattern[]): { re: RegExp; looku
   if (phrases.length === 0) return null;
   phrases.sort((a, b) => b.length - a.length);
   // \p{L} agar batas kata bekerja untuk huruf beraksen
-  const re = new RegExp(`(?<![\\p{L}\\p{N}])(${phrases.map(escapeRe).join('|')})(?![\\p{L}\\p{N}])`, 'giu');
+  const re = new RegExp(
+    `(?<![\\p{L}\\p{N}])(${phrases.map(escapeRe).join('|')})(?![\\p{L}\\p{N}])`,
+    'giu',
+  );
   return { re, lookup };
 }
 

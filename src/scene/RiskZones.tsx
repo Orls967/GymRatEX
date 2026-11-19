@@ -17,14 +17,28 @@ const POINTS: Record<Zone, (sk: Skeleton) => Vector3[]> = {
   hip: (sk) => [sk.thigh_l.start, sk.thigh_r.start],
 };
 
-const RADIUS: Record<Zone, number> = { knee: 0.075, lumbar: 0.11, shoulder: 0.085, elbow: 0.06, hip: 0.08 };
+const RADIUS: Record<Zone, number> = {
+  knee: 0.075,
+  lumbar: 0.11,
+  shoulder: 0.085,
+  elbow: 0.06,
+  hip: 0.08,
+};
 
 /** Penanda zona rawan: bola semi-transparen berdenyut di sendi yang terbebani berlebih. */
-export function RiskZones({ zones, skeleton }: { zones: readonly Zone[]; skeleton: { current: Skeleton } }) {
+export function RiskZones({
+  zones,
+  skeleton,
+}: {
+  zones: readonly Zone[];
+  skeleton: { current: Skeleton };
+}) {
   const theme = useSceneTheme();
   const reduced = useReducedMotion();
   const refs = useRef<(Mesh | null)[]>([]);
-  const items = zones.flatMap((z) => [0, 1].slice(0, z === 'lumbar' ? 1 : 2).map((i) => ({ z, i })));
+  const items = zones.flatMap((z) =>
+    [0, 1].slice(0, z === 'lumbar' ? 1 : 2).map((i) => ({ z, i })),
+  );
   useFrame(({ clock }) => {
     const s = reduced ? 1 : 1 + 0.15 * Math.sin(clock.elapsedTime * 4);
     items.forEach(({ z, i }, k) => {
@@ -46,7 +60,13 @@ export function RiskZones({ zones, skeleton }: { zones: readonly Zone[]; skeleto
           renderOrder={10}
         >
           <sphereGeometry args={[1, 20, 14]} />
-          <meshBasicMaterial color={theme.danger} transparent opacity={0.38} depthTest={false} depthWrite={false} />
+          <meshBasicMaterial
+            color={theme.danger}
+            transparent
+            opacity={0.38}
+            depthTest={false}
+            depthWrite={false}
+          />
         </mesh>
       ))}
     </>

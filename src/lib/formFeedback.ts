@@ -2,7 +2,8 @@ import type { JointAngles2D } from './pose2d';
 import type { RepConfig, RepEvent } from './repCounter';
 
 export type WebcamMode = 'squat' | 'curl' | 'ohp';
-export type FeedbackKey = 'good' | 'goDeeper' | 'kneesIn' | 'leanForward' | 'fullExtension' | 'fullRange' | 'swing';
+export type FeedbackKey =
+  'good' | 'goDeeper' | 'kneesIn' | 'leanForward' | 'fullExtension' | 'fullRange' | 'swing';
 
 export const REP_CONFIG: Record<WebcamMode, RepConfig> = {
   // lutut: lurus ≈ 170°, squat sejajar ≈ 90–100°. Ambang `low` sengaja longgar agar squat dangkal tetap terhitung lalu diberi umpan balik.

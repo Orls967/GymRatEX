@@ -5,7 +5,13 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { AlertTriangle, Camera, Pause, Play } from 'lucide-react';
 import { exerciseIntensities, getExercise } from '../content';
 import { computeMoments } from '../lib/biomech';
-import { movementFrame, PARAM_RANGES, phaseAt, type MovementFrame, type StudioPattern } from '../lib/movements';
+import {
+  movementFrame,
+  PARAM_RANGES,
+  phaseAt,
+  type MovementFrame,
+  type StudioPattern,
+} from '../lib/movements';
 import { skeletonAngles } from '../lib/jointAngles';
 import { presetFor, PATTERN_EXERCISE } from '../lib/studioPresets';
 import { useReducedMotion } from '../lib/reducedMotion';
@@ -25,7 +31,13 @@ import { STUDIO_PATTERNS } from '../content';
 const SAMPLES = 41;
 
 /** Loop animasi di dalam Canvas: memajukan waktu, menulis frame ke ref, sinkron fase ke store ~15 Hz. */
-function Animator({ frameRef, pattern }: { frameRef: { current: MovementFrame }; pattern: StudioPattern }) {
+function Animator({
+  frameRef,
+  pattern,
+}: {
+  frameRef: { current: MovementFrame };
+  pattern: StudioPattern;
+}) {
   const invalidate = useThree((s) => s.invalidate);
   const time = useRef(0);
   const lastSync = useRef(0);
@@ -51,7 +63,8 @@ function Animator({ frameRef, pattern }: { frameRef: { current: MovementFrame };
           time.current = (Math.acos(1 - 2 * s.phase) / Math.PI) * 0.55 * s.tempo;
           lastSync.current = time.current;
         }
-        if (s.params !== prev.params || s.phase !== prev.phase || s.playing !== prev.playing) invalidate();
+        if (s.params !== prev.params || s.phase !== prev.phase || s.playing !== prev.playing)
+          invalidate();
       }),
     [invalidate],
   );
@@ -86,7 +99,10 @@ export default function StudioPage() {
   );
 
   const exForMuscles = exercise ?? getExercise(PATTERN_EXERCISE[pattern]);
-  const intensities = useMemo(() => (exForMuscles ? exerciseIntensities(exForMuscles) : {}), [exForMuscles]);
+  const intensities = useMemo(
+    () => (exForMuscles ? exerciseIntensities(exForMuscles) : {}),
+    [exForMuscles],
+  );
 
   const series = useMemo<MomentSeries[]>(() => {
     const knee: number[] = [];
@@ -94,7 +110,12 @@ export default function StudioPage() {
     const lumbar: number[] = [];
     for (let i = 0; i < SAMPLES; i++) {
       const fr = movementFrame(pattern, params, i / (SAMPLES - 1));
-      const m = computeMoments({ frame: fr, pattern, loadKg: params.load, bodyMass: params.bodyMass });
+      const m = computeMoments({
+        frame: fr,
+        pattern,
+        loadKg: params.load,
+        bodyMass: params.bodyMass,
+      });
       knee.push(m.knee);
       hip.push(m.hip);
       lumbar.push(m.lumbar);
@@ -119,12 +140,17 @@ export default function StudioPage() {
   const name = exercise ? L(exercise.name) : t(`studio.patterns.${pattern}`);
   const narrow = typeof window !== 'undefined' && window.innerWidth < 640;
   const loadKind = pattern === 'lunge' ? 'dumbbells' : 'barbell';
-  const peak = (k: MomentSeries['key']) => Math.max(...(series.find((s) => s.key === k)?.values ?? [0]));
+  const peak = (k: MomentSeries['key']) =>
+    Math.max(...(series.find((s) => s.key === k)?.values ?? [0]));
 
   return (
     <div>
       <PageHeader num="03" title={t('studio.title')} lead={t('studio.lead')}>
-        {exercise && <p className="label-mono self-end">{t('studio.fromExercise', { name: L(exercise.name) })}</p>}
+        {exercise && (
+          <p className="label-mono self-end">
+            {t('studio.fromExercise', { name: L(exercise.name) })}
+          </p>
+        )}
       </PageHeader>
       <div className="mx-auto grid max-w-7xl lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-6 lg:px-4 lg:py-4">
         <section className="lg:sticky lg:top-16 lg:self-start">
@@ -142,13 +168,24 @@ export default function StudioPage() {
             label={t('studio.canvasLabel', { name })}
           >
             <Animator frameRef={frameRef} pattern={pattern} />
-            <BodyModel skeleton={skeletonSource} intensities={intensities} dimInactive interactive={false} />
+            <BodyModel
+              skeleton={skeletonSource}
+              intensities={intensities}
+              dimInactive
+              interactive={false}
+            />
             <LoadProp
               kind={loadKind}
               spread={0.5}
               getPosition={() => (params.load > 0 ? frameRef.current.bar : null)}
             />
-            <CameraRig target={[0, 0.9, 0]} direction={[1, 0.22, 0.85]} distance={narrow ? 4.8 : 3.8} nonce={pattern} enablePan />
+            <CameraRig
+              target={[0, 0.9, 0]}
+              direction={[1, 0.22, 0.85]}
+              distance={narrow ? 4.8 : 3.8}
+              nonce={pattern}
+              enablePan
+            />
           </Stage>
           <div className="flex items-center gap-3 border-b border-line p-3 lg:border-x">
             <button
@@ -174,7 +211,9 @@ export default function StudioPage() {
               />
             </div>
           </div>
-          {reduced && <p className="px-3 py-2 text-sm text-ink-muted">{t('studio.reducedMotion')}</p>}
+          {reduced && (
+            <p className="px-3 py-2 text-sm text-ink-muted">{t('studio.reducedMotion')}</p>
+          )}
           <div className="px-3 py-2 lg:px-0">
             <IntensityLegend />
           </div>
@@ -234,7 +273,10 @@ export default function StudioPage() {
           </div>
 
           {!current.fr.balanced && (
-            <p role="status" className="flex items-start gap-2 border-l-4 border-danger pl-3 text-sm">
+            <p
+              role="status"
+              className="flex items-start gap-2 border-l-4 border-danger pl-3 text-sm"
+            >
               <AlertTriangle size={16} aria-hidden className="mt-0.5 shrink-0 text-danger" />
               {t('studio.unbalanced')}
             </p>
@@ -247,32 +289,55 @@ export default function StudioPage() {
             <thead>
               <tr className="label-mono text-left">
                 <th className="border-b border-line py-1 font-normal">{t('studio.joint')}</th>
-                <th className="border-b border-line py-1 text-right font-normal">{t('studio.current')}</th>
-                <th className="border-b border-line py-1 text-right font-normal">{t('studio.peak')}</th>
-                <th className="border-b border-line py-1 text-right font-normal">{t('studio.momentArm')}</th>
+                <th className="border-b border-line py-1 text-right font-normal">
+                  {t('studio.current')}
+                </th>
+                <th className="border-b border-line py-1 text-right font-normal">
+                  {t('studio.peak')}
+                </th>
+                <th className="border-b border-line py-1 text-right font-normal">
+                  {t('studio.momentArm')}
+                </th>
               </tr>
             </thead>
             <tbody className="font-mono tabular-nums">
               {(['knee', 'hip', 'lumbar'] as const).map((k, i) => (
                 <tr key={k}>
-                  <th scope="row" className="border-b border-line py-1.5 text-left font-sans font-normal">
-                    <span className="mr-2 inline-block h-0.5 w-4 align-middle" style={{ background: `var(--c-chart-${i + 1})` }} />
+                  <th
+                    scope="row"
+                    className="border-b border-line py-1.5 text-left font-sans font-normal"
+                  >
+                    <span
+                      className="mr-2 inline-block h-0.5 w-4 align-middle"
+                      style={{ background: `var(--c-chart-${i + 1})` }}
+                    />
                     {t(`studio.${k}`)}
                   </th>
-                  <td className="border-b border-line py-1.5 text-right">{Math.round(current.m[k])}</td>
+                  <td className="border-b border-line py-1.5 text-right">
+                    {Math.round(current.m[k])}
+                  </td>
                   <td className="border-b border-line py-1.5 text-right">{Math.round(peak(k))}</td>
-                  <td className="border-b border-line py-1.5 text-right">{(current.m.arms[k] * 100).toFixed(0)} {t('common.cm')}</td>
+                  <td className="border-b border-line py-1.5 text-right">
+                    {(current.m.arms[k] * 100).toFixed(0)} {t('common.cm')}
+                  </td>
                 </tr>
               ))}
               {pattern === 'ohp' && (
                 <tr>
-                  <th scope="row" className="border-b border-line py-1.5 text-left font-sans font-normal">
+                  <th
+                    scope="row"
+                    className="border-b border-line py-1.5 text-left font-sans font-normal"
+                  >
                     <span className="mr-6" />
                     {t('studio.shoulder')}
                   </th>
-                  <td className="border-b border-line py-1.5 text-right">{Math.round(current.m.shoulder)}</td>
+                  <td className="border-b border-line py-1.5 text-right">
+                    {Math.round(current.m.shoulder)}
+                  </td>
                   <td className="border-b border-line py-1.5 text-right">—</td>
-                  <td className="border-b border-line py-1.5 text-right">{(current.m.arms.shoulder * 100).toFixed(0)} {t('common.cm')}</td>
+                  <td className="border-b border-line py-1.5 text-right">
+                    {(current.m.arms.shoulder * 100).toFixed(0)} {t('common.cm')}
+                  </td>
                 </tr>
               )}
             </tbody>
@@ -296,7 +361,9 @@ export default function StudioPage() {
             </dl>
           </div>
 
-          <p className="border-l-4 border-line-strong pl-3 text-sm text-ink-muted">{t('studio.chartNote')}</p>
+          <p className="border-l-4 border-line-strong pl-3 text-sm text-ink-muted">
+            {t('studio.chartNote')}
+          </p>
 
           {exercise?.webcam && (
             <Link to={`/webcam?mode=${exercise.webcam}`} className="btn justify-self-start">

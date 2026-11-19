@@ -19,7 +19,14 @@ interface BarProps {
 }
 
 /** Barbel/dumbel sederhana yang mengikuti posisi beban dari generator gerakan. */
-export function LoadProp({ getPosition, kind, spread = 0.42, plateScale = 0.85, barLength = 2.0, ghost = false }: BarProps) {
+export function LoadProp({
+  getPosition,
+  kind,
+  spread = 0.42,
+  plateScale = 0.85,
+  barLength = 2.0,
+  ghost = false,
+}: BarProps) {
   const ref = useRef<Group>(null);
   const t = useSceneTheme();
   useFrame(() => {
@@ -58,9 +65,20 @@ export function LoadProp({ getPosition, kind, spread = 0.42, plateScale = 0.85, 
         <meshStandardMaterial color={steel} metalness={0.7} roughness={0.3} />
       </mesh>
       {[-1, 1].map((s) => (
-        <mesh key={s} position={[s * (barLength / 2 - 0.38), 0, 0]} rotation={[0, 0, Math.PI / 2]} scale={[plateScale, 1, plateScale]}>
+        <mesh
+          key={s}
+          position={[s * (barLength / 2 - 0.38), 0, 0]}
+          rotation={[0, 0, Math.PI / 2]}
+          scale={[plateScale, 1, plateScale]}
+        >
           <cylinderGeometry args={[0.225, 0.225, 0.07, 28]} />
-          <meshStandardMaterial color={plate} roughness={0.75} transparent={ghost} opacity={ghost ? 0.18 : 1} depthWrite={!ghost} />
+          <meshStandardMaterial
+            color={plate}
+            roughness={0.75}
+            transparent={ghost}
+            opacity={ghost ? 0.18 : 1}
+            depthWrite={!ghost}
+          />
         </mesh>
       ))}
     </group>

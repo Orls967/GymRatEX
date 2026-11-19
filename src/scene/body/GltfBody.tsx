@@ -12,14 +12,23 @@ const base = import.meta.env.BASE_URL;
 const DRACO_PATH = `${base}decoders/draco/`;
 
 /** Implementasi BodyModel berbasis glTF. Hanya dimuat bila BODY_MODEL_SOURCE = 'gltf'. */
-export default function GltfBody({ intensities, selected, hovered, minLayer = 1, onHover, onSelect, interactive = true }: BodyModelProps) {
+export default function GltfBody({
+  intensities,
+  selected,
+  hovered,
+  minLayer = 1,
+  onHover,
+  onSelect,
+  interactive = true,
+}: BodyModelProps) {
   const gltf = useGLTF(`${base}${GLTF_MAPPING.url}`, DRACO_PATH);
   const theme = useSceneTheme();
   const invalidate = useThree((s) => s.invalidate);
 
   const meshToMuscle = useMemo(() => {
     const m = new Map<string, string>();
-    for (const [id, names] of Object.entries(GLTF_MAPPING.muscles)) for (const n of names) m.set(n, id);
+    for (const [id, names] of Object.entries(GLTF_MAPPING.muscles))
+      for (const n of names) m.set(n, id);
     return m;
   }, []);
 

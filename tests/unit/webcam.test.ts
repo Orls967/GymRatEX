@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { angle2d, computeAngles, Ema, LM, tiltFromVertical, type Landmark } from '../../src/lib/pose2d';
+import {
+  angle2d,
+  computeAngles,
+  Ema,
+  LM,
+  tiltFromVertical,
+  type Landmark,
+} from '../../src/lib/pose2d';
 import { RepCounter } from '../../src/lib/repCounter';
 import { liveFeedback, REP_CONFIG, repFeedback } from '../../src/lib/formFeedback';
 
@@ -78,10 +85,28 @@ describe('RepCounter', () => {
 
   it('umpan balik langsung: lutut masuk', () => {
     expect(
-      liveFeedback('squat', { knee: 100, hip: 90, elbow: 170, torsoTilt: 30, shoulder: 10, kneeAnkleRatio: 0.6, side: 'left', confidence: 1 }),
+      liveFeedback('squat', {
+        knee: 100,
+        hip: 90,
+        elbow: 170,
+        torsoTilt: 30,
+        shoulder: 10,
+        kneeAnkleRatio: 0.6,
+        side: 'left',
+        confidence: 1,
+      }),
     ).toBe('kneesIn');
     expect(
-      liveFeedback('squat', { knee: 100, hip: 90, elbow: 170, torsoTilt: 30, shoulder: 10, kneeAnkleRatio: 1.1, side: 'left', confidence: 1 }),
+      liveFeedback('squat', {
+        knee: 100,
+        hip: 90,
+        elbow: 170,
+        torsoTilt: 30,
+        shoulder: 10,
+        kneeAnkleRatio: 1.1,
+        side: 'left',
+        confidence: 1,
+      }),
     ).toBeNull();
   });
 });

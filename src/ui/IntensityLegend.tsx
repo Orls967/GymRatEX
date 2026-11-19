@@ -12,7 +12,11 @@ export function IntensityLegend() {
       <span className="label-mono">{t('exercises.legend')}</span>
       {items.map((i) => (
         <span key={i.lvl} className="flex items-center gap-1.5 text-sm">
-          <span aria-hidden className="inline-block h-3 w-6" style={{ background: `var(--c-int-${i.lvl})` }} />
+          <span
+            aria-hidden
+            className="inline-block h-3 w-6"
+            style={{ background: `var(--c-int-${i.lvl})` }}
+          />
           {i.label}
         </span>
       ))}

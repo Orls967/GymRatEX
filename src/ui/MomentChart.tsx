@@ -53,7 +53,9 @@ export function MomentChart({ series, cursor }: Props) {
   const idx = hover ?? Math.round(cursor * (n - 1));
   // label langsung di ujung kanan, dihindarkan dari tabrakan dengan jarak minimum 14px
   const labels = useMemo(() => {
-    const items = series.map((s) => ({ key: s.key, y: y(s.values[n - 1] ?? 0) })).sort((a, b) => a.y - b.y);
+    const items = series
+      .map((s) => ({ key: s.key, y: y(s.values[n - 1] ?? 0) }))
+      .sort((a, b) => a.y - b.y);
     for (let i = 1; i < items.length; i++) {
       const prev = items[i - 1];
       const cur = items[i];
@@ -85,11 +87,29 @@ export function MomentChart({ series, cursor }: Props) {
           </span>
         ))}
       </div>
-      <svg viewBox={`0 0 ${W} ${H}`} className="block h-auto w-full select-none" role="img" aria-labelledby={titleId}>
+      <svg
+        viewBox={`0 0 ${W} ${H}`}
+        className="block h-auto w-full select-none"
+        role="img"
+        aria-labelledby={titleId}
+      >
         {ticks.map((v) => (
           <g key={v}>
-            <line x1={M.l} x2={W - M.r} y1={y(v)} y2={y(v)} stroke="var(--c-chart-grid)" strokeWidth={v === 0 ? 1.5 : 1} />
-            <text x={M.l - 6} y={y(v)} textAnchor="end" dominantBaseline="middle" className="fill-ink-muted font-mono text-[10px]">
+            <line
+              x1={M.l}
+              x2={W - M.r}
+              y1={y(v)}
+              y2={y(v)}
+              stroke="var(--c-chart-grid)"
+              strokeWidth={v === 0 ? 1.5 : 1}
+            />
+            <text
+              x={M.l - 6}
+              y={y(v)}
+              textAnchor="end"
+              dominantBaseline="middle"
+              className="fill-ink-muted font-mono text-[10px]"
+            >
               {v}
             </text>
           </g>
@@ -97,7 +117,12 @@ export function MomentChart({ series, cursor }: Props) {
         <text x={M.l} y={H - 8} className="fill-ink-muted font-mono text-[10px]">
           {t('studio.phase')} 0
         </text>
-        <text x={W - M.r} y={H - 8} textAnchor="end" className="fill-ink-muted font-mono text-[10px]">
+        <text
+          x={W - M.r}
+          y={H - 8}
+          textAnchor="end"
+          className="fill-ink-muted font-mono text-[10px]"
+        >
           1
         </text>
         {series.map((s) => (
@@ -112,11 +137,24 @@ export function MomentChart({ series, cursor }: Props) {
           />
         ))}
         {labels.map((l) => (
-          <text key={l.key} x={W - M.r + 6} y={l.y} dominantBaseline="middle" className="fill-ink text-[11px]">
+          <text
+            key={l.key}
+            x={W - M.r + 6}
+            y={l.y}
+            dominantBaseline="middle"
+            className="fill-ink text-[11px]"
+          >
             {t(`studio.${l.key}`)}
           </text>
         ))}
-        <line x1={tipX} x2={tipX} y1={M.t} y2={H - M.b} stroke="var(--c-ink-muted)" strokeDasharray={hover === null ? '3 3' : undefined} />
+        <line
+          x1={tipX}
+          x2={tipX}
+          y1={M.t}
+          y2={H - M.b}
+          stroke="var(--c-ink-muted)"
+          strokeDasharray={hover === null ? '3 3' : undefined}
+        />
         {series.map((s) => (
           <circle
             key={s.key}
@@ -129,8 +167,16 @@ export function MomentChart({ series, cursor }: Props) {
           />
         ))}
         {hover !== null && (
-          <g transform={`translate(${tipLeft ? tipX - 130 : tipX + 8}, ${M.t + 4})`} pointerEvents="none">
-            <rect width={122} height={16 + series.length * 15} fill="var(--c-surface)" stroke="var(--c-line-strong)" />
+          <g
+            transform={`translate(${tipLeft ? tipX - 130 : tipX + 8}, ${M.t + 4})`}
+            pointerEvents="none"
+          >
+            <rect
+              width={122}
+              height={16 + series.length * 15}
+              fill="var(--c-surface)"
+              stroke="var(--c-line-strong)"
+            />
             <text x={8} y={13} className="fill-ink-muted font-mono text-[10px]">
               {t('studio.phase')} {(idx / (n - 1)).toFixed(2)}
             </text>
@@ -140,7 +186,13 @@ export function MomentChart({ series, cursor }: Props) {
                 <text x={14} y={0} dominantBaseline="middle" className="fill-ink text-[10px]">
                   {t(`studio.${s.key}`)}
                 </text>
-                <text x={112} y={0} textAnchor="end" dominantBaseline="middle" className="fill-ink font-mono text-[10px]">
+                <text
+                  x={112}
+                  y={0}
+                  textAnchor="end"
+                  dominantBaseline="middle"
+                  className="fill-ink font-mono text-[10px]"
+                >
                   {Math.round(s.values[idx] ?? 0)}
                 </text>
               </g>

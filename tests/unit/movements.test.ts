@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { BONE_LENGTH, computeSkeleton, neutralPose, STANDING_HIP_HEIGHT } from '../../src/lib/rig';
-import { DEFAULT_PARAMS, movementFrame, phaseAt, type StudioPattern } from '../../src/lib/movements';
+import {
+  DEFAULT_PARAMS,
+  movementFrame,
+  phaseAt,
+  type StudioPattern,
+} from '../../src/lib/movements';
 
 const PATTERNS: StudioPattern[] = ['squat', 'hinge', 'lunge', 'ohp'];
 

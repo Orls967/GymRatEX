@@ -35,7 +35,10 @@ const raw: z.input<typeof Muscle>[] = [
     region: 'chest',
     layer: 3,
     side: 'front',
-    origin: { id: 'Iga ke-3 sampai ke-5 dekat kartilago kosta', en: 'Ribs 3–5 near the costal cartilages' },
+    origin: {
+      id: 'Iga ke-3 sampai ke-5 dekat kartilago kosta',
+      en: 'Ribs 3–5 near the costal cartilages',
+    },
     insertion: { id: 'Prosesus korakoid skapula', en: 'Coracoid process of the scapula' },
     function: {
       id: 'Menarik skapula ke depan-bawah (protraksi & depresi); membantu inspirasi paksa.',
@@ -85,7 +88,10 @@ const raw: z.input<typeof Muscle>[] = [
     side: 'front',
     origin: { id: 'Akromion skapula', en: 'Acromion of the scapula' },
     insertion: { id: 'Tuberositas deltoid humerus', en: 'Deltoid tuberosity of the humerus' },
-    function: { id: 'Abduksi bahu (mengangkat lengan ke samping).', en: 'Shoulder abduction (raising the arm sideways).' },
+    function: {
+      id: 'Abduksi bahu (mengangkat lengan ke samping).',
+      en: 'Shoulder abduction (raising the arm sideways).',
+    },
     sources: [G, OS],
     needsVerification: false,
   },
@@ -116,7 +122,10 @@ const raw: z.input<typeof Muscle>[] = [
       id: 'Fossa infraspinatus dan tepi lateral skapula',
       en: 'Infraspinous fossa and lateral border of the scapula',
     },
-    insertion: { id: 'Tuberkulum mayor humerus (faset tengah & bawah)', en: 'Greater tubercle of the humerus (middle & inferior facets)' },
+    insertion: {
+      id: 'Tuberkulum mayor humerus (faset tengah & bawah)',
+      en: 'Greater tubercle of the humerus (middle & inferior facets)',
+    },
     function: {
       id: 'Rotasi eksternal bahu dan menstabilkan kepala humerus di soket.',
       en: 'External rotation of the shoulder and stabilizing the humeral head in the socket.',
@@ -135,8 +144,14 @@ const raw: z.input<typeof Muscle>[] = [
       id: 'Kepala pendek: prosesus korakoid; kepala panjang: tuberkulum supraglenoid',
       en: 'Short head: coracoid process; long head: supraglenoid tubercle',
     },
-    insertion: { id: 'Tuberositas radius dan aponeurosis bisipital', en: 'Radial tuberosity and bicipital aponeurosis' },
-    function: { id: 'Fleksi siku dan supinasi lengan bawah.', en: 'Elbow flexion and forearm supination.' },
+    insertion: {
+      id: 'Tuberositas radius dan aponeurosis bisipital',
+      en: 'Radial tuberosity and bicipital aponeurosis',
+    },
+    function: {
+      id: 'Fleksi siku dan supinasi lengan bawah.',
+      en: 'Elbow flexion and forearm supination.',
+    },
     sources: [G, OS],
     needsVerification: false,
   },
@@ -147,9 +162,18 @@ const raw: z.input<typeof Muscle>[] = [
     region: 'arm',
     layer: 2,
     side: 'front',
-    origin: { id: 'Separuh distal permukaan anterior humerus', en: 'Distal half of the anterior humerus' },
-    insertion: { id: 'Prosesus koronoid dan tuberositas ulna', en: 'Coronoid process and tuberosity of the ulna' },
-    function: { id: 'Fleksor siku utama pada semua posisi lengan bawah.', en: 'Main elbow flexor in every forearm position.' },
+    origin: {
+      id: 'Separuh distal permukaan anterior humerus',
+      en: 'Distal half of the anterior humerus',
+    },
+    insertion: {
+      id: 'Prosesus koronoid dan tuberositas ulna',
+      en: 'Coronoid process and tuberosity of the ulna',
+    },
+    function: {
+      id: 'Fleksor siku utama pada semua posisi lengan bawah.',
+      en: 'Main elbow flexor in every forearm position.',
+    },
     sources: [G, OS],
     needsVerification: false,
   },
@@ -179,7 +203,10 @@ const raw: z.input<typeof Muscle>[] = [
     region: 'forearm',
     layer: 1,
     side: 'front',
-    origin: { id: 'Krista suprakondilar lateral humerus', en: 'Lateral supracondylar ridge of the humerus' },
+    origin: {
+      id: 'Krista suprakondilar lateral humerus',
+      en: 'Lateral supracondylar ridge of the humerus',
+    },
     insertion: { id: 'Prosesus stiloid radius', en: 'Styloid process of the radius' },
     function: {
       id: 'Fleksi siku, paling efektif dengan genggaman netral (hammer).',
@@ -195,9 +222,18 @@ const raw: z.input<typeof Muscle>[] = [
     region: 'forearm',
     layer: 1,
     side: 'front',
-    origin: { id: 'Epikondilus medial humerus (tendon fleksor bersama)', en: 'Medial epicondyle of the humerus (common flexor tendon)' },
-    insertion: { id: 'Tulang karpal, metakarpal, dan falang', en: 'Carpals, metacarpals and phalanges' },
-    function: { id: 'Fleksi pergelangan dan jari; kekuatan genggaman.', en: 'Wrist and finger flexion; grip strength.' },
+    origin: {
+      id: 'Epikondilus medial humerus (tendon fleksor bersama)',
+      en: 'Medial epicondyle of the humerus (common flexor tendon)',
+    },
+    insertion: {
+      id: 'Tulang karpal, metakarpal, dan falang',
+      en: 'Carpals, metacarpals and phalanges',
+    },
+    function: {
+      id: 'Fleksi pergelangan dan jari; kekuatan genggaman.',
+      en: 'Wrist and finger flexion; grip strength.',
+    },
     sources: [G, OS],
     needsVerification: true,
   },
@@ -208,8 +244,14 @@ const raw: z.input<typeof Muscle>[] = [
     region: 'forearm',
     layer: 1,
     side: 'back',
-    origin: { id: 'Epikondilus lateral humerus (tendon ekstensor bersama)', en: 'Lateral epicondyle of the humerus (common extensor tendon)' },
-    insertion: { id: 'Metakarpal dan falang bagian dorsal', en: 'Dorsal metacarpals and phalanges' },
+    origin: {
+      id: 'Epikondilus lateral humerus (tendon ekstensor bersama)',
+      en: 'Lateral epicondyle of the humerus (common extensor tendon)',
+    },
+    insertion: {
+      id: 'Metakarpal dan falang bagian dorsal',
+      en: 'Dorsal metacarpals and phalanges',
+    },
     function: {
       id: 'Ekstensi pergelangan dan jari; menstabilkan pergelangan saat menggenggam.',
       en: 'Wrist and finger extension; stabilizes the wrist while gripping.',
@@ -225,7 +267,10 @@ const raw: z.input<typeof Muscle>[] = [
     layer: 1,
     side: 'front',
     origin: { id: 'Krista pubis dan simfisis pubis', en: 'Pubic crest and pubic symphysis' },
-    insertion: { id: 'Prosesus xifoid dan kartilago kosta 5–7', en: 'Xiphoid process and costal cartilages 5–7' },
+    insertion: {
+      id: 'Prosesus xifoid dan kartilago kosta 5–7',
+      en: 'Xiphoid process and costal cartilages 5–7',
+    },
     function: {
       id: 'Fleksi tulang belakang; menahan ekstensi berlebih dan menaikkan tekanan intra-abdomen.',
       en: 'Flexes the spine; resists over-extension and raises intra-abdominal pressure.',
@@ -241,7 +286,10 @@ const raw: z.input<typeof Muscle>[] = [
     layer: 1,
     side: 'front',
     origin: { id: 'Permukaan luar iga 5–12', en: 'Outer surfaces of ribs 5–12' },
-    insertion: { id: 'Krista iliaka, linea alba, tuberkulum pubis', en: 'Iliac crest, linea alba, pubic tubercle' },
+    insertion: {
+      id: 'Krista iliaka, linea alba, tuberkulum pubis',
+      en: 'Iliac crest, linea alba, pubic tubercle',
+    },
     function: {
       id: 'Rotasi dan fleksi lateral batang tubuh; menahan rotasi (anti-rotasi).',
       en: 'Trunk rotation and lateral flexion; resists rotation (anti-rotation).',
@@ -256,7 +304,10 @@ const raw: z.input<typeof Muscle>[] = [
     region: 'core',
     layer: 2,
     side: 'front',
-    origin: { id: 'Fasia torakolumbal, krista iliaka, ligamen inguinal', en: 'Thoracolumbar fascia, iliac crest, inguinal ligament' },
+    origin: {
+      id: 'Fasia torakolumbal, krista iliaka, ligamen inguinal',
+      en: 'Thoracolumbar fascia, iliac crest, inguinal ligament',
+    },
     insertion: { id: 'Iga 10–12, linea alba', en: 'Ribs 10–12, linea alba' },
     function: {
       id: 'Rotasi batang tubuh ke sisi yang sama; menstabilkan dinding perut.',
@@ -317,7 +368,10 @@ const raw: z.input<typeof Muscle>[] = [
       id: 'Prosesus spinosus T7–L5, fasia torakolumbal, krista iliaka, iga bawah',
       en: 'Spinous processes T7–L5, thoracolumbar fascia, iliac crest, lower ribs',
     },
-    insertion: { id: 'Dasar alur intertuberkular humerus', en: 'Floor of the intertubercular groove of the humerus' },
+    insertion: {
+      id: 'Dasar alur intertuberkular humerus',
+      en: 'Floor of the intertubercular groove of the humerus',
+    },
     function: {
       id: 'Ekstensi, aduksi, dan rotasi internal bahu; menarik badan ke palang.',
       en: 'Shoulder extension, adduction and internal rotation; pulls the body up to a bar.',
@@ -334,7 +388,10 @@ const raw: z.input<typeof Muscle>[] = [
     side: 'back',
     origin: { id: 'Prosesus spinosus C7–T5', en: 'Spinous processes C7–T5' },
     insertion: { id: 'Tepi medial skapula', en: 'Medial border of the scapula' },
-    function: { id: 'Retraksi dan rotasi bawah skapula.', en: 'Retracts and downwardly rotates the scapula.' },
+    function: {
+      id: 'Retraksi dan rotasi bawah skapula.',
+      en: 'Retracts and downwardly rotates the scapula.',
+    },
     sources: [G, OS],
     needsVerification: false,
   },
@@ -349,7 +406,10 @@ const raw: z.input<typeof Muscle>[] = [
       id: 'Sakrum, krista iliaka, prosesus spinosus lumbal (tendon bersama)',
       en: 'Sacrum, iliac crest, lumbar spinous processes (common tendon)',
     },
-    insertion: { id: 'Iga, prosesus vertebra torakal & servikal, tulang tengkorak', en: 'Ribs, thoracic & cervical vertebral processes, skull' },
+    insertion: {
+      id: 'Iga, prosesus vertebra torakal & servikal, tulang tengkorak',
+      en: 'Ribs, thoracic & cervical vertebral processes, skull',
+    },
     function: {
       id: 'Ekstensi tulang belakang; menahan fleksi saat membungkuk dengan beban.',
       en: 'Extends the spine; resists flexion when bending over under load.',
@@ -364,8 +424,14 @@ const raw: z.input<typeof Muscle>[] = [
     region: 'back',
     layer: 3,
     side: 'back',
-    origin: { id: 'Sakrum dan prosesus transversus/mamilaris vertebra', en: 'Sacrum and transverse/mammillary processes of vertebrae' },
-    insertion: { id: 'Prosesus spinosus 2–4 ruas di atasnya', en: 'Spinous processes 2–4 segments above' },
+    origin: {
+      id: 'Sakrum dan prosesus transversus/mamilaris vertebra',
+      en: 'Sacrum and transverse/mammillary processes of vertebrae',
+    },
+    insertion: {
+      id: 'Prosesus spinosus 2–4 ruas di atasnya',
+      en: 'Spinous processes 2–4 segments above',
+    },
     function: {
       id: 'Menstabilkan ruas-ruas tulang belakang secara segmental.',
       en: 'Stabilizes individual spinal segments.',
@@ -380,8 +446,14 @@ const raw: z.input<typeof Muscle>[] = [
     region: 'back',
     layer: 3,
     side: 'back',
-    origin: { id: 'Krista iliaka dan ligamen iliolumbal', en: 'Iliac crest and iliolumbar ligament' },
-    insertion: { id: 'Iga ke-12 dan prosesus transversus L1–L4', en: 'Rib 12 and transverse processes L1–L4' },
+    origin: {
+      id: 'Krista iliaka dan ligamen iliolumbal',
+      en: 'Iliac crest and iliolumbar ligament',
+    },
+    insertion: {
+      id: 'Iga ke-12 dan prosesus transversus L1–L4',
+      en: 'Rib 12 and transverse processes L1–L4',
+    },
     function: {
       id: 'Fleksi lateral tulang belakang; menahan panggul agar tidak jatuh ke samping saat membawa beban.',
       en: 'Lateral spinal flexion; keeps the pelvis level when carrying a load on one side.',
@@ -400,7 +472,10 @@ const raw: z.input<typeof Muscle>[] = [
       id: 'Ilium posterior, sakrum, koksiks, ligamen sakrotuberal',
       en: 'Posterior ilium, sacrum, coccyx, sacrotuberous ligament',
     },
-    insertion: { id: 'Traktus iliotibial dan tuberositas gluteal femur', en: 'Iliotibial tract and gluteal tuberosity of the femur' },
+    insertion: {
+      id: 'Traktus iliotibial dan tuberositas gluteal femur',
+      en: 'Iliotibial tract and gluteal tuberosity of the femur',
+    },
     function: {
       id: 'Ekstensi dan rotasi eksternal pinggul; penggerak utama saat bangkit dari squat dan hip thrust.',
       en: 'Hip extension and external rotation; prime mover when rising from a squat and in hip thrusts.',
@@ -431,9 +506,15 @@ const raw: z.input<typeof Muscle>[] = [
     region: 'hip',
     layer: 3,
     side: 'front',
-    origin: { id: 'Vertebra T12–L5 (psoas) dan fossa iliaka (iliakus)', en: 'Vertebrae T12–L5 (psoas) and iliac fossa (iliacus)' },
+    origin: {
+      id: 'Vertebra T12–L5 (psoas) dan fossa iliaka (iliakus)',
+      en: 'Vertebrae T12–L5 (psoas) and iliac fossa (iliacus)',
+    },
     insertion: { id: 'Trokanter minor femur', en: 'Lesser trochanter of the femur' },
-    function: { id: 'Fleksi pinggul; menstabilkan lumbal.', en: 'Hip flexion; stabilizes the lumbar spine.' },
+    function: {
+      id: 'Fleksi pinggul; menstabilkan lumbal.',
+      en: 'Hip flexion; stabilizes the lumbar spine.',
+    },
     sources: [G, OS],
     needsVerification: false,
   },
@@ -445,7 +526,10 @@ const raw: z.input<typeof Muscle>[] = [
     layer: 1,
     side: 'front',
     origin: { id: 'Ramus pubis dan tuberositas iskium', en: 'Pubic ramus and ischial tuberosity' },
-    insertion: { id: 'Linea aspera dan tuberkulum aduktor femur', en: 'Linea aspera and adductor tubercle of the femur' },
+    insertion: {
+      id: 'Linea aspera dan tuberkulum aduktor femur',
+      en: 'Linea aspera and adductor tubercle of the femur',
+    },
     function: {
       id: 'Aduksi pinggul; aduktor magnus juga membantu ekstensi pinggul di posisi squat dalam.',
       en: 'Hip adduction; adductor magnus also assists hip extension in a deep squat.',
@@ -461,7 +545,10 @@ const raw: z.input<typeof Muscle>[] = [
     layer: 1,
     side: 'front',
     origin: { id: 'Spina iliaka anterior inferior', en: 'Anterior inferior iliac spine' },
-    insertion: { id: 'Tuberositas tibia melalui tendon patela', en: 'Tibial tuberosity via the patellar tendon' },
+    insertion: {
+      id: 'Tuberositas tibia melalui tendon patela',
+      en: 'Tibial tuberosity via the patellar tendon',
+    },
     function: {
       id: 'Ekstensi lutut dan fleksi pinggul (otot dua sendi).',
       en: 'Knee extension and hip flexion (two-joint muscle).',
@@ -476,8 +563,14 @@ const raw: z.input<typeof Muscle>[] = [
     region: 'thigh',
     layer: 1,
     side: 'front',
-    origin: { id: 'Trokanter mayor dan linea aspera femur', en: 'Greater trochanter and linea aspera of the femur' },
-    insertion: { id: 'Tuberositas tibia melalui tendon patela', en: 'Tibial tuberosity via the patellar tendon' },
+    origin: {
+      id: 'Trokanter mayor dan linea aspera femur',
+      en: 'Greater trochanter and linea aspera of the femur',
+    },
+    insertion: {
+      id: 'Tuberositas tibia melalui tendon patela',
+      en: 'Tibial tuberosity via the patellar tendon',
+    },
     function: { id: 'Ekstensi lutut.', en: 'Knee extension.' },
     sources: [G, OS],
     needsVerification: false,
@@ -489,8 +582,14 @@ const raw: z.input<typeof Muscle>[] = [
     region: 'thigh',
     layer: 1,
     side: 'front',
-    origin: { id: 'Garis intertrokanter dan linea aspera femur', en: 'Intertrochanteric line and linea aspera of the femur' },
-    insertion: { id: 'Tuberositas tibia melalui tendon patela', en: 'Tibial tuberosity via the patellar tendon' },
+    origin: {
+      id: 'Garis intertrokanter dan linea aspera femur',
+      en: 'Intertrochanteric line and linea aspera of the femur',
+    },
+    insertion: {
+      id: 'Tuberositas tibia melalui tendon patela',
+      en: 'Tibial tuberosity via the patellar tendon',
+    },
     function: {
       id: 'Ekstensi lutut; membantu menstabilkan tempurung lutut.',
       en: 'Knee extension; helps stabilize the kneecap.',
@@ -505,8 +604,14 @@ const raw: z.input<typeof Muscle>[] = [
     region: 'thigh',
     layer: 3,
     side: 'front',
-    origin: { id: 'Permukaan anterior dan lateral batang femur', en: 'Anterior and lateral shaft of the femur' },
-    insertion: { id: 'Tuberositas tibia melalui tendon patela', en: 'Tibial tuberosity via the patellar tendon' },
+    origin: {
+      id: 'Permukaan anterior dan lateral batang femur',
+      en: 'Anterior and lateral shaft of the femur',
+    },
+    insertion: {
+      id: 'Tuberositas tibia melalui tendon patela',
+      en: 'Tibial tuberosity via the patellar tendon',
+    },
     function: { id: 'Ekstensi lutut.', en: 'Knee extension.' },
     sources: [G, OS],
     needsVerification: false,
@@ -518,8 +623,14 @@ const raw: z.input<typeof Muscle>[] = [
     region: 'thigh',
     layer: 1,
     side: 'back',
-    origin: { id: 'Tuberositas iskium (kepala pendek bisep femoris: linea aspera)', en: 'Ischial tuberosity (biceps femoris short head: linea aspera)' },
-    insertion: { id: 'Kepala fibula dan kondilus medial tibia', en: 'Fibular head and medial tibial condyle' },
+    origin: {
+      id: 'Tuberositas iskium (kepala pendek bisep femoris: linea aspera)',
+      en: 'Ischial tuberosity (biceps femoris short head: linea aspera)',
+    },
+    insertion: {
+      id: 'Kepala fibula dan kondilus medial tibia',
+      en: 'Fibular head and medial tibial condyle',
+    },
     function: {
       id: 'Ekstensi pinggul dan fleksi lutut; menahan tibia agar tidak bergeser ke depan.',
       en: 'Hip extension and knee flexion; resists forward shear of the tibia.',
@@ -550,7 +661,10 @@ const raw: z.input<typeof Muscle>[] = [
     region: 'leg',
     layer: 2,
     side: 'back',
-    origin: { id: 'Kepala fibula dan garis soleal tibia', en: 'Fibular head and soleal line of the tibia' },
+    origin: {
+      id: 'Kepala fibula dan garis soleal tibia',
+      en: 'Fibular head and soleal line of the tibia',
+    },
     insertion: { id: 'Kalkaneus melalui tendon Achilles', en: 'Calcaneus via the Achilles tendon' },
     function: {
       id: 'Plantarfleksi pergelangan kaki, dominan saat lutut ditekuk.',
@@ -566,8 +680,14 @@ const raw: z.input<typeof Muscle>[] = [
     region: 'leg',
     layer: 1,
     side: 'front',
-    origin: { id: 'Kondilus lateral dan batang tibia', en: 'Lateral condyle and shaft of the tibia' },
-    insertion: { id: 'Kuneiformis medial dan metatarsal pertama', en: 'Medial cuneiform and first metatarsal' },
+    origin: {
+      id: 'Kondilus lateral dan batang tibia',
+      en: 'Lateral condyle and shaft of the tibia',
+    },
+    insertion: {
+      id: 'Kuneiformis medial dan metatarsal pertama',
+      en: 'Medial cuneiform and first metatarsal',
+    },
     function: {
       id: 'Dorsofleksi dan inversi kaki; mengontrol lutut maju di atas jari kaki.',
       en: 'Dorsiflexion and inversion of the foot; controls the knee travelling over the toes.',

@@ -6,7 +6,14 @@ import type { PoseLandmarker } from '@mediapipe/tasks-vision';
 import { WEBCAM_MODES } from '../content';
 import { computeAngles, Ema, POSE_EDGES, type JointAngles2D, type Landmark } from '../lib/pose2d';
 import { RepCounter } from '../lib/repCounter';
-import { liveFeedback, REP_CONFIG, repFeedback, repMetric, type FeedbackKey, type WebcamMode } from '../lib/formFeedback';
+import {
+  liveFeedback,
+  REP_CONFIG,
+  repFeedback,
+  repMetric,
+  type FeedbackKey,
+  type WebcamMode,
+} from '../lib/formFeedback';
 import { PageHeader } from '../ui/PageHeader';
 import { Segmented } from '../ui/Segmented';
 
@@ -67,7 +74,9 @@ export default function WebcamPage() {
   const { t } = useTranslation();
   const [params, setParams] = useSearchParams();
   const modeParam = params.get('mode');
-  const mode: WebcamMode = (WEBCAM_MODES as readonly string[]).includes(modeParam ?? '') ? (modeParam as WebcamMode) : 'squat';
+  const mode: WebcamMode = (WEBCAM_MODES as readonly string[]).includes(modeParam ?? '')
+    ? (modeParam as WebcamMode)
+    : 'squat';
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -184,7 +193,11 @@ export default function WebcamPage() {
     } catch (err) {
       const e = err as DOMException;
       setStatus('error');
-      setError(e?.name === 'NotAllowedError' ? t('webcam.denied') : t('webcam.cameraError', { msg: e?.message ?? String(err) }));
+      setError(
+        e?.name === 'NotAllowedError'
+          ? t('webcam.denied')
+          : t('webcam.cameraError', { msg: e?.message ?? String(err) }),
+      );
       return;
     }
     try {
@@ -206,7 +219,8 @@ export default function WebcamPage() {
   };
 
   const running = status === 'running';
-  const feedbackTone = feedback === 'good' ? 'border-ok' : feedback ? 'border-danger' : 'border-line';
+  const feedbackTone =
+    feedback === 'good' ? 'border-ok' : feedback ? 'border-danger' : 'border-line';
 
   return (
     <div>
@@ -221,19 +235,29 @@ export default function WebcamPage() {
               className="absolute inset-0 h-full w-full -scale-x-100 object-cover"
               aria-hidden
             />
-            <canvas ref={canvasRef} className="absolute inset-0 h-full w-full -scale-x-100 object-cover" aria-hidden />
+            <canvas
+              ref={canvasRef}
+              className="absolute inset-0 h-full w-full -scale-x-100 object-cover"
+              aria-hidden
+            />
             {!running && (
               <div className="absolute inset-0 grid place-items-center p-6 text-center">
                 <div>
                   <Camera size={36} aria-hidden className="mx-auto text-ink-muted" />
-                  <p className="mt-2 text-sm text-ink-muted">{status === 'loading' ? t('webcam.loadingModel') : t('webcam.tips')}</p>
+                  <p className="mt-2 text-sm text-ink-muted">
+                    {status === 'loading' ? t('webcam.loadingModel') : t('webcam.tips')}
+                  </p>
                 </div>
               </div>
             )}
             {running && (
               <div className="absolute left-3 top-3 border border-line bg-surface px-3 py-1">
                 <p className="label-mono">{t('webcam.reps')}</p>
-                <p className="font-mono text-4xl tabular-nums" data-testid="rep-count" aria-live="polite">
+                <p
+                  className="font-mono text-4xl tabular-nums"
+                  data-testid="rep-count"
+                  aria-live="polite"
+                >
                   {reps}
                 </p>
               </div>
@@ -252,7 +276,8 @@ export default function WebcamPage() {
                 disabled={status === 'loading'}
                 data-testid="camera-start"
               >
-                <Camera size={16} aria-hidden /> {status === 'loading' ? t('webcam.loadingModel') : t('webcam.start')}
+                <Camera size={16} aria-hidden />{' '}
+                {status === 'loading' ? t('webcam.loadingModel') : t('webcam.start')}
               </button>
             )}
             <button type="button" className="btn" onClick={reset} disabled={!running}>
@@ -260,7 +285,11 @@ export default function WebcamPage() {
             </button>
           </div>
           {error && (
-            <p role="alert" className="mt-3 border-l-4 border-danger pl-3 text-sm" data-testid="webcam-error">
+            <p
+              role="alert"
+              className="mt-3 border-l-4 border-danger pl-3 text-sm"
+              data-testid="webcam-error"
+            >
               {error}
             </p>
           )}
@@ -284,7 +313,11 @@ export default function WebcamPage() {
           <div aria-live="polite">
             <p className="label-mono">{t('webcam.feedback')}</p>
             <p className={`mt-1 min-h-14 border-l-4 ${feedbackTone} pl-3 text-lg`}>
-              {running && !personVisible ? t('webcam.noPerson') : feedback ? t(`webcam.msg.${feedback}`) : '—'}
+              {running && !personVisible
+                ? t('webcam.noPerson')
+                : feedback
+                  ? t(`webcam.msg.${feedback}`)
+                  : '—'}
             </p>
           </div>
           <div>
@@ -299,13 +332,17 @@ export default function WebcamPage() {
                 ] as const
               ).map(([k, v]) => (
                 <div key={k} className="border-r border-line px-2 py-2 last:border-r-0">
-                  <dt className="label-mono">{k === 'shoulder' ? t('compare.zoneNames.elbow') : t(`studio.${k}`)}</dt>
+                  <dt className="label-mono">
+                    {k === 'shoulder' ? t('compare.zoneNames.elbow') : t(`studio.${k}`)}
+                  </dt>
                   <dd className="text-2xl">{v === undefined ? '—' : `${Math.round(v)}°`}</dd>
                 </div>
               ))}
             </dl>
           </div>
-          <p className="border-l-4 border-line-strong pl-3 text-sm text-ink-muted">{t('webcam.limitation')}</p>
+          <p className="border-l-4 border-line-strong pl-3 text-sm text-ink-muted">
+            {t('webcam.limitation')}
+          </p>
         </section>
       </div>
     </div>

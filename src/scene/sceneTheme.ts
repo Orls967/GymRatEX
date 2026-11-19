@@ -15,12 +15,33 @@ export interface SceneTheme {
   accent: string;
   danger: string;
   intensity: [string, string, string, string];
-  light: { ambient: number; key: number; rim: number; hemiSky: string; hemiGround: string; exposure: number };
+  light: {
+    ambient: number;
+    key: number;
+    rim: number;
+    hemiSky: string;
+    hemiGround: string;
+    exposure: number;
+  };
 }
 
 const LIGHT_PRESETS: Record<ResolvedTheme, SceneTheme['light']> = {
-  dark: { ambient: 0.55, key: 2.6, rim: 1.6, hemiSky: '#cfd6e0', hemiGround: '#1a1714', exposure: 1.0 },
-  light: { ambient: 0.6, key: 1.8, rim: 0.6, hemiSky: '#fff8ec', hemiGround: '#b8ac98', exposure: 1.05 },
+  dark: {
+    ambient: 0.55,
+    key: 2.6,
+    rim: 1.6,
+    hemiSky: '#cfd6e0',
+    hemiGround: '#1a1714',
+    exposure: 1.0,
+  },
+  light: {
+    ambient: 0.6,
+    key: 1.8,
+    rim: 0.6,
+    hemiSky: '#fff8ec',
+    hemiGround: '#b8ac98',
+    exposure: 1.05,
+  },
 };
 
 function cssVar(name: string): string {

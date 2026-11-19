@@ -1,10 +1,19 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useFrame, useThree, type ThreeEvent } from '@react-three/fiber';
-import { CapsuleGeometry, Color, Mesh, MeshStandardMaterial, Quaternion, SphereGeometry, Vector3, Matrix4 } from 'three';
-import { MUSCLES } from '../../content/muscles';
-import { boneLocalPoint, type BoneName, type Segment, type Side } from '../../lib/rig';
+import {
+  CapsuleGeometry,
+  Color,
+  Mesh,
+  MeshStandardMaterial,
+  Quaternion,
+  SphereGeometry,
+  Vector3,
+  Matrix4,
+} from 'three';
+import type { BoneName, Side } from '../../lib/rig';
 import { useSceneTheme } from '../sceneTheme';
-import { MUSCLE_SHAPES, resolveBone, type Belly } from './muscleGeometry';
+import { resolveBone } from './muscleGeometry';
+import { MUSCLE_MESHES, anchorPoint } from './muscleMeshes';
 import type { BodyModelProps, Intensity } from './types';
 
 const UNIT_SPHERE = new SphereGeometry(1, 24, 16);
@@ -60,30 +69,6 @@ const BASE_PARTS: BasePart[] = [
   ...SIDED('l'),
   ...SIDED('r'),
 ];
-
-interface MuscleMeshDef {
-  key: string;
-  muscleId: string;
-  side: Side;
-  belly: Belly;
-  layer: 1 | 2 | 3;
-}
-
-const MUSCLE_MESHES: MuscleMeshDef[] = MUSCLES.flatMap((m) => {
-  const shape = MUSCLE_SHAPES[m.id];
-  if (!shape) return [];
-  const sides: Side[] = shape.bilateral ? ['l', 'r'] : ['l'];
-  return sides.flatMap((side) =>
-    shape.bellies.map((belly, i) => ({ key: `${m.id}:${side}:${i}`, muscleId: m.id, side, belly, layer: m.layer })),
-  );
-});
-
-function anchorPoint(seg: Segment, side: Side, off: [number, number], t: number, isMidline: boolean): Vector3 {
-  const sg = side === 'l' ? 1 : -1;
-  // tulang garis tengah & tulang sisi kanan: offset lateral dicerminkan untuk sisi kanan
-  const x = isMidline || side === 'r' ? off[0] * sg : off[0];
-  return boneLocalPoint(seg, t, [x, off[1]]);
-}
 
 export function ProceduralBody({
   skeleton,
@@ -183,8 +168,20 @@ export function ProceduralBody({
       const boneB = resolveBone(def.belly.b.bone, def.side);
       const segA = sk[boneA];
       const segB = sk[boneB];
-      const pa = anchorPoint(segA, def.side, def.belly.a.off, def.belly.a.t, !def.belly.a.bone.endsWith('_S'));
-      const pb = anchorPoint(segB, def.side, def.belly.b.off, def.belly.b.t, !def.belly.b.bone.endsWith('_S'));
+      const pa = anchorPoint(
+        segA,
+        def.side,
+        def.belly.a.off,
+        def.belly.a.t,
+        !def.belly.a.bone.endsWith('_S'),
+      );
+      const pb = anchorPoint(
+        segB,
+        def.side,
+        def.belly.b.off,
+        def.belly.b.t,
+        !def.belly.b.bone.endsWith('_S'),
+      );
       const dir = pb.clone().sub(pa);
       const len = dir.length();
       const ref = Z.clone().applyQuaternion(segA.quat);
@@ -247,23 +244,3 @@ export function ProceduralBody({
     </group>
   );
 }
-
-/** Titik tengah (dunia) otot untuk kamera fokus. */
-export function muscleCentroid(skeletonCurrent: Parameters<typeof centroidImpl>[0], muscleId: string): Vector3 | null {
-  return centroidImpl(skeletonCurrent, muscleId);
-}
-
-function centroidImpl(sk: Record<BoneName, Segment>, muscleId: string): Vector3 | null {
-  const defs = MUSCLE_MESHES.filter((d) => d.muscleId === muscleId);
-  if (defs.length === 0) return null;
-  const c = new Vector3();
-  for (const def of defs) {
-    const segA = sk[resolveBone(def.belly.a.bone, def.side)];
-    const segB = sk[resolveBone(def.belly.b.bone, def.side)];
-    c.add(anchorPoint(segA, def.side, def.belly.a.off, def.belly.a.t, !def.belly.a.bone.endsWith('_S')));
-    c.add(anchorPoint(segB, def.side, def.belly.b.off, def.belly.b.t, !def.belly.b.bone.endsWith('_S')));
-  }
-  return c.multiplyScalar(1 / (defs.length * 2));
-}
-
-export const PROCEDURAL_MUSCLE_IDS = [...new Set(MUSCLE_MESHES.map((d) => d.muscleId))];

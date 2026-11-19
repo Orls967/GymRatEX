@@ -19,7 +19,8 @@ function collectL10n(value: unknown, path: string, out: { path: string; v: unkno
   if (Array.isArray(value)) value.forEach((v, i) => collectL10n(v, `${path}[${i}]`, out));
   else if (value && typeof value === 'object') {
     const keys = Object.keys(value);
-    if (keys.length === 2 && keys.includes('id') && keys.includes('en')) out.push({ path, v: value });
+    if (keys.length === 2 && keys.includes('id') && keys.includes('en'))
+      out.push({ path, v: value });
     else for (const [k, v] of Object.entries(value)) collectL10n(v, `${path}.${k}`, out);
   }
 }
@@ -61,9 +62,14 @@ describe('konten ilmiah dwibahasa', () => {
   });
 
   it('glosarium related & kesalahan form valid', () => {
-    for (const g of GLOSSARY) for (const r of g.related) expect(TERM_BY_ID.has(r), `${g.id} → ${r}`).toBe(true);
+    for (const g of GLOSSARY)
+      for (const r of g.related) expect(TERM_BY_ID.has(r), `${g.id} → ${r}`).toBe(true);
     for (const f of FORM_ERRORS) {
-      for (const e of f.exercises) expect(EXERCISES.some((x) => x.id === e), `${f.id} → ${e}`).toBe(true);
+      for (const e of f.exercises)
+        expect(
+          EXERCISES.some((x) => x.id === e),
+          `${f.id} → ${e}`,
+        ).toBe(true);
     }
   });
 

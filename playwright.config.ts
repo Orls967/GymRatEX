@@ -13,7 +13,10 @@ export default defineConfig({
     launchOptions: executablePath ? { executablePath } : {},
   },
   projects: [
-    { name: 'mobile', use: { ...devices['Pixel 7'], launchOptions: executablePath ? { executablePath } : {} } },
+    {
+      name: 'mobile',
+      use: { ...devices['Pixel 7'], launchOptions: executablePath ? { executablePath } : {} },
+    },
   ],
   webServer: {
     command: 'npm run build && npx vite preview --port 4173 --strictPort',

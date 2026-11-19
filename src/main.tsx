@@ -19,3 +19,10 @@ if (el) {
     </StrictMode>,
   );
 }
+
+// Service worker hanya di build produksi: aplikasi bisa dipakai offline setelah dimuat.
+if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch(() => undefined);
+  });
+}

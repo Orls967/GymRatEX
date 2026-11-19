@@ -9,15 +9,30 @@ const raw: In[] = [
     name: { id: 'Back squat', en: 'Back squat' },
     equipment: ['barbell'],
     pattern: 'squat',
-    primary: ['rectus-femoris', 'vastus-lateralis', 'vastus-medialis', 'vastus-intermedius', 'gluteus-maximus'],
+    primary: [
+      'rectus-femoris',
+      'vastus-lateralis',
+      'vastus-medialis',
+      'vastus-intermedius',
+      'gluteus-maximus',
+    ],
     synergist: ['adductors', 'hamstrings', 'soleus'],
-    stabilizer: ['erector-spinae', 'rectus-abdominis', 'obliques-external', 'transversus-abdominis', 'gluteus-medius'],
+    stabilizer: [
+      'erector-spinae',
+      'rectus-abdominis',
+      'obliques-external',
+      'transversus-abdominis',
+      'gluteus-medius',
+    ],
     summary: {
       id: 'Barbel di punggung atas, turunkan pinggul di antara kaki lalu berdiri kembali.',
       en: 'Bar on the upper back, sit the hips down between the feet and stand back up.',
     },
     cues: [
-      { id: 'Tarik napas dan kencangkan perut (bracing) sebelum turun.', en: 'Breathe in and brace before descending.' },
+      {
+        id: 'Tarik napas dan kencangkan perut (bracing) sebelum turun.',
+        en: 'Breathe in and brace before descending.',
+      },
       { id: 'Lutut mengikuti arah jari kaki.', en: 'Knees track over the toes.' },
       { id: 'Barbel tetap di atas tengah telapak kaki.', en: 'Keep the bar over mid-foot.' },
     ],
@@ -39,7 +54,10 @@ const raw: In[] = [
       en: 'Bar on the front of the shoulders; a more upright torso makes the quads more dominant.',
     },
     cues: [
-      { id: 'Siku tinggi agar barbel tidak menggelinding.', en: 'Elbows high so the bar does not roll.' },
+      {
+        id: 'Siku tinggi agar barbel tidak menggelinding.',
+        en: 'Elbows high so the bar does not roll.',
+      },
       { id: 'Dada tegak, turun lurus ke bawah.', en: 'Chest up, sit straight down.' },
     ],
     errors: ['knee-valgus'],
@@ -60,7 +78,10 @@ const raw: In[] = [
       en: 'Hold a dumbbell/kettlebell at the chest; a beginner-friendly squat variation.',
     },
     cues: [
-      { id: 'Siku turun di antara lutut di posisi bawah.', en: 'Elbows drop between the knees at the bottom.' },
+      {
+        id: 'Siku turun di antara lutut di posisi bawah.',
+        en: 'Elbows drop between the knees at the bottom.',
+      },
       { id: 'Beban menempel di dada.', en: 'Keep the weight against the chest.' },
     ],
     errors: ['knee-valgus', 'butt-wink'],
@@ -75,15 +96,30 @@ const raw: In[] = [
     pattern: 'hinge',
     primary: ['gluteus-maximus', 'hamstrings', 'erector-spinae'],
     synergist: ['adductors', 'rectus-femoris', 'vastus-lateralis', 'vastus-medialis', 'trapezius'],
-    stabilizer: ['latissimus-dorsi', 'forearm-flexors', 'rectus-abdominis', 'multifidus', 'rhomboids'],
+    stabilizer: [
+      'latissimus-dorsi',
+      'forearm-flexors',
+      'rectus-abdominis',
+      'multifidus',
+      'rhomboids',
+    ],
     summary: {
       id: 'Angkat barbel dari lantai dengan mendorong lantai lalu mengunci pinggul.',
       en: 'Lift the bar from the floor by pushing the floor away and locking out the hips.',
     },
     cues: [
-      { id: 'Barbel dekat tulang kering sepanjang gerakan.', en: 'Keep the bar close to the shins throughout.' },
-      { id: 'Punggung netral; “patahkan” barbel dengan lat.', en: 'Neutral back; “bend the bar” with your lats.' },
-      { id: 'Dorong lantai, jangan tarik dengan punggung.', en: 'Push the floor away rather than pulling with your back.' },
+      {
+        id: 'Barbel dekat tulang kering sepanjang gerakan.',
+        en: 'Keep the bar close to the shins throughout.',
+      },
+      {
+        id: 'Punggung netral; “patahkan” barbel dengan lat.',
+        en: 'Neutral back; “bend the bar” with your lats.',
+      },
+      {
+        id: 'Dorong lantai, jangan tarik dengan punggung.',
+        en: 'Push the floor away rather than pulling with your back.',
+      },
     ],
     errors: ['rounded-back'],
     studio: 'hinge',
@@ -102,8 +138,14 @@ const raw: In[] = [
       en: 'Hinge from standing with soft knees; loads the hamstrings in a stretch.',
     },
     cues: [
-      { id: 'Dorong pinggul ke belakang, lutut hampir diam.', en: 'Push the hips back, knees nearly still.' },
-      { id: 'Berhenti saat punggung mulai ingin membulat.', en: 'Stop when the back starts to round.' },
+      {
+        id: 'Dorong pinggul ke belakang, lutut hampir diam.',
+        en: 'Push the hips back, knees nearly still.',
+      },
+      {
+        id: 'Berhenti saat punggung mulai ingin membulat.',
+        en: 'Stop when the back starts to round.',
+      },
     ],
     errors: ['rounded-back'],
     studio: 'hinge',
@@ -142,7 +184,10 @@ const raw: In[] = [
       en: 'Bar on the back, bow forward from the hips with a neutral spine.',
     },
     cues: [
-      { id: 'Mulai ringan — lengan momen ke punggung bawah panjang.', en: 'Start light — the moment arm to the lower back is long.' },
+      {
+        id: 'Mulai ringan — lengan momen ke punggung bawah panjang.',
+        en: 'Start light — the moment arm to the lower back is long.',
+      },
       { id: 'Pinggul ke belakang, bukan dada ke bawah.', en: 'Hips back, not chest down.' },
     ],
     errors: ['rounded-back'],
@@ -163,7 +208,10 @@ const raw: In[] = [
     },
     cues: [
       { id: 'Skapula ditarik ke belakang-bawah.', en: 'Shoulder blades pulled back and down.' },
-      { id: 'Siku sekitar 45–70° dari badan, bukan 90°.', en: 'Elbows about 45–70° from the torso, not 90°.' },
+      {
+        id: 'Siku sekitar 45–70° dari badan, bukan 90°.',
+        en: 'Elbows about 45–70° from the torso, not 90°.',
+      },
       { id: 'Kaki menapak, dorong lantai.', en: 'Feet planted, drive through the floor.' },
     ],
     errors: ['elbow-flare'],
@@ -183,7 +231,10 @@ const raw: In[] = [
     },
     cues: [
       { id: 'Turunkan beban ke dada atas.', en: 'Lower the weight to the upper chest.' },
-      { id: 'Jaga skapula tetap rapat ke bangku.', en: 'Keep the shoulder blades pinned to the bench.' },
+      {
+        id: 'Jaga skapula tetap rapat ke bangku.',
+        en: 'Keep the shoulder blades pinned to the bench.',
+      },
     ],
     errors: ['elbow-flare'],
     needsVerification: true,
@@ -195,7 +246,12 @@ const raw: In[] = [
     pattern: 'push',
     primary: ['pectoralis-major', 'triceps-brachii'],
     synergist: ['deltoid-anterior', 'serratus-anterior'],
-    stabilizer: ['rectus-abdominis', 'obliques-external', 'gluteus-maximus', 'transversus-abdominis'],
+    stabilizer: [
+      'rectus-abdominis',
+      'obliques-external',
+      'gluteus-maximus',
+      'transversus-abdominis',
+    ],
     summary: {
       id: 'Tubuh lurus seperti papan, turunkan dada ke lantai lalu dorong.',
       en: 'Body straight like a plank, lower the chest to the floor and push back up.',
@@ -220,7 +276,10 @@ const raw: In[] = [
       en: 'Supported on parallel bars, lower by bending the elbows and press back up.',
     },
     cues: [
-      { id: 'Turun hanya sejauh bahu nyaman.', en: 'Only descend as far as the shoulders are comfortable.' },
+      {
+        id: 'Turun hanya sejauh bahu nyaman.',
+        en: 'Only descend as far as the shoulders are comfortable.',
+      },
       { id: 'Bahu menjauh dari telinga.', en: 'Shoulders away from the ears.' },
     ],
     errors: [],
@@ -239,8 +298,14 @@ const raw: In[] = [
       en: 'Press the bar from the shoulders to overhead while standing.',
     },
     cues: [
-      { id: 'Bokong dan perut kencang, jangan melengkungkan punggung.', en: 'Glutes and abs tight, do not arch the back.' },
-      { id: 'Kepala “masuk ke jendela” setelah barbel lewat.', en: 'Head “through the window” once the bar passes.' },
+      {
+        id: 'Bokong dan perut kencang, jangan melengkungkan punggung.',
+        en: 'Glutes and abs tight, do not arch the back.',
+      },
+      {
+        id: 'Kepala “masuk ke jendela” setelah barbel lewat.',
+        en: 'Head “through the window” once the bar passes.',
+      },
     ],
     errors: [],
     studio: 'ohp',
@@ -260,7 +325,10 @@ const raw: In[] = [
       en: 'Raise the dumbbells out to the side to shoulder height.',
     },
     cues: [
-      { id: 'Siku sedikit ditekuk dan memimpin gerakan.', en: 'Slightly bent elbows lead the movement.' },
+      {
+        id: 'Siku sedikit ditekuk dan memimpin gerakan.',
+        en: 'Slightly bent elbows lead the movement.',
+      },
       { id: 'Jangan mengayun dengan badan.', en: 'Do not swing with the body.' },
     ],
     errors: [],
@@ -279,7 +347,10 @@ const raw: In[] = [
       en: 'Torso hinged forward, pull the bar to the lower stomach.',
     },
     cues: [
-      { id: 'Pertahankan sudut torso, jangan berdiri saat menarik.', en: 'Hold the torso angle; do not stand up as you pull.' },
+      {
+        id: 'Pertahankan sudut torso, jangan berdiri saat menarik.',
+        en: 'Hold the torso angle; do not stand up as you pull.',
+      },
       { id: 'Tarik siku ke arah pinggul.', en: 'Drive the elbows toward the hips.' },
     ],
     errors: ['rounded-back'],
@@ -299,7 +370,10 @@ const raw: In[] = [
     },
     cues: [
       { id: 'Badan tidak berputar saat menarik.', en: 'Do not rotate the torso as you pull.' },
-      { id: 'Turunkan dumbel dengan terkontrol hingga lengan lurus.', en: 'Lower under control to a straight arm.' },
+      {
+        id: 'Turunkan dumbel dengan terkontrol hingga lengan lurus.',
+        en: 'Lower under control to a straight arm.',
+      },
     ],
     errors: [],
     needsVerification: false,
@@ -317,7 +391,10 @@ const raw: In[] = [
       en: 'Overhand grip, pull the body up until the chin clears the bar.',
     },
     cues: [
-      { id: 'Mulai dengan menarik skapula ke bawah.', en: 'Start by pulling the shoulder blades down.' },
+      {
+        id: 'Mulai dengan menarik skapula ke bawah.',
+        en: 'Start by pulling the shoulder blades down.',
+      },
       { id: 'Turun penuh tanpa kehilangan tegangan.', en: 'Lower fully without losing tension.' },
     ],
     errors: [],
@@ -355,7 +432,10 @@ const raw: In[] = [
       en: 'Pull a cable bar down to the upper chest while seated.',
     },
     cues: [
-      { id: 'Sedikit condong ke belakang, dada terangkat.', en: 'Lean back slightly with the chest up.' },
+      {
+        id: 'Sedikit condong ke belakang, dada terangkat.',
+        en: 'Lean back slightly with the chest up.',
+      },
       { id: 'Jangan menarik ke belakang leher.', en: 'Do not pull behind the neck.' },
     ],
     errors: [],
@@ -374,7 +454,10 @@ const raw: In[] = [
       en: 'Seated, row the cable handle to the stomach with an upright torso.',
     },
     cues: [
-      { id: 'Rapatkan skapula di akhir tarikan.', en: 'Squeeze the shoulder blades together at the end.' },
+      {
+        id: 'Rapatkan skapula di akhir tarikan.',
+        en: 'Squeeze the shoulder blades together at the end.',
+      },
       { id: 'Torso tidak mengayun maju-mundur.', en: 'Do not rock the torso back and forth.' },
     ],
     errors: [],
@@ -393,7 +476,10 @@ const raw: In[] = [
       en: 'Pull a rope toward the face while rotating the arms outward.',
     },
     cues: [
-      { id: 'Siku tinggi, tangan berakhir di samping telinga.', en: 'Elbows high, hands finish beside the ears.' },
+      {
+        id: 'Siku tinggi, tangan berakhir di samping telinga.',
+        en: 'Elbows high, hands finish beside the ears.',
+      },
       { id: 'Beban ringan, fokus kontrol.', en: 'Light load, focus on control.' },
     ],
     errors: [],
@@ -432,7 +518,10 @@ const raw: In[] = [
       en: 'Rear foot on a bench; a single-leg squat with a high balance demand.',
     },
     cues: [
-      { id: 'Jarak kaki cukup jauh agar tumit depan tetap menapak.', en: 'Stance long enough for the front heel to stay down.' },
+      {
+        id: 'Jarak kaki cukup jauh agar tumit depan tetap menapak.',
+        en: 'Stance long enough for the front heel to stay down.',
+      },
       { id: 'Turun lurus ke bawah.', en: 'Drop straight down.' },
     ],
     errors: ['knee-valgus'],
@@ -472,7 +561,10 @@ const raw: In[] = [
     },
     cues: [
       { id: 'Dorong lewat tumit.', en: 'Drive through the heels.' },
-      { id: 'Jangan melengkungkan punggung bawah di atas.', en: 'Do not arch the lower back at the top.' },
+      {
+        id: 'Jangan melengkungkan punggung bawah di atas.',
+        en: 'Do not arch the lower back at the top.',
+      },
     ],
     errors: [],
     needsVerification: false,
@@ -490,7 +582,10 @@ const raw: In[] = [
       en: 'Push the machine platform with the legs while the back is supported.',
     },
     cues: [
-      { id: 'Panggul tetap menempel sandaran di posisi bawah.', en: 'Keep the pelvis on the pad at the bottom.' },
+      {
+        id: 'Panggul tetap menempel sandaran di posisi bawah.',
+        en: 'Keep the pelvis on the pad at the bottom.',
+      },
       { id: 'Jangan mengunci lutut keras di atas.', en: 'Do not slam the knees into lockout.' },
     ],
     errors: ['butt-wink', 'knee-valgus'],
@@ -548,7 +643,10 @@ const raw: In[] = [
     },
     cues: [
       { id: 'Jeda di bawah agar tidak memantul.', en: 'Pause at the bottom to avoid bouncing.' },
-      { id: 'Lutut lurus menekankan gastroknemius.', en: 'Straight knees emphasize the gastrocnemius.' },
+      {
+        id: 'Lutut lurus menekankan gastroknemius.',
+        en: 'Straight knees emphasize the gastrocnemius.',
+      },
     ],
     errors: [],
     needsVerification: false,
@@ -605,7 +703,10 @@ const raw: In[] = [
       en: 'Hold a straight body on the forearms and toes.',
     },
     cues: [
-      { id: 'Panggul sedikit diputar ke belakang (rusuk turun).', en: 'Tuck the pelvis slightly (ribs down).' },
+      {
+        id: 'Panggul sedikit diputar ke belakang (rusuk turun).',
+        en: 'Tuck the pelvis slightly (ribs down).',
+      },
       { id: 'Dorong lantai menjauh dengan lengan.', en: 'Push the floor away with the forearms.' },
     ],
     errors: [],
@@ -624,7 +725,10 @@ const raw: In[] = [
       en: 'Hanging from a bar, raise the legs by curling the pelvis up.',
     },
     cues: [
-      { id: 'Gulung panggul, bukan hanya mengayun kaki.', en: 'Curl the pelvis, not just swing the legs.' },
+      {
+        id: 'Gulung panggul, bukan hanya mengayun kaki.',
+        en: 'Curl the pelvis, not just swing the legs.',
+      },
       { id: 'Turunkan pelan tanpa berayun.', en: 'Lower slowly without swinging.' },
     ],
     errors: [],
@@ -652,7 +756,9 @@ const raw: In[] = [
 ];
 
 export const EXERCISES: readonly Exercise[] = z.array(Exercise).parse(raw);
-export const EXERCISE_BY_ID: ReadonlyMap<string, Exercise> = new Map(EXERCISES.map((e) => [e.id, e]));
+export const EXERCISE_BY_ID: ReadonlyMap<string, Exercise> = new Map(
+  EXERCISES.map((e) => [e.id, e]),
+);
 
 export function getExercise(id: string | undefined): Exercise | undefined {
   return id ? EXERCISE_BY_ID.get(id) : undefined;

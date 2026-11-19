@@ -23,7 +23,13 @@ export interface TwoBoneResult {
  * @param bend arah tekuk: +1 = sendi tengah diputar +90° (berlawanan jarum jam di bidang z–y)
  *             dari arah root→target. Untuk rantai yang mengarah ke bawah, +1 = sendi tengah di depan.
  */
-export function solveTwoBone2D(root: P2, target: P2, l1: number, l2: number, bend: 1 | -1): TwoBoneResult {
+export function solveTwoBone2D(
+  root: P2,
+  target: P2,
+  l1: number,
+  l2: number,
+  bend: 1 | -1,
+): TwoBoneResult {
   const dz = target.z - root.z;
   const dy = target.y - root.y;
   const rawD = Math.hypot(dz, dy);

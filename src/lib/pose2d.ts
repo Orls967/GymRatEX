@@ -25,8 +25,18 @@ export const LM = {
 
 /** Pasangan untuk menggambar kerangka. */
 export const POSE_EDGES: readonly [number, number][] = [
-  [11, 12], [11, 13], [13, 15], [12, 14], [14, 16],
-  [11, 23], [12, 24], [23, 24], [23, 25], [25, 27], [24, 26], [26, 28],
+  [11, 12],
+  [11, 13],
+  [13, 15],
+  [12, 14],
+  [14, 16],
+  [11, 23],
+  [12, 24],
+  [23, 24],
+  [23, 25],
+  [25, 27],
+  [24, 26],
+  [26, 28],
 ];
 
 /** Sudut dalam di titik b (derajat) dari a–b–c. */
@@ -52,8 +62,14 @@ export type BodySide = 'left' | 'right';
 
 /** Sisi tubuh yang paling terlihat (rata-rata visibility bahu–pinggul–lutut–pergelangan). */
 export function bestSide(lms: readonly Landmark[]): BodySide {
-  const l = [LM.lShoulder, LM.lElbow, LM.lHip, LM.lKnee, LM.lAnkle].reduce((s, i) => s + vis(lms[i]), 0);
-  const r = [LM.rShoulder, LM.rElbow, LM.rHip, LM.rKnee, LM.rAnkle].reduce((s, i) => s + vis(lms[i]), 0);
+  const l = [LM.lShoulder, LM.lElbow, LM.lHip, LM.lKnee, LM.lAnkle].reduce(
+    (s, i) => s + vis(lms[i]),
+    0,
+  );
+  const r = [LM.rShoulder, LM.rElbow, LM.rHip, LM.rKnee, LM.rAnkle].reduce(
+    (s, i) => s + vis(lms[i]),
+    0,
+  );
   return r > l ? 'right' : 'left';
 }
 
@@ -74,9 +90,10 @@ export interface JointAngles2D {
 export function computeAngles(lms: readonly Landmark[]): JointAngles2D | null {
   if (lms.length < 29) return null;
   const side = bestSide(lms);
-  const P = side === 'left'
-    ? { s: LM.lShoulder, e: LM.lElbow, w: LM.lWrist, h: LM.lHip, k: LM.lKnee, a: LM.lAnkle }
-    : { s: LM.rShoulder, e: LM.rElbow, w: LM.rWrist, h: LM.rHip, k: LM.rKnee, a: LM.rAnkle };
+  const P =
+    side === 'left'
+      ? { s: LM.lShoulder, e: LM.lElbow, w: LM.lWrist, h: LM.lHip, k: LM.lKnee, a: LM.lAnkle }
+      : { s: LM.rShoulder, e: LM.rElbow, w: LM.rWrist, h: LM.rHip, k: LM.rKnee, a: LM.rAnkle };
   const g = (i: number) => lms[i] as Landmark;
   const kneeGap = Math.abs(g(LM.lKnee).x - g(LM.rKnee).x);
   const ankleGap = Math.abs(g(LM.lAnkle).x - g(LM.rAnkle).x);
