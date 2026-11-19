@@ -161,6 +161,9 @@ const id = {
     reducedMotion: 'Gerakan dikurangi: animasi berhenti, gunakan slider fase.',
     fromExercise: 'Dari latihan: {{name}}',
     toWebcam: 'Coba sendiri lewat kamera',
+    unbalanced: 'Batas mobilitas tercapai: barbel tidak lagi di atas tengah telapak kaki.',
+    table: 'Tabel nilai momen',
+    joint: 'Sendi',
     canvasLabel: 'Manekin 3D memperagakan {{name}}',
   },
   compare: {

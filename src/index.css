@@ -27,9 +27,10 @@
   --c-int-2: #cf6a10;
   --c-int-3: #b3261e;
   /* Grafik biomekanika */
-  --c-chart-1: #b44200; /* lutut */
-  --c-chart-2: #1f5f8b; /* pinggul */
-  --c-chart-3: #6b4fa0; /* punggung bawah */
+  /* Grafik biomekanika: urutan kategorikal tetap, divalidasi CVD (all-pairs) untuk permukaan ini */
+  --c-chart-1: #2a78d6; /* lutut */
+  --c-chart-2: #eb6834; /* pinggul */
+  --c-chart-3: #1baf7a; /* punggung bawah — kontras <3:1, karenanya selalu ada label langsung + tabel */
   --c-chart-grid: #ddd5c6;
   /* Scene 3D */
   --c-scene-bg: #ebe5d9;
@@ -56,18 +57,18 @@
   --c-focus: #ff8a45;
   --c-danger: #ff5a4e;
   --c-ok: #7fc47f;
-  --c-int-0: #57524c;
+  --c-int-0: #6e6862;
   --c-int-1: #e3c04a;
   --c-int-2: #f08a2c;
   --c-int-3: #e8483a;
-  --c-chart-1: #ff8a45;
-  --c-chart-2: #6fb4e3;
-  --c-chart-3: #c3a6f0;
+  --c-chart-1: #3987e5;
+  --c-chart-2: #d95926;
+  --c-chart-3: #199e70;
   --c-chart-grid: #302d2a;
   --c-scene-bg: #121110;
   --c-scene-grid: #4a4540;
   --c-scene-grid-sub: #2c2926;
-  --c-mannequin: #77716a;
+  --c-mannequin: #8a847b;
   --c-muscle: #9a6f62;
   --c-muscle-deep: #7d5a50;
   --c-bone: #cfc8ba;

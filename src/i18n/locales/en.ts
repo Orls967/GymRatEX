@@ -164,6 +164,9 @@ const en: LocaleShape<typeof id> = {
     reducedMotion: 'Reduced motion: animation paused, use the phase slider.',
     fromExercise: 'From exercise: {{name}}',
     toWebcam: 'Try it yourself with the camera',
+    unbalanced: 'Mobility limit reached: the bar is no longer over mid-foot.',
+    table: 'Moment values table',
+    joint: 'Joint',
     canvasLabel: '3D mannequin demonstrating {{name}}',
   },
   compare: {

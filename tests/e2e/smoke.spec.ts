@@ -87,3 +87,21 @@ test.describe('pustaka latihan', () => {
     await expect(page.getByTestId('exercise-detail')).toContainText('Triceps brachii');
   });
 });
+
+test.describe('studio form', () => {
+  test('mengubah beban mengubah momen sendi', async ({ page }) => {
+    await page.goto('./#/studio/back-squat');
+    await page.getByTestId('phase-slider').fill('1');
+    const table = page.getByTestId('moment-table');
+    const hipCell = table.locator('tbody tr').nth(1).locator('td').first();
+    const before = Number(await hipCell.textContent());
+    await page.getByTestId('load-slider').fill('140');
+    await expect.poll(async () => Number(await hipCell.textContent())).toBeGreaterThan(before + 50);
+  });
+
+  test('ganti pola gerak ke deadlift', async ({ page }) => {
+    await page.goto('./#/studio');
+    await page.getByTestId('pattern-toggle').getByRole('radio', { name: /Deadlift/ }).click();
+    await expect(page.getByTestId('pattern-toggle').getByRole('radio', { name: /Deadlift/ })).toHaveAttribute('aria-checked', 'true');
+  });
+});

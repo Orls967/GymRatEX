@@ -23,3 +23,9 @@ Format: fase, status, catatan singkat. Data yang belum dicek silang ditandai `ne
 - 33 latihan dwibahasa (otot utama/sinergis/stabilisator, alat, pola gerak, isyarat teknik, kesalahan umum), divalidasi Zod + uji referensial.
 - Pilih latihan → otot menyala dengan skala sekuensial (stabilisator → sinergis → utama), otot lain diredupkan; sisi kamera otomatis mengikuti otot utama.
 - Filter per otot & alat tersimpan di URL (`#/latihan?otot=…&alat=…`), tautan kontekstual ke Peta Otot, Studio Form, Cek Form Webcam, dan Benar vs Salah.
+
+## Fase 4 — Manekin, IK, Studio Form + grafik biomekanika ✅
+- `src/lib/movements.ts`: generator gerakan prosedural (back squat, deadlift/hinge, lunge, overhead press, + bench untuk peragaan) memakai IK dua-tulang & keseimbangan barbel di atas tengah telapak; parameter kedalaman, sudut torso, lebar kaki/langkah, beban, tempo.
+- `src/lib/biomech.ts`: model statis bidang sagital — momen = berat × lengan momen horizontal, massa segmen Winter; lunge memakai metode gaya reaksi lantai (porsi kaki depan 80%, diasumsikan). Teruji: momen naik dengan kedalaman, torso condong menggeser momen ke pinggul, punggung membulat menaikkan momen lumbal.
+- Studio Form: animasi tempo (eksentrik 55%), jeda + slider fase (otomatis berhenti bila reduced-motion), grafik momen vs fase (satu sumbu, legenda + label langsung, crosshair & tooltip, palet kategorikal tervalidasi CVD untuk kedua tema), tabel nilai, sudut sendi, peringatan batas mobilitas.
+- Preset per latihan (front squat, RDL, sumo, good morning, Bulgarian split squat).
