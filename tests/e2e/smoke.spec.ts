@@ -73,3 +73,15 @@ test.describe('peta otot', () => {
     await expect(page.getByTestId('three-canvas').locator('canvas')).toBeVisible();
   });
 });
+
+test.describe('pustaka latihan', () => {
+  test('filter otot mempersempit daftar dan detail menampilkan peran otot', async ({ page }) => {
+    await page.goto('./#/latihan');
+    const items = page.getByTestId('exercise-list').locator('li');
+    const all = await items.count();
+    await page.getByTestId('filter-muscle').selectOption('triceps-brachii');
+    await expect.poll(() => items.count()).toBeLessThan(all);
+    await page.getByTestId('exercise-list').getByRole('link', { name: /Bench press/i }).first().click();
+    await expect(page.getByTestId('exercise-detail')).toContainText('Triceps brachii');
+  });
+});

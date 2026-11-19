@@ -18,3 +18,8 @@ Format: fase, status, catatan singkat. Data yang belum dicek silang ditandai `ne
 - Peta Otot: klik/ketuk otot, hover highlight, depan/belakang, lapisan superfisial → dalam, kamera mulus ke otot (snap bila reduced-motion), daftar otot per regio yang bisa dinavigasi keyboard, latihan terkait per peran.
 - Scene ikut tema (warna dari CSS variables, preset cahaya per tema), DPR dibatasi & AO/SMAA dimatikan di HP, fallback bila WebGL tidak ada.
 - Catatan: model adalah stilisasi; bentuk & perlekatan disederhanakan (lihat Tentang → Batasan).
+
+## Fase 3 — Data latihan + Pustaka Latihan ✅
+- 33 latihan dwibahasa (otot utama/sinergis/stabilisator, alat, pola gerak, isyarat teknik, kesalahan umum), divalidasi Zod + uji referensial.
+- Pilih latihan → otot menyala dengan skala sekuensial (stabilisator → sinergis → utama), otot lain diredupkan; sisi kamera otomatis mengikuti otot utama.
+- Filter per otot & alat tersimpan di URL (`#/latihan?otot=…&alat=…`), tautan kontekstual ke Peta Otot, Studio Form, Cek Form Webcam, dan Benar vs Salah.
