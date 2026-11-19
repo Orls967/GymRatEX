@@ -417,13 +417,13 @@ Salah) menggulir ke istilah **Lengan momen** dan menandainya dengan garis oranye
 
 ```bash
 npm install        # juga menyalin WASM MediaPipe & decoder Draco ke public/ (scripts/copy-assets.mjs)
-npm run dev        # http://localhost:5173/GymRat/
+npm run dev        # http://localhost:5173/GymRatEX/
 npm test           # unit test (Vitest)
 npm run e2e        # smoke test Playwright (build + preview otomatis)
 npm run lint       # ESLint
 npm run typecheck  # TypeScript strict
 npm run build      # hasil di dist/
-npm run preview    # menyajikan dist/ di http://localhost:4173/GymRat/
+npm run preview    # menyajikan dist/ di http://localhost:4173/GymRatEX/
 ```
 
 Butuh **Node 20+**. Bila Chromium sudah terpasang di mesin, `PW_CHROMIUM_PATH=/path/ke/chrome npm run e2e`
@@ -531,11 +531,11 @@ dipakai. Setelah dimuat sekali, semua modul tetap bisa dibuka tanpa internet.
 
 ## Deploy ke GitHub Pages
 
-`vite.config.ts` memakai `base: '/GymRat/'` (nama repo) dan routing memakai HashRouter.
+`vite.config.ts` memakai `base: '/GymRatEX/'` (nama repo) dan routing memakai HashRouter.
 Workflow `.github/workflows/deploy.yml`: lint → unit test → build → Playwright smoke → deploy, setiap push ke `main`.
 
 Sekali saja di GitHub: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-Setelah itu situs tersedia di `https://orls967.github.io/GymRat/`.
+Setelah itu situs tersedia di `https://orls967.github.io/GymRatEX/`.
 
 ## Data “perlu verifikasi”
 

@@ -8,7 +8,7 @@ export default defineConfig({
   timeout: 60_000,
   retries: process.env.CI ? 1 : 0,
   use: {
-    baseURL: 'http://localhost:4173/GymRat/',
+    baseURL: 'http://localhost:4173/GymRatEX/',
     trace: 'off',
     launchOptions: executablePath ? { executablePath } : {},
   },
@@ -20,7 +20,7 @@ export default defineConfig({
   ],
   webServer: {
     command: 'npm run build && npx vite preview --port 4173 --strictPort',
-    url: 'http://localhost:4173/GymRat/',
+    url: 'http://localhost:4173/GymRatEX/',
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
   },

@@ -22,9 +22,9 @@ function precacheManifest(): Plugin {
   };
 }
 
-// `base` harus sama dengan nama repo agar GitHub Pages (https://<user>.github.io/GymRat/) memuat aset dengan benar.
+// `base` harus sama dengan nama repo agar GitHub Pages (https://<user>.github.io/GymRatEX/) memuat aset dengan benar.
 export default defineConfig({
-  base: '/GymRat/',
+  base: '/GymRatEX/',
   plugins: [react(), tailwindcss(), precacheManifest()],
   build: {
     target: 'es2022',
