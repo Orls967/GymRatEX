@@ -78,7 +78,9 @@ test.describe('pustaka latihan', () => {
   test('filter otot mempersempit daftar dan detail menampilkan peran otot', async ({ page }) => {
     await page.goto('./#/latihan');
     const items = page.getByTestId('exercise-list').locator('li');
+    await expect(items.first()).toBeVisible();
     const all = await items.count();
+    expect(all).toBeGreaterThan(28);
     await page.getByTestId('filter-muscle').selectOption('triceps-brachii');
     await expect.poll(() => items.count()).toBeLessThan(all);
     await page.getByTestId('exercise-list').getByRole('link', { name: /Bench press/i }).first().click();
