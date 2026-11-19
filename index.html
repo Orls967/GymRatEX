@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="id" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="OtotLapis — anatomi otot 3D dan biomekanika gerakan gym. Alat edukasi, 100% di browser." />
+    <meta name="color-scheme" content="dark light" />
+    <title>OtotLapis</title>
+    <script>
+      // Terapkan tema & bahasa SEBELUM render pertama agar tidak berkedip.
+      (function () {
+        var theme = 'system';
+        var lang = 'id';
+        try {
+          var t = localStorage.getItem('ototlapis.theme');
+          if (t === 'light' || t === 'dark' || t === 'system') theme = t;
+          var l = localStorage.getItem('ototlapis.lang');
+          if (l === 'id' || l === 'en') lang = l;
+        } catch (e) {}
+        var dark =
+          theme === 'dark' ||
+          (theme === 'system' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        var root = document.documentElement;
+        root.setAttribute('data-theme', dark ? 'dark' : 'light');
+        root.setAttribute('lang', lang);
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>OtotLapis membutuhkan JavaScript. / OtotLapis requires JavaScript.</noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

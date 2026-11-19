@@ -1,0 +1,223 @@
+@import 'tailwindcss';
+
+/* Varian dark Tailwind mengikuti atribut data-theme di <html> (diset sebelum render). */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+/* ===== Design tokens =====
+   Semua warna komponen berasal dari variabel di bawah. Tema terang BUKAN inversi:
+   off-white hangat + arang, aksen oranye digelapkan agar kontras AA. */
+:root,
+[data-theme='light'] {
+  --c-bg: #f3efe6;
+  --c-surface: #fbf8f2;
+  --c-surface-2: #e9e3d6;
+  --c-line: #cfc6b5;
+  --c-line-strong: #a89f8d;
+  --c-ink: #1d1c1a;
+  --c-ink-muted: #59544b;
+  --c-accent: #b44200; /* 5.3:1 pada bg, teks putih di atasnya 5.6:1 */
+  --c-accent-strong: #8f3400;
+  --c-on-accent: #ffffff;
+  --c-focus: #b44200;
+  --c-danger: #b3261e;
+  --c-ok: #2f6b2f;
+  /* Skala sekuensial intensitas otot: stabilisator → sinergis → utama */
+  --c-int-0: #c9c0ae;
+  --c-int-1: #c49a12;
+  --c-int-2: #cf6a10;
+  --c-int-3: #b3261e;
+  /* Grafik biomekanika */
+  --c-chart-1: #b44200; /* lutut */
+  --c-chart-2: #1f5f8b; /* pinggul */
+  --c-chart-3: #6b4fa0; /* punggung bawah */
+  --c-chart-grid: #ddd5c6;
+  /* Scene 3D */
+  --c-scene-bg: #ebe5d9;
+  --c-scene-grid: #c9bfac;
+  --c-scene-grid-sub: #dcd4c4;
+  --c-mannequin: #d8d0c1;
+  --c-muscle: #c7a998;
+  --c-muscle-deep: #b38f7f;
+  --c-bone: #efe9dc;
+  --c-highlight: #1d1c1a;
+}
+
+[data-theme='dark'] {
+  --c-bg: #151413;
+  --c-surface: #1d1c1a;
+  --c-surface-2: #282624;
+  --c-line: #383532;
+  --c-line-strong: #57524c;
+  --c-ink: #ece8df;
+  --c-ink-muted: #a7a196;
+  --c-accent: #ff6a13; /* 6.9:1 pada bg */
+  --c-accent-strong: #ff8a45;
+  --c-on-accent: #151413;
+  --c-focus: #ff8a45;
+  --c-danger: #ff5a4e;
+  --c-ok: #7fc47f;
+  --c-int-0: #4a4642;
+  --c-int-1: #e3c04a;
+  --c-int-2: #f08a2c;
+  --c-int-3: #e8483a;
+  --c-chart-1: #ff8a45;
+  --c-chart-2: #6fb4e3;
+  --c-chart-3: #c3a6f0;
+  --c-chart-grid: #302d2a;
+  --c-scene-bg: #121110;
+  --c-scene-grid: #3a3632;
+  --c-scene-grid-sub: #24221f;
+  --c-mannequin: #4b4743;
+  --c-muscle: #7a5c52;
+  --c-muscle-deep: #5f463f;
+  --c-bone: #cfc8ba;
+  --c-highlight: #ece8df;
+}
+
+@theme {
+  --color-bg: var(--c-bg);
+  --color-surface: var(--c-surface);
+  --color-surface-2: var(--c-surface-2);
+  --color-line: var(--c-line);
+  --color-line-strong: var(--c-line-strong);
+  --color-ink: var(--c-ink);
+  --color-ink-muted: var(--c-ink-muted);
+  --color-accent: var(--c-accent);
+  --color-accent-strong: var(--c-accent-strong);
+  --color-on-accent: var(--c-on-accent);
+  --color-danger: var(--c-danger);
+  --color-ok: var(--c-ok);
+  --color-int-0: var(--c-int-0);
+  --color-int-1: var(--c-int-1);
+  --color-int-2: var(--c-int-2);
+  --color-int-3: var(--c-int-3);
+  --color-chart-1: var(--c-chart-1);
+  --color-chart-2: var(--c-chart-2);
+  --color-chart-3: var(--c-chart-3);
+
+  --font-display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --font-sans: 'Archivo', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --radius-sm: 2px;
+  --radius-md: 4px;
+}
+
+@layer base {
+  html {
+    background: var(--c-bg);
+    color: var(--c-ink);
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    margin: 0;
+    background: var(--c-bg);
+    color: var(--c-ink);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.55;
+    min-height: 100dvh;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    line-height: 1.05;
+    text-transform: uppercase;
+  }
+  :focus-visible {
+    outline: 2px solid var(--c-focus);
+    outline-offset: 2px;
+  }
+  ::selection {
+    background: var(--c-accent);
+    color: var(--c-on-accent);
+  }
+  input[type='range'] {
+    accent-color: var(--c-accent);
+  }
+}
+
+@layer components {
+  .label-mono {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--c-ink-muted);
+  }
+  .rule {
+    border-color: var(--c-line);
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    padding: 0 1rem;
+    border: 1px solid var(--c-line-strong);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--c-ink);
+    background: transparent;
+    transition:
+      background-color 120ms ease,
+      border-color 120ms ease,
+      color 120ms ease;
+  }
+  .btn:hover {
+    border-color: var(--c-ink);
+  }
+  .btn-accent {
+    background: var(--c-accent);
+    border-color: var(--c-accent);
+    color: var(--c-on-accent);
+  }
+  .btn-accent:hover {
+    background: var(--c-accent-strong);
+    border-color: var(--c-accent-strong);
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 36px;
+    padding: 0 0.7rem;
+    border: 1px solid var(--c-line);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--c-ink-muted);
+    background: transparent;
+  }
+  .chip[aria-pressed='true'],
+  .chip[aria-current='true'] {
+    border-color: var(--c-accent);
+    color: var(--c-ink);
+    box-shadow: inset 3px 0 0 var(--c-accent);
+  }
+  .glossary-link {
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-decoration-color: var(--c-accent);
+    text-underline-offset: 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
