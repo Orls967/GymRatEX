@@ -29,3 +29,9 @@ Format: fase, status, catatan singkat. Data yang belum dicek silang ditandai `ne
 - `src/lib/biomech.ts`: model statis bidang sagital — momen = berat × lengan momen horizontal, massa segmen Winter; lunge memakai metode gaya reaksi lantai (porsi kaki depan 80%, diasumsikan). Teruji: momen naik dengan kedalaman, torso condong menggeser momen ke pinggul, punggung membulat menaikkan momen lumbal.
 - Studio Form: animasi tempo (eksentrik 55%), jeda + slider fase (otomatis berhenti bila reduced-motion), grafik momen vs fase (satu sumbu, legenda + label langsung, crosshair & tooltip, palet kategorikal tervalidasi CVD untuk kedua tema), tabel nilai, sudut sendi, peringatan batas mobilitas.
 - Preset per latihan (front squat, RDL, sumo, good morning, Bulgarian split squat).
+
+## Fase 5 — Benar vs Salah ✅
+- Empat kesalahan: knee valgus (tampak depan), butt wink & punggung membulat (tampak samping), elbow flare (bench, tampak atas).
+- Satu kanvas, dua manekin beranimasi sinkron dari generator gerakan yang sama; versi salah memakai parameter `Faults` (valgus, posterior tilt, fleksi lumbal/torakal, abduksi bahu).
+- Zona rawan berdenyut (statis bila reduced-motion), daftar perbaikan, latihan terkait, dan perbandingan momen lumbal (estimasi) untuk kesalahan yang menyangkut punggung bawah.
+- Kesalahan yang belum dicek silang ditandai “perlu verifikasi”.

@@ -179,6 +179,10 @@ const en: LocaleShape<typeof id> = {
     fix: 'How to fix it',
     zones: 'Risk zones',
     seen: 'Seen in',
+    momentCompare: 'Lower-back moment at the bottom (estimate)',
+    pick: 'Choose an error',
+    views: { front: 'Front view', side: 'Side view', top: 'Top view' },
+    zoneNames: { knee: 'Knee', lumbar: 'Lower back', shoulder: 'Shoulder', elbow: 'Elbow', hip: 'Hip' },
     severity: 'Emphasis',
   },
   webcam: {

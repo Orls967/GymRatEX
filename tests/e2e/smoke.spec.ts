@@ -105,3 +105,13 @@ test.describe('studio form', () => {
     await expect(page.getByTestId('pattern-toggle').getByRole('radio', { name: /Deadlift/ })).toHaveAttribute('aria-checked', 'true');
   });
 });
+
+test.describe('benar vs salah', () => {
+  test('memilih kesalahan menampilkan zona & perbaikan', async ({ page }) => {
+    await page.goto('./#/benar-salah');
+    await page.getByTestId('error-tab-rounded-back').click();
+    await expect(page).toHaveURL(/rounded-back/);
+    await expect(page.getByTestId('error-detail')).toContainText(/Punggung membulat/);
+    await expect(page.getByTestId('three-canvas').locator('canvas')).toBeVisible();
+  });
+});

@@ -12,10 +12,14 @@ interface BarProps {
   spread?: number;
   /** Sumbu batang barbel mengikuti sumbu X dunia; true bila tubuh berbaring (bench). */
   plateScale?: number;
+  /** Panjang batang barbel (m). */
+  barLength?: number;
+  /** Piringan transparan agar tidak menutupi tubuh (tampak samping). */
+  ghost?: boolean;
 }
 
 /** Barbel/dumbel sederhana yang mengikuti posisi beban dari generator gerakan. */
-export function LoadProp({ getPosition, kind, spread = 0.42, plateScale = 0.85 }: BarProps) {
+export function LoadProp({ getPosition, kind, spread = 0.42, plateScale = 0.85, barLength = 2.0, ghost = false }: BarProps) {
   const ref = useRef<Group>(null);
   const t = useSceneTheme();
   useFrame(() => {
@@ -50,13 +54,13 @@ export function LoadProp({ getPosition, kind, spread = 0.42, plateScale = 0.85 }
   return (
     <group ref={ref}>
       <mesh rotation={[0, 0, Math.PI / 2]}>
-        <cylinderGeometry args={[0.014, 0.014, 2.0, 12]} />
+        <cylinderGeometry args={[0.014, 0.014, barLength, 12]} />
         <meshStandardMaterial color={steel} metalness={0.7} roughness={0.3} />
       </mesh>
       {[-1, 1].map((s) => (
-        <mesh key={s} position={[s * 0.62, 0, 0]} rotation={[0, 0, Math.PI / 2]} scale={[plateScale, 1, plateScale]}>
+        <mesh key={s} position={[s * (barLength / 2 - 0.38), 0, 0]} rotation={[0, 0, Math.PI / 2]} scale={[plateScale, 1, plateScale]}>
           <cylinderGeometry args={[0.225, 0.225, 0.07, 28]} />
-          <meshStandardMaterial color={plate} roughness={0.75} />
+          <meshStandardMaterial color={plate} roughness={0.75} transparent={ghost} opacity={ghost ? 0.18 : 1} depthWrite={!ghost} />
         </mesh>
       ))}
     </group>

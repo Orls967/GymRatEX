@@ -176,6 +176,10 @@ const id = {
     fix: 'Cara memperbaiki',
     zones: 'Zona rawan',
     seen: 'Terlihat pada',
+    momentCompare: 'Momen punggung bawah di posisi bawah (estimasi)',
+    pick: 'Pilih kesalahan',
+    views: { front: 'Tampak depan', side: 'Tampak samping', top: 'Tampak atas' },
+    zoneNames: { knee: 'Lutut', lumbar: 'Punggung bawah', shoulder: 'Bahu', elbow: 'Siku', hip: 'Pinggul' },
     severity: 'Penekanan',
   },
   webcam: {
