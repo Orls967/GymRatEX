@@ -110,7 +110,14 @@ export function ProceduralBody({
 
   useEffect(() => {
     baseMaterial.color.set(theme.mannequin);
-  }, [baseMaterial, theme]);
+    // Saat lapisan luar dikupas, badan manekin dibuat tembus pandang agar otot dalam terlihat.
+    const peeled = showMuscles && minLayer >= 2;
+    baseMaterial.transparent = peeled;
+    baseMaterial.opacity = peeled ? (minLayer === 3 ? 0.14 : 0.28) : 1;
+    baseMaterial.depthWrite = !peeled;
+    baseMaterial.needsUpdate = true;
+    invalidate();
+  }, [baseMaterial, theme, minLayer, showMuscles, invalidate]);
 
   // Warna otot: dihitung ulang hanya saat status berubah, bukan tiap frame.
   useEffect(() => {

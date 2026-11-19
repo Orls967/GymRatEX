@@ -144,6 +144,7 @@ test.describe('glosarium & tentang', () => {
       .getByRole('link', { name: /lengan momen/i })
       .click();
     await expect(page).toHaveURL(/#\/glosarium\/moment-arm/);
+    await expect(page.locator('#term-moment-arm')).toBeInViewport();
   });
 
   test('halaman Tentang memuat disclaimer di kedua bahasa', async ({ page }) => {

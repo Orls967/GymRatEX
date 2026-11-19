@@ -30,11 +30,15 @@ export default function GlossaryPage() {
 
   useEffect(() => {
     if (!termId) return;
-    const el = document.getElementById(`term-${termId}`);
-    if (el) {
-      el.scrollIntoView({ block: 'center' });
-      el.focus({ preventScroll: true });
-    }
+    // ditunda satu frame: Layout menggulir ke atas saat rute berubah, dan efek induk berjalan setelah efek anak
+    const raf = requestAnimationFrame(() => {
+      const el = document.getElementById(`term-${termId}`);
+      if (el) {
+        el.scrollIntoView({ block: 'center' });
+        el.focus({ preventScroll: true });
+      }
+    });
+    return () => cancelAnimationFrame(raf);
   }, [termId]);
 
   return (
