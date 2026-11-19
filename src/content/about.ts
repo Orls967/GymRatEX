@@ -39,7 +39,7 @@ export const ABOUT = AboutContent.parse({
   ],
   licenses: [
     { name: 'three.js, @react-three/fiber, @react-three/drei', license: 'MIT', note: { id: 'Render 3D.', en: '3D rendering.' } },
-    { name: 'MediaPipe Tasks Vision + pose_landmarker_lite.task', license: 'Apache-2.0', note: { id: 'Di-host lokal di /mediapipe.', en: 'Hosted locally under /mediapipe.' } },
+    { name: 'MediaPipe Tasks Vision + pose_landmarker_lite.task', license: 'Apache-2.0', note: { id: 'Di-host lokal di /mediapipe. Ping telemetri bawaan pustaka ini (ke odml.pa.googleapis.com) diblokir oleh Content-Security-Policy situs.', en: 'Hosted locally under /mediapipe. The library’s built-in telemetry ping (to odml.pa.googleapis.com) is blocked by the site’s Content-Security-Policy.' } },
     { name: 'Barlow Condensed, Archivo, IBM Plex Mono (@fontsource)', license: 'SIL OFL 1.1', note: { id: 'Font di-host sendiri.', en: 'Self-hosted fonts.' } },
     { name: 'lucide-react', license: 'ISC', note: { id: 'Ikon.', en: 'Icons.' } },
     { name: 'Model tubuh prosedural OtotLapis', license: 'MIT', note: { id: 'Dibuat lewat kode di proyek ini, tanpa aset eksternal.', en: 'Generated in code in this project, no external assets.' } },

@@ -35,3 +35,8 @@ Format: fase, status, catatan singkat. Data yang belum dicek silang ditandai `ne
 - Satu kanvas, dua manekin beranimasi sinkron dari generator gerakan yang sama; versi salah memakai parameter `Faults` (valgus, posterior tilt, fleksi lumbal/torakal, abduksi bahu).
 - Zona rawan berdenyut (statis bila reduced-motion), daftar perbaikan, latihan terkait, dan perbandingan momen lumbal (estimasi) untuk kesalahan yang menyangkut punggung bawah.
 - Kesalahan yang belum dicek silang ditandai “perlu verifikasi”.
+
+## Fase 6 — Cek Form Webcam ✅
+- MediaPipe PoseLandmarker (lite, float16) + WASM di-host lokal (`public/mediapipe/`, WASM disalin saat `npm install`), dimuat malas hanya saat kamera dinyalakan; GPU dengan fallback CPU.
+- `src/lib/pose2d.ts` (sudut 2D, sisi paling terlihat, EMA), `src/lib/repCounter.ts` (histeresis), `src/lib/formFeedback.ts` (aturan squat/curl/OHP) — semuanya teruji.
+- **Privasi:** MediaPipe ternyata mengirim ping telemetri ke `odml.pa.googleapis.com` dan tidak punya opsi untuk mematikannya. Ditambahkan Content-Security-Policy (`connect-src 'self'`) di `index.html` sehingga browser memblokir semua koneksi keluar. Smoke test Playwright (kamera palsu) memverifikasi model termuat dan tidak ada permintaan ke host luar.

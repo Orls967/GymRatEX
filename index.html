@@ -6,6 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content="OtotLapis — anatomi otot 3D dan biomekanika gerakan gym. Alat edukasi, 100% di browser." />
     <meta name="color-scheme" content="dark light" />
+    <!--
+      CSP: aplikasi hanya boleh terhubung ke origin sendiri. Ini juga memblokir ping telemetri
+      bawaan MediaPipe (odml.pa.googleapis.com) sehingga janji "tanpa pelacakan" ditegakkan browser.
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' blob: mediastream:; object-src 'none'; base-uri 'self'; form-action 'none'"
+    />
     <title>OtotLapis</title>
     <script>
       // Terapkan tema & bahasa SEBELUM render pertama agar tidak berkedip.
