@@ -10,3 +10,11 @@ Format: fase, status, catatan singkat. Data yang belum dicek silang ditandai `ne
 - HashRouter + lazy-load per halaman, ErrorBoundary per rute, pencarian global Ctrl/⌘+K (dwibahasa).
 - Workflow GitHub Actions: lint → unit test → build → Playwright smoke → deploy Pages (hanya push ke `main`).
 - Playwright smoke: ganti bahasa, ganti tema, tema sistem, semua rute, pencarian.
+
+## Fase 2 — BodyModel prosedural + Peta Otot ✅
+- `src/lib/rig.ts`: rig tulang forward-kinematics (panggul → lumbal → toraks → leher/kepala, bahu–lengan, tungkai), sudut relatif, teruji.
+- `src/lib/ik.ts`: IK dua-tulang analitik bidang sagital (dipakai tungkai & lengan).
+- `src/scene/body/`: abstraksi `BodyModel` (kontrak `BodyModelProps`), implementasi `ProceduralBody` (otot = elipsoid di antara jangkar tulang, mengikuti skeleton tiap frame), jalur `GltfBody` + `gltfMapping.ts` (Draco lokal) untuk aset anatomi nanti.
+- Peta Otot: klik/ketuk otot, hover highlight, depan/belakang, lapisan superfisial → dalam, kamera mulus ke otot (snap bila reduced-motion), daftar otot per regio yang bisa dinavigasi keyboard, latihan terkait per peran.
+- Scene ikut tema (warna dari CSS variables, preset cahaya per tema), DPR dibatasi & AO/SMAA dimatikan di HP, fallback bila WebGL tidak ada.
+- Catatan: model adalah stilisasi; bentuk & perlekatan disederhanakan (lihat Tentang → Batasan).

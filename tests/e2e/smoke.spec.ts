@@ -57,3 +57,19 @@ test.describe('smoke', () => {
     await expect(page).toHaveURL(/#\/otot\/hamstrings/);
   });
 });
+
+test.describe('peta otot', () => {
+  test('memilih otot dari daftar menampilkan detail dan latihan terkait', async ({ page }) => {
+    await page.goto('./#/otot');
+    await page.getByTestId('muscle-chip-gluteus-maximus').click();
+    await expect(page).toHaveURL(/#\/otot\/gluteus-maximus/);
+    const detail = page.getByTestId('muscle-detail');
+    await expect(detail).toContainText('Gluteus maximus');
+    await expect(detail.getByRole('link', { name: /Hip thrust/ })).toBeVisible();
+  });
+
+  test('kanvas 3D dirender', async ({ page }) => {
+    await page.goto('./#/otot');
+    await expect(page.getByTestId('three-canvas').locator('canvas')).toBeVisible();
+  });
+});

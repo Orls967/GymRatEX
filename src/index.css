@@ -56,7 +56,7 @@
   --c-focus: #ff8a45;
   --c-danger: #ff5a4e;
   --c-ok: #7fc47f;
-  --c-int-0: #4a4642;
+  --c-int-0: #57524c;
   --c-int-1: #e3c04a;
   --c-int-2: #f08a2c;
   --c-int-3: #e8483a;
@@ -65,11 +65,11 @@
   --c-chart-3: #c3a6f0;
   --c-chart-grid: #302d2a;
   --c-scene-bg: #121110;
-  --c-scene-grid: #3a3632;
-  --c-scene-grid-sub: #24221f;
-  --c-mannequin: #4b4743;
-  --c-muscle: #7a5c52;
-  --c-muscle-deep: #5f463f;
+  --c-scene-grid: #4a4540;
+  --c-scene-grid-sub: #2c2926;
+  --c-mannequin: #77716a;
+  --c-muscle: #9a6f62;
+  --c-muscle-deep: #7d5a50;
   --c-bone: #cfc8ba;
   --c-highlight: #ece8df;
 }
