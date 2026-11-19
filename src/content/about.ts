@@ -3,8 +3,8 @@ import { AboutContent } from './schema';
 export const ABOUT = AboutContent.parse({
   disclaimer: [
     {
-      id: 'OtotLapis adalah alat edukasi. Isinya bukan nasihat medis dan bukan pengganti pelatih bersertifikat, dokter, atau fisioterapis.',
-      en: 'OtotLapis is an educational tool. Its content is not medical advice and is not a substitute for a certified coach, doctor or physiotherapist.',
+      id: 'GymRat adalah alat edukasi. Isinya bukan nasihat medis dan bukan pengganti pelatih bersertifikat, dokter, atau fisioterapis.',
+      en: 'GymRat is an educational tool. Its content is not medical advice and is not a substitute for a certified coach, doctor or physiotherapist.',
     },
     {
       id: 'Hentikan latihan bila terasa nyeri tajam, dan konsultasikan dengan tenaga profesional sebelum memulai program baru bila Anda punya cedera atau kondisi kesehatan.',
@@ -88,7 +88,7 @@ export const ABOUT = AboutContent.parse({
     },
     { name: 'lucide-react', license: 'ISC', note: { id: 'Ikon.', en: 'Icons.' } },
     {
-      name: 'Model tubuh prosedural OtotLapis',
+      name: 'Model tubuh prosedural GymRat',
       license: 'MIT',
       note: {
         id: 'Dibuat lewat kode di proyek ini, tanpa aset eksternal.',

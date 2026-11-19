@@ -4,7 +4,7 @@ import type id from './id';
 /** English UI strings. The type forces exactly the same key structure as the Indonesian file. */
 const en: LocaleShape<typeof id> = {
   app: {
-    name: 'OtotLapis',
+    name: 'GymRat',
     tagline: '3D muscle anatomy & gym movement biomechanics',
     skip: 'Skip to content',
     loading: 'Loading…',
@@ -235,7 +235,7 @@ const en: LocaleShape<typeof id> = {
   },
   about: {
     title: 'About',
-    lead: 'OtotLapis is a 3D educational tool that runs 100% in the browser.',
+    lead: 'GymRat is a 3D educational tool that runs 100% in the browser.',
     disclaimerTitle: 'Disclaimer',
     principlesTitle: 'Principles',
     principles: [

@@ -35,7 +35,7 @@ export function Layout() {
           <Link to="/" className="flex items-baseline gap-2" aria-label={t('nav.home')}>
             <span aria-hidden className="block h-3 w-5 translate-y-[-2px] bg-accent" />
             <span className="font-display text-2xl font-bold uppercase tracking-wide">
-              Otot<span className="text-accent">Lapis</span>
+              Gym<span className="text-accent">Rat</span>
             </span>
           </Link>
           <nav aria-label={t('nav.main')} className="ml-6 hidden lg:block">

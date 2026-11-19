@@ -1,9 +1,9 @@
-/* OtotLapis service worker: membuat aplikasi bisa dipakai offline setelah dimuat sekali.
+/* GymRat service worker: membuat aplikasi bisa dipakai offline setelah dimuat sekali.
    - install: pra-cache semua aset hasil build (daftar dari precache-manifest.json)
    - navigasi: network-first, jatuh ke cache bila offline
    - aset lain (termasuk WASM & model pose saat pertama dipakai): cache-first + isi cache saat runtime
    Hanya permintaan ke origin sendiri yang ditangani. */
-const VERSION = 'ototlapis-v2';
+const VERSION = 'gymrat-v3';
 const SCOPE = self.registration.scope;
 
 self.addEventListener('install', (event) => {

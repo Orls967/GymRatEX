@@ -7,7 +7,7 @@ import type { Plugin } from 'vite';
 /** Menulis daftar aset hasil build agar service worker bisa pra-cache semuanya (mode offline). */
 function precacheManifest(): Plugin {
   return {
-    name: 'ototlapis-precache-manifest',
+    name: 'gymrat-precache-manifest',
     apply: 'build',
     generateBundle(_, bundle) {
       const files = Object.keys(bundle).filter((f) => !f.endsWith('.map') && f !== 'index.html');

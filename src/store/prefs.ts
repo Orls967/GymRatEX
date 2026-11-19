@@ -5,8 +5,8 @@ export type Lang = 'id' | 'en';
 export type ThemePref = 'light' | 'dark' | 'system';
 export type ResolvedTheme = 'light' | 'dark';
 
-export const LANG_KEY = 'ototlapis.lang';
-export const THEME_KEY = 'ototlapis.theme';
+export const LANG_KEY = 'gymrat.lang';
+export const THEME_KEY = 'gymrat.theme';
 
 function initialLang(): Lang {
   const v = readStorage(LANG_KEY);

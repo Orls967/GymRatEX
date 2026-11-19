@@ -2,7 +2,7 @@
  * Jalur penggantian ke model anatomi glTF.
  *
  * 1. Letakkan file .glb (disarankan Draco + KTX2) di `public/models/`, mis. `public/models/anatomy.glb`.
- * 2. Isi `GLTF_MAPPING.muscles` dengan ID otot OtotLapis → nama mesh di file glTF (kiri & kanan).
+ * 2. Isi `GLTF_MAPPING.muscles` dengan ID otot GymRat → nama mesh di file glTF (kiri & kanan).
  * 3. Ubah `BODY_MODEL_SOURCE` di `bodyModelConfig.ts` menjadi `'gltf'`.
  * 4. Catat kredit & lisensi aset di `src/content/about.ts` (wajib lisensi bebas, mis. CC BY / CC0).
  *
@@ -16,7 +16,7 @@ export interface GltfMapping {
   scale: number;
   offset: [number, number, number];
   muscles: Record<string, string[]>;
-  /** Opsional: nama tulang glTF → nama tulang rig OtotLapis. */
+  /** Opsional: nama tulang glTF → nama tulang rig GymRat. */
   bones?: Record<string, string>;
 }
 

@@ -38,9 +38,9 @@ export default function GltfBody({
     scene.traverse((o) => {
       if (!(o instanceof Mesh)) return;
       const id = meshToMuscle.get(o.name);
-      if (!(o.material instanceof MeshStandardMaterial) || !o.userData.ototlapisOwned) {
+      if (!(o.material instanceof MeshStandardMaterial) || !o.userData.gymratOwned) {
         o.material = new MeshStandardMaterial({ roughness: 0.6 });
-        o.userData.ototlapisOwned = true;
+        o.userData.gymratOwned = true;
       }
       const mat = o.material as MeshStandardMaterial;
       if (!id) {

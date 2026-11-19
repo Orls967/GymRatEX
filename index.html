@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="description" content="OtotLapis — anatomi otot 3D dan biomekanika gerakan gym. Alat edukasi, 100% di browser." />
+    <meta name="description" content="GymRat — anatomi otot 3D dan biomekanika gerakan gym. Alat edukasi, 100% di browser." />
     <meta name="color-scheme" content="dark light" />
     <!--
       CSP: aplikasi hanya boleh terhubung ke origin sendiri. Ini juga memblokir ping telemetri
@@ -14,16 +14,16 @@
       http-equiv="Content-Security-Policy"
       content="default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' blob: mediastream:; object-src 'none'; base-uri 'self'; form-action 'none'"
     />
-    <title>OtotLapis</title>
+    <title>GymRat</title>
     <script>
       // Terapkan tema & bahasa SEBELUM render pertama agar tidak berkedip.
       (function () {
         var theme = 'system';
         var lang = 'id';
         try {
-          var t = localStorage.getItem('ototlapis.theme');
+          var t = localStorage.getItem('gymrat.theme');
           if (t === 'light' || t === 'dark' || t === 'system') theme = t;
-          var l = localStorage.getItem('ototlapis.lang');
+          var l = localStorage.getItem('gymrat.lang');
           if (l === 'id' || l === 'en') lang = l;
         } catch (e) {}
         var dark =
@@ -37,7 +37,7 @@
   </head>
   <body>
     <div id="root"></div>
-    <noscript>OtotLapis membutuhkan JavaScript. / OtotLapis requires JavaScript.</noscript>
+    <noscript>GymRat membutuhkan JavaScript. / GymRat requires JavaScript.</noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -1,4 +1,4 @@
-# Catatan progres OtotLapis
+# Catatan progres GymRat
 
 Format: fase, status, catatan singkat. Data yang belum dicek silang ditandai `needsVerification: true` di `src/content`.
 

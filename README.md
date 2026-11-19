@@ -1,9 +1,9 @@
-# OtotLapis
+# GymRat
 
 **Anatomi otot 3D & biomekanika gerakan gym — alat edukasi berbahasa Indonesia (dan Inggris).**
 100% di sisi klien: tanpa backend, tanpa akun, tanpa pelacakan, bisa dipakai offline setelah dimuat.
 
-> _English summary:_ OtotLapis is a client-side 3D educational web app about muscle anatomy and the
+> _English summary:_ GymRat is a client-side 3D educational web app about muscle anatomy and the
 > biomechanics of gym movements. Indonesian by default, with a full English toggle. No backend, no
 > accounts, no tracking; works offline after the first load.
 
@@ -76,7 +76,7 @@ otomatis mengikuti animasi rig.
 
 1. Siapkan aset berlisensi bebas (mis. CC0 / CC BY), kompres dengan Draco (dan KTX2 untuk tekstur), simpan di
    `public/models/anatomy.glb`. Atur skala agar tinggi ≈ 1,78 m dengan kaki di y = 0 (atau isi `scale`/`offset`).
-2. Isi `GLTF_MAPPING.muscles` di `src/scene/body/gltfMapping.ts`: ID otot OtotLapis → nama mesh di file
+2. Isi `GLTF_MAPPING.muscles` di `src/scene/body/gltfMapping.ts`: ID otot GymRat → nama mesh di file
    (biasanya kiri & kanan), mis. `'pectoralis-major': ['Pectoralis_major_L', 'Pectoralis_major_R']`.
    ID otot yang tersedia ada di `src/content/muscles.ts`.
 3. Ubah `BODY_MODEL_SOURCE` di `src/scene/body/bodyModelConfig.ts` menjadi `'gltf'`.

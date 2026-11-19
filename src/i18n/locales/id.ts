@@ -1,7 +1,7 @@
 /** Teks UI bahasa Indonesia (sumber kebenaran struktur kunci). Konten ilmiah ada di src/content. */
 const id = {
   app: {
-    name: 'OtotLapis',
+    name: 'GymRat',
     tagline: 'Anatomi otot 3D & biomekanika gerakan gym',
     skip: 'Lewati ke konten',
     loading: 'Memuat…',
@@ -232,7 +232,7 @@ const id = {
   },
   about: {
     title: 'Tentang',
-    lead: 'OtotLapis adalah alat edukasi 3D yang berjalan 100% di browser.',
+    lead: 'GymRat adalah alat edukasi 3D yang berjalan 100% di browser.',
     disclaimerTitle: 'Disclaimer',
     principlesTitle: 'Prinsip',
     principles: [
