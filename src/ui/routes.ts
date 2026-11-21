@@ -21,3 +21,27 @@ export const NAV_ITEMS: readonly { key: NavKey; path: string; icon: LucideIcon; 
   { key: 'glossary', path: '/glosarium', icon: BookOpen, num: '06' },
   { key: 'about', path: '/tentang', icon: Info, num: '07' },
 ];
+
+/** Muat chunk halaman lebih awal (hover/fokus/idle) agar perpindahan rute tidak menampilkan layar kosong. */
+const loaders: Record<string, () => Promise<unknown>> = {
+  '': () => import('../pages/HomePage'),
+  otot: () => import('../pages/MuscleMapPage'),
+  latihan: () => import('../pages/ExerciseLibraryPage'),
+  studio: () => import('../pages/StudioPage'),
+  'benar-salah': () => import('../pages/ComparePage'),
+  webcam: () => import('../pages/WebcamPage'),
+  glosarium: () => import('../pages/GlossaryPage'),
+  tentang: () => import('../pages/AboutPage'),
+};
+
+export function routeModule(pathname: string): string {
+  return pathname.split('/')[1] ?? '';
+}
+
+export function preloadRoute(path: string): void {
+  void loaders[routeModule(path)]?.().catch(() => undefined);
+}
+
+export function preloadAllRoutes(): void {
+  for (const k of Object.keys(loaders)) void loaders[k]?.().catch(() => undefined);
+}

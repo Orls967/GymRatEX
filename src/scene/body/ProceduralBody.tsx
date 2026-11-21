@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useFrame, useThree, type ThreeEvent } from '@react-three/fiber';
 import {
-  CapsuleGeometry,
+  CanvasTexture,
   Color,
   Mesh,
   MeshStandardMaterial,
@@ -12,6 +12,7 @@ import {
 } from 'three';
 import type { BoneName, Side } from '../../lib/rig';
 import { useSceneTheme } from '../sceneTheme';
+import { CORE_PROFILES, LIMB_PROFILES, loft, type Ring } from './bodyShapes';
 import { resolveBone } from './muscleGeometry';
 import { MUSCLE_MESHES, anchorPoint } from './muscleMeshes';
 import type { BodyModelProps, Intensity } from './types';
@@ -39,36 +40,50 @@ function orient(out: Quaternion, dir: Vector3, ref: Vector3): Quaternion {
 
 interface BasePart {
   bone: BoneName;
-  /** jari-jari [x, z] dan perpanjangan ujung */
-  r: [number, number];
-  shape: 'capsule' | 'ellipsoid';
-  /** pemendekan relatif di ujung (agar tidak tumpang tindih di sendi) */
-  inset?: number;
-  /** sumbu referensi untuk penampang: anterior (default) atau atas lokal */
+  rings: readonly Ring[];
+  /** bagian bertubuh otot (diberi warna jaringan saat otot ditampilkan) */
+  covered?: boolean;
+  /** sumbu referensi penampang: anterior (default) atau "atas" lokal (telapak kaki) */
   refUp?: boolean;
-  /** skala panjang ellipsoid relatif terhadap panjang tulang */
-  lenScale?: number;
 }
 
 const SIDED = (s: Side): BasePart[] => [
-  { bone: `upperArm_${s}`, r: [0.036, 0.036], shape: 'capsule', inset: 0.02 },
-  { bone: `forearm_${s}`, r: [0.03, 0.028], shape: 'capsule', inset: 0.02 },
-  { bone: `hand_${s}`, r: [0.026, 0.014], shape: 'ellipsoid', lenScale: 0.6 },
-  { bone: `thigh_${s}`, r: [0.06, 0.06], shape: 'capsule', inset: 0.04 },
-  { bone: `shank_${s}`, r: [0.042, 0.042], shape: 'capsule', inset: 0.03 },
-  { bone: `foot_${s}`, r: [0.042, 0.03], shape: 'ellipsoid', refUp: true, lenScale: 0.62 },
-  { bone: `clavicle_${s}`, r: [0.03, 0.03], shape: 'capsule', inset: 0.02 },
+  { bone: `clavicle_${s}`, rings: LIMB_PROFILES.clavicle, covered: true },
+  { bone: `upperArm_${s}`, rings: LIMB_PROFILES.upperArm, covered: true },
+  { bone: `forearm_${s}`, rings: LIMB_PROFILES.forearm, covered: true },
+  { bone: `hand_${s}`, rings: LIMB_PROFILES.hand },
+  { bone: `thigh_${s}`, rings: LIMB_PROFILES.thigh, covered: true },
+  { bone: `shank_${s}`, rings: LIMB_PROFILES.shank, covered: true },
+  { bone: `foot_${s}`, rings: LIMB_PROFILES.foot, refUp: true },
 ];
 
 const BASE_PARTS: BasePart[] = [
-  { bone: 'pelvis', r: [0.15, 0.1], shape: 'ellipsoid', lenScale: 1.25 },
-  { bone: 'lumbar', r: [0.125, 0.085], shape: 'ellipsoid', lenScale: 0.9 },
-  { bone: 'thorax', r: [0.15, 0.1], shape: 'ellipsoid', lenScale: 0.66 },
-  { bone: 'neck', r: [0.045, 0.045], shape: 'capsule', inset: 0.0 },
-  { bone: 'head', r: [0.072, 0.088], shape: 'ellipsoid', lenScale: 0.86 },
+  { bone: 'pelvis', rings: CORE_PROFILES.pelvis, covered: true },
+  { bone: 'lumbar', rings: CORE_PROFILES.lumbar, covered: true },
+  { bone: 'thorax', rings: CORE_PROFILES.thorax, covered: true },
+  { bone: 'neck', rings: CORE_PROFILES.neck },
+  { bone: 'head', rings: CORE_PROFILES.head },
   ...SIDED('l'),
   ...SIDED('r'),
 ];
+
+const BLOB_TEXTURE = (() => {
+  try {
+    const c = document.createElement('canvas');
+    c.width = c.height = 64;
+    const g = c.getContext('2d');
+    if (!g) return null;
+    const grad = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+    grad.addColorStop(0, 'rgba(0,0,0,0.38)');
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = grad;
+    g.fillRect(0, 0, 64, 64);
+    const tex = new CanvasTexture(c);
+    return tex;
+  } catch {
+    return null;
+  }
+})();
 
 export function ProceduralBody({
   skeleton,
@@ -87,20 +102,14 @@ export function ProceduralBody({
   const baseRefs = useRef<(Mesh | null)[]>([]);
   const muscleRefs = useRef<(Mesh | null)[]>([]);
 
-  const baseGeometries = useMemo(
-    () =>
-      BASE_PARTS.map((p) => {
-        if (p.shape !== 'capsule') return UNIT_SPHERE;
-        const len = skeleton.current[p.bone].length;
-        const body = Math.max(len - 2 * (p.inset ?? 0) - 2 * p.r[0], 0.001);
-        return new CapsuleGeometry(p.r[0], body, 6, 14);
-      }),
-    // geometri hanya bergantung pada panjang tulang yang konstan
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
+  const baseGeometries = useMemo(() => BASE_PARTS.map((p) => loft(p.rings)), []);
+  const blob = useRef<Mesh>(null);
   const baseMaterial = useMemo(
     () => new MeshStandardMaterial({ roughness: 0.85, metalness: 0.0 }),
+    [],
+  );
+  const tissueMaterial = useMemo(
+    () => new MeshStandardMaterial({ roughness: 0.9, metalness: 0.0 }),
     [],
   );
   const muscleMaterials = useMemo(
@@ -116,8 +125,14 @@ export function ProceduralBody({
     baseMaterial.opacity = peeled ? (minLayer === 3 ? 0.14 : 0.28) : 1;
     baseMaterial.depthWrite = !peeled;
     baseMaterial.needsUpdate = true;
+    // Di antara otot terlihat jaringan gelap (bukan manekin abu-abu) agar otot tampak menempel.
+    tissueMaterial.color.set(showMuscles ? theme.tissue : theme.mannequin);
+    tissueMaterial.transparent = peeled;
+    tissueMaterial.opacity = baseMaterial.opacity;
+    tissueMaterial.depthWrite = !peeled;
+    tissueMaterial.needsUpdate = true;
     invalidate();
-  }, [baseMaterial, theme, minLayer, showMuscles, invalidate]);
+  }, [baseMaterial, tissueMaterial, theme, minLayer, showMuscles, invalidate]);
 
   // Warna otot: dihitung ulang hanya saat status berubah, bukan tiap frame.
   useEffect(() => {
@@ -144,10 +159,11 @@ export function ProceduralBody({
   useEffect(
     () => () => {
       baseMaterial.dispose();
+      tissueMaterial.dispose();
       muscleMaterials.forEach((m) => m.dispose());
-      baseGeometries.forEach((g) => g !== UNIT_SPHERE && g.dispose());
+      baseGeometries.forEach((g) => g.dispose());
     },
-    [baseMaterial, muscleMaterials, baseGeometries],
+    [baseMaterial, tissueMaterial, muscleMaterials, baseGeometries],
   );
 
   useFrame(() => {
@@ -157,17 +173,15 @@ export function ProceduralBody({
       if (!mesh) return;
       const seg = sk[p.bone];
       const dir = _x.copy(seg.end).sub(seg.start);
-      const len = dir.length();
       const ref = (p.refUp ? Y : Z).clone().applyQuaternion(seg.quat);
       orient(mesh.quaternion, dir, ref);
-      mesh.position.copy(seg.start).lerp(seg.end, 0.5);
-      if (p.shape === 'capsule') {
-        // panjang tulang konstan (rig kaku) → geometri kapsul dibuat sekali dengan ukuran sebenarnya
-        mesh.scale.set(1, 1, p.r[1] / p.r[0]);
-      } else {
-        mesh.scale.set(p.r[0], (len * (p.lenScale ?? 1)) / 2 + 0.01, p.r[1]);
-      }
+      mesh.position.copy(seg.start);
     });
+    if (blob.current) {
+      const fl = sk.foot_l.start;
+      const fr = sk.foot_r.start;
+      blob.current.position.set((fl.x + fr.x) / 2, 0.004, (fl.z + fr.z) / 2);
+    }
     MUSCLE_MESHES.forEach((def, i) => {
       const mesh = muscleRefs.current[i];
       if (!mesh) return;
@@ -228,11 +242,15 @@ export function ProceduralBody({
             baseRefs.current[i] = m;
           }}
           geometry={baseGeometries[i]}
-          material={baseMaterial}
-          castShadow
-          receiveShadow
+          material={p.covered ? tissueMaterial : baseMaterial}
         />
       ))}
+      {BLOB_TEXTURE && (
+        <mesh ref={blob} rotation={[-Math.PI / 2, 0, 0]} renderOrder={-1}>
+          <planeGeometry args={[0.9, 0.9]} />
+          <meshBasicMaterial map={BLOB_TEXTURE} transparent depthWrite={false} />
+        </mesh>
+      )}
       {showMuscles &&
         MUSCLE_MESHES.map((def, i) => (
           <mesh
@@ -244,7 +262,6 @@ export function ProceduralBody({
             visible={def.layer >= minLayer}
             geometry={UNIT_SPHERE}
             material={muscleMaterials[i]}
-            castShadow
             {...pointer(def.muscleId)}
           />
         ))}

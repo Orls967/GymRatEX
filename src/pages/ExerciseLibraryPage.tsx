@@ -14,7 +14,7 @@ import {
 } from '../content';
 import { computeSkeleton, neutralPose } from '../lib/rig';
 import { Stage } from '../scene/Stage';
-import { CameraRig } from '../scene/CameraRig';
+import { CameraRig, FIT_BODY } from '../scene/CameraRig';
 import { BodyModel } from '../scene/body/BodyModel';
 import { PageHeader } from '../ui/PageHeader';
 import { Segmented } from '../ui/Segmented';
@@ -87,7 +87,6 @@ function ExerciseDetail({ ex }: { ex: Exercise }) {
   const view = viewOverride?.id === ex.id ? viewOverride.view : dominantSide(ex);
   const intensities = useMemo(() => exerciseIntensities(ex), [ex]);
   const dirZ = view === 'front' ? 1 : -1;
-  const narrow = typeof window !== 'undefined' && window.innerWidth < 640;
 
   return (
     <article data-testid="exercise-detail">
@@ -105,7 +104,8 @@ function ExerciseDetail({ ex }: { ex: Exercise }) {
           <CameraRig
             target={[0, 0.98, 0]}
             direction={[0, 0.06, dirZ]}
-            distance={narrow ? 4.1 : 3.2}
+            distance={3.2}
+            fitHeight={FIT_BODY}
             nonce={`${ex.id}-${view}`}
           />
         </Stage>

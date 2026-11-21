@@ -141,9 +141,9 @@ export default function ComparePage() {
           dist: narrow ? 4.6 : 3.4,
         }
       : {
-          target: [0, 0.75, 0] as [number, number, number],
+          target: [0, 0.64, 0] as [number, number, number],
           dir: [0, 0.12, 1] as [number, number, number],
-          dist: narrow ? 5.2 : 3.9,
+          dist: narrow ? 4.7 : 3.9,
         };
 
   return (

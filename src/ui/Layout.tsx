@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { Menu, Search, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { NAV_ITEMS } from './routes';
+import { NAV_ITEMS, preloadAllRoutes, preloadRoute, routeModule } from './routes';
 import { LangToggle, ThemeToggle } from './PrefsControls';
 import { SearchDialog } from './SearchDialog';
 import { useSearchShortcut } from './useSearchShortcut';
@@ -13,10 +13,34 @@ export function Layout() {
   const [searchOpen, setSearchOpen] = useSearchShortcut();
   const location = useLocation();
 
+  // Transisi hanya saat modul (halaman) berganti; memilih otot/latihan di halaman yang sama tidak dianimasikan.
+  const moduleKey = routeModule(location.pathname);
+  const firstRender = useRef(true);
+
   useEffect(() => {
     setMenuOpen(false);
     window.scrollTo({ top: 0 });
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
+    // fokus keyboard/pembaca layar kembali ke awal konten halaman baru
+    document.getElementById('main')?.focus({ preventScroll: true });
+  }, [moduleKey]);
+
+  // Muat semua chunk halaman saat browser senggang (setelah halaman pertama tampil).
+  useEffect(() => {
+    const w = window as { requestIdleCallback?: (cb: () => void) => number };
+    const id = w.requestIdleCallback
+      ? w.requestIdleCallback(preloadAllRoutes)
+      : window.setTimeout(preloadAllRoutes, 1500);
+    return () => {
+      if (!w.requestIdleCallback) window.clearTimeout(id);
+    };
+  }, []);
 
   return (
     <div className="flex min-h-dvh flex-col">
@@ -44,6 +68,8 @@ export function Layout() {
                 <li key={item.key}>
                   <NavLink
                     to={item.path}
+                    onPointerEnter={() => preloadRoute(item.path)}
+                    onFocus={() => preloadRoute(item.path)}
                     className={({ isActive }) =>
                       `block px-2.5 py-1.5 font-display text-[1.02rem] font-semibold uppercase tracking-wide ${
                         isActive
@@ -116,7 +142,9 @@ export function Layout() {
         )}
       </header>
       <main id="main" tabIndex={-1} className="flex-1 outline-none">
-        <Outlet />
+        <div key={moduleKey} className="page-enter" data-testid="page-transition">
+          <Outlet />
+        </div>
       </main>
       <footer className="border-t border-line">
         <div className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-5 text-sm text-ink-muted sm:flex-row sm:justify-between">

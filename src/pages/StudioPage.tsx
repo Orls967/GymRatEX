@@ -138,7 +138,6 @@ export default function StudioPage() {
 
   const ranges = PARAM_RANGES[pattern];
   const name = exercise ? L(exercise.name) : t(`studio.patterns.${pattern}`);
-  const narrow = typeof window !== 'undefined' && window.innerWidth < 640;
   const loadKind = pattern === 'lunge' ? 'dumbbells' : 'barbell';
   const peak = (k: MomentSeries['key']) =>
     Math.max(...(series.find((s) => s.key === k)?.values ?? [0]));
@@ -182,7 +181,8 @@ export default function StudioPage() {
             <CameraRig
               target={[0, 0.9, 0]}
               direction={[1, 0.22, 0.85]}
-              distance={narrow ? 4.8 : 3.8}
+              distance={3.8}
+              fitHeight={2.3}
               nonce={pattern}
               enablePan
             />

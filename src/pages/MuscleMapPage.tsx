@@ -5,7 +5,7 @@ import { ArrowRight, X } from 'lucide-react';
 import { MUSCLES, MUSCLE_REGIONS, exercisesForMuscle, getMuscle } from '../content';
 import { computeSkeleton, neutralPose } from '../lib/rig';
 import { Stage } from '../scene/Stage';
-import { CameraRig } from '../scene/CameraRig';
+import { CameraRig, FIT_BODY } from '../scene/CameraRig';
 import { BodyModel } from '../scene/body/BodyModel';
 import { muscleCentroid } from '../scene/body/muscleMeshes';
 import { PageHeader } from '../ui/PageHeader';
@@ -49,11 +49,13 @@ export default function MuscleMapPage() {
         target: [c.x * 0.6, c.y, 0] as [number, number, number],
         distance: narrow ? 2.2 : 1.55,
         dir: [0.15 * dirZ, 0.1, dirZ] as [number, number, number],
+        fit: false,
       };
     return {
       target: [0, 0.98, 0] as [number, number, number],
-      distance: narrow ? 4.2 : 3.3,
+      distance: 3.3,
       dir: [0, 0.08, dirZ] as [number, number, number],
+      fit: true,
     };
   }, [selected, view]);
 
@@ -83,6 +85,7 @@ export default function MuscleMapPage() {
               target={focus.target}
               direction={focus.dir}
               distance={focus.distance}
+              fitHeight={focus.fit ? FIT_BODY : undefined}
               nonce={`${selected?.id}-${view}`}
             />
           </Stage>

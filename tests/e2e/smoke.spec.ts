@@ -156,6 +156,43 @@ test.describe('glosarium & tentang', () => {
   });
 });
 
+test.describe('beranda & transisi', () => {
+  test('alur belajar berurutan dan CTA utama menuju Peta Otot', async ({ page }) => {
+    await page.goto('./');
+    const steps = page.locator('#alur ol > li a');
+    await expect(steps).toHaveCount(5);
+    const hrefs = await steps.evaluateAll((els) => els.map((e) => e.getAttribute('href')));
+    expect(hrefs).toEqual(['#/otot', '#/latihan', '#/studio', '#/benar-salah', '#/webcam']);
+    await expect(page.getByRole('link', { name: /Glosarium/ }).first()).toBeVisible();
+    await page.getByTestId('hero-cta').click();
+    await expect(page).toHaveURL(/#\/otot$/);
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('Peta Otot');
+  });
+
+  test('pindah modul memicu transisi; memilih otot di halaman yang sama tidak', async ({
+    page,
+  }) => {
+    await page.goto('./#/otot');
+    const wrap = page.getByTestId('page-transition');
+    await expect(wrap).toBeVisible();
+    await wrap.evaluate((el) => el.setAttribute('data-mark', '1'));
+    await page.goto('./#/otot/gluteus-maximus');
+    await expect(wrap).toHaveAttribute('data-mark', '1');
+    await page.goto('./#/latihan');
+    await expect(page.getByTestId('page-transition')).not.toHaveAttribute('data-mark', '1');
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('Pustaka Latihan');
+  });
+
+  test('prefers-reduced-motion mematikan animasi transisi', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('./#/glosarium');
+    const name = await page
+      .getByTestId('page-transition')
+      .evaluate((el) => getComputedStyle(el).animationName);
+    expect(name).toBe('none');
+  });
+});
+
 test('offline setelah dimuat (service worker)', async ({ page, context }) => {
   await page.goto('./');
   await page.evaluate(async () => {

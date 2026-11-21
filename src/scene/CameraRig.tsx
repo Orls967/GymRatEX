@@ -16,26 +16,52 @@ interface Props {
   minDistance?: number;
   maxDistance?: number;
   enablePan?: boolean;
+  /** Bila diisi, jarak dihitung agar tinggi (m) ini muat di kanvas pada rasio apa pun. */
+  fitHeight?: number;
+  /** Putar otomatis pelan sampai pengguna menyentuh model. */
+  autoRotate?: boolean;
+  /** Sentuhan vertikal menggulir halaman (hanya geser horizontal yang memutar). Untuk kanvas di tengah halaman panjang. */
+  pageScroll?: boolean;
 }
+
+/** Tinggi tubuh penuh (m) + ruang napas; dipakai semua halaman agar framing seragam. */
+export const FIT_BODY = 2.05;
 
 /** Kamera orbit dengan transisi mulus ke fokus baru (dimatikan bila prefers-reduced-motion). */
 export function CameraRig({
   target,
   direction,
-  distance,
+  distance: distanceProp,
   nonce,
   minDistance = 0.6,
   maxDistance = 6,
   enablePan = false,
+  fitHeight,
+  autoRotate = false,
+  pageScroll = false,
 }: Props) {
   const controls = useRef<OrbitControlsImpl | null>(null);
   const camera = useThree((s) => s.camera);
   const invalidate = useThree((s) => s.invalidate);
   const reduced = useReducedMotion();
+  const size = useThree((s) => s.size);
+  const dom = useThree((s) => s.gl.domElement);
+  useEffect(() => {
+    if (pageScroll) dom.style.touchAction = 'pan-y';
+  }, [pageScroll, dom]);
+  let distance = distanceProp;
+  if (fitHeight) {
+    const fov = ((camera as { fov?: number }).fov ?? 35) * (Math.PI / 180);
+    const aspect = size.width / Math.max(size.height, 1);
+    const half = Math.tan(fov / 2);
+    // muat tinggi dan lebar (≈ 0,9× tinggi) tubuh; ambil jarak terbesar
+    distance = Math.max(fitHeight / 2 / half, (fitHeight * 0.46) / (half * aspect));
+  }
+  const first = useRef(true);
   const goal = useRef({ target: new Vector3(...target), pos: new Vector3(), active: true });
 
   // kunci nilai (bukan identitas array) agar animasi hanya diulang saat fokus benar-benar berubah
-  const key = `${target.join(',')}|${direction.join(',')}|${distance}|${nonce ?? ''}|${reduced}`;
+  const key = `${target.join(',')}|${direction.join(',')}|${distance.toFixed(3)}|${nonce ?? ''}|${reduced}`;
   const latest = useRef({ target, direction, distance });
   latest.current = { target, direction, distance };
 
@@ -44,7 +70,10 @@ export function CameraRig({
     const t = new Vector3(...tg);
     const pos = new Vector3(...dir).normalize().multiplyScalar(dist).add(t);
     goal.current = { target: t, pos, active: true };
-    if (reduced && controls.current) {
+    // pertama kali muncul: langsung di posisi (tanpa gerak menyapu saat halaman baru tampil)
+    const snap = reduced || first.current;
+    first.current = false;
+    if (snap && controls.current) {
       controls.current.target.copy(t);
       camera.position.copy(pos);
       controls.current.update();
@@ -57,7 +86,8 @@ export function CameraRig({
     const c = controls.current;
     const g = goal.current;
     if (!c || !g.active) return;
-    const k = 1 - Math.exp(-dt * 5);
+    // dt dibatasi: setelah jeda (frameloop demand) dt bisa besar dan membuat kamera meloncat
+    const k = 1 - Math.exp(-Math.min(dt, 0.05) * 6);
     c.target.lerp(g.target, k);
     camera.position.lerp(g.pos, k);
     c.update();
@@ -71,6 +101,11 @@ export function CameraRig({
       ref={controls}
       makeDefault
       enableDamping
+      dampingFactor={0.12}
+      rotateSpeed={0.7}
+      zoomSpeed={0.8}
+      autoRotate={autoRotate && !reduced}
+      autoRotateSpeed={0.8}
       enablePan={enablePan}
       minDistance={minDistance}
       maxDistance={maxDistance}

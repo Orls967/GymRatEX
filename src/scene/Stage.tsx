@@ -23,12 +23,7 @@ function Lights() {
     <>
       <color attach="background" args={[t.bg]} />
       <hemisphereLight args={[t.light.hemiSky, t.light.hemiGround, t.light.ambient]} />
-      <directionalLight
-        position={[2.5, 4, 3]}
-        intensity={t.light.key}
-        castShadow={!isLowPower()}
-        shadow-mapSize={[1024, 1024]}
-      />
+      <directionalLight position={[2.5, 4, 3]} intensity={t.light.key} />
       <directionalLight position={[-3, 2.5, -3]} intensity={t.light.rim} />
       <ambientLight intensity={t.light.ambient * 0.5} />
     </>
@@ -59,7 +54,7 @@ function Effects() {
   if (low) return null;
   return (
     <EffectComposer multisampling={0}>
-      <N8AO aoRadius={0.35} intensity={1.6} distanceFalloff={0.6} />
+      <N8AO aoRadius={0.3} intensity={1.4} distanceFalloff={0.6} quality="low" halfRes />
       <SMAA />
     </EffectComposer>
   );
@@ -95,7 +90,6 @@ export function Stage({
         <Canvas
           frameloop={frameloop}
           dpr={dpr}
-          shadows={!isLowPower()}
           camera={{
             position: camera?.position ?? [0, 1.2, 3.2],
             fov: camera?.fov ?? 35,

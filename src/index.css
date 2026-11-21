@@ -39,6 +39,7 @@
   --c-mannequin: #d8d0c1;
   --c-muscle: #c7a998;
   --c-muscle-deep: #b38f7f;
+  --c-tissue: #8f6b5d;
   --c-bone: #efe9dc;
   --c-highlight: #1d1c1a;
 }
@@ -71,6 +72,7 @@
   --c-mannequin: #8a847b;
   --c-muscle: #9a6f62;
   --c-muscle-deep: #7d5a50;
+  --c-tissue: #4a332d;
   --c-bone: #cfc8ba;
   --c-highlight: #ece8df;
 }
@@ -212,6 +214,67 @@
   }
 }
 
+/* ===== Beranda: jalur alur belajar ===== */
+.flow-step::before {
+  content: '';
+  position: absolute;
+  left: 18px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--c-line-strong);
+}
+.flow-step:last-child::before {
+  bottom: auto;
+  height: 18px;
+}
+.flow-node {
+  z-index: 1;
+}
+@media (min-width: 1024px) {
+  .flow-step::before {
+    left: 36px;
+    right: 0;
+    top: 18px;
+    bottom: auto;
+    width: auto;
+    height: 1px;
+  }
+  .flow-step:last-child::before {
+    display: none;
+  }
+}
+
+/* ===== Transisi halaman & muat ===== */
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.page-enter {
+  animation: page-in 220ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.hero-canvas {
+  animation: fade-in 500ms ease both;
+}
+/* indikator muat baru muncul bila memuat > 250 ms (hindari kilatan teks) */
+.fallback-delay {
+  animation: fade-in 200ms ease 250ms both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -220,5 +283,9 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
+  }
+  .page-enter,
+  .hero-canvas {
+    animation: none !important;
   }
 }

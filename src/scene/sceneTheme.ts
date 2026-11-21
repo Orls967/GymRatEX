@@ -10,6 +10,7 @@ export interface SceneTheme {
   mannequin: string;
   muscle: string;
   muscleDeep: string;
+  tissue: string;
   bone: string;
   highlight: string;
   accent: string;
@@ -61,6 +62,7 @@ export function readSceneTheme(mode: ResolvedTheme): SceneTheme {
     mannequin: cssVar('--c-mannequin'),
     muscle: cssVar('--c-muscle'),
     muscleDeep: cssVar('--c-muscle-deep'),
+    tissue: cssVar('--c-tissue'),
     bone: cssVar('--c-bone'),
     highlight: cssVar('--c-highlight'),
     accent: cssVar('--c-accent'),
