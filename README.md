@@ -57,7 +57,8 @@ navigasi keyboard, dan dukungan `prefers-reduced-motion`.
 ## Galeri tampilan
 
 Semua screenshot diambil dari build produksi (`npm run build`) dengan Chromium. Tampilan desktop berukuran
-1440 × 900, tampilan HP memakai emulasi Pixel 7. File aslinya ada di [`docs/screenshots/`](docs/screenshots/).
+1440 × 900, tampilan HP memakai emulasi Pixel 7. File aslinya ada di [`docs/screenshots/`](docs/screenshots/). Untuk mengambil ulang: `npm run build`, jalankan
+`npx vite preview --port 4174 --strictPort`, lalu `node scripts/screenshots.mjs`.
 
 ### 1. Beranda, navigasi, pencarian, bahasa & tema
 
@@ -65,11 +66,14 @@ Semua screenshot diambil dari build produksi (`npm run build`) dengan Chromium. 
 
 ![Beranda tema gelap](docs/screenshots/01-beranda-gelap.jpg)
 
-**Menampilkan:** judul aplikasi, ringkasan singkat, tombol **Mulai dari Peta Otot**, kotak **Alur belajar**
-(otot → latihan → Studio Form → kamera), dan grid enam modul bernomor 01–06 beserta deskripsinya.
+**Menampilkan:** hero dengan judul, ringkasan, satu tombol utama **Mulai dari Peta Otot** dan tautan
+**Lihat alur belajar**. Di kanan, manekin 3D yang sama dengan Studio Form memeragakan gerakan (pilih Back squat,
+Deadlift, Lunge, atau Overhead press) dengan otot yang bekerja menyala. Di bawahnya ada **Alur belajar** lima
+langkah (Peta Otot → Pustaka Latihan → Studio Form → Benar vs Salah → Cek Form) dan bagian **Pendukung**
+(Glosarium, Tentang, pencarian).
 Di header ada menu utama, tombol pencarian (**Ctrl K**), toggle bahasa **ID/EN**, dan tiga tombol tema
 (terang ☀, gelap ☾, ikuti sistem 🖥).
-**Untuk apa:** titik masuk — pengguna langsung tahu ada modul apa saja dan urutan belajar yang disarankan.
+**Untuk apa:** titik masuk — pengguna langsung tahu apa isinya, urutan belajar yang disarankan, dan bisa langsung mencoba model 3D.
 
 #### Beranda — tema terang di HP
 
@@ -103,7 +107,7 @@ menemukan otot yang sama, begitu juga nama Latin.
 
 ![Beranda dalam bahasa Inggris](docs/screenshots/05-beranda-english.jpg)
 
-**Menampilkan:** seluruh antarmuka setelah toggle **EN** ditekan — judul, deskripsi modul, menu.
+**Menampilkan:** seluruh antarmuka setelah toggle **EN** ditekan — judul, alur belajar, menu.
 Pilihan bahasa disimpan di perangkat dan diterapkan ke atribut `lang` halaman.
 **Untuk apa:** semua teks UI dan seluruh konten ilmiah (otot, latihan, glosarium, kesalahan form,
 disclaimer) tersedia dalam dua bahasa.
