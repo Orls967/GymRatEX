@@ -43,5 +43,7 @@ export function preloadRoute(path: string): void {
 }
 
 export function preloadAllRoutes(): void {
+  // aset tubuh 3D dibangun di Web Worker selagi senggang, sebelum halaman 3D dibuka
+  void import('../scene/body/assets').then((m) => m.loadBodyAssets()).catch(() => undefined);
   for (const k of Object.keys(loaders)) void loaders[k]?.().catch(() => undefined);
 }

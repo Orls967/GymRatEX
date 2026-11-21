@@ -1,71 +1,30 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { use, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { useFrame, useThree, type ThreeEvent } from '@react-three/fiber';
 import {
+  Bone,
+  BufferAttribute,
+  BufferGeometry,
   CanvasTexture,
   Color,
+  Group,
+  Matrix4,
   Mesh,
   MeshStandardMaterial,
-  Quaternion,
-  SphereGeometry,
+  Skeleton,
+  SkinnedMesh,
   Vector3,
-  Matrix4,
 } from 'three';
-import type { BoneName, Side } from '../../lib/rig';
 import { useSceneTheme } from '../sceneTheme';
-import { CORE_PROFILES, LIMB_PROFILES, loft, type Ring } from './bodyShapes';
-import { resolveBone } from './muscleGeometry';
-import { MUSCLE_MESHES, anchorPoint } from './muscleMeshes';
+import { BONES, REST_SKELETON, boneFrame, boneQuat, getBodyAsset } from './skin';
+import { getMuscleShells } from './muscleShells';
+import { loadBodyAssets } from './assets';
 import type { BodyModelProps, Intensity } from './types';
 
-const UNIT_SPHERE = new SphereGeometry(1, 24, 16);
-
-const _x = new Vector3();
-const _y = new Vector3();
-const _z = new Vector3();
-const _m = new Matrix4();
-const _tw = new Quaternion();
-const Y = new Vector3(0, 1, 0);
-const Z = new Vector3(0, 0, 1);
-
-/** Orientasi dengan sumbu Y sepanjang dir dan sumbu Z sedekat mungkin ke ref. */
-function orient(out: Quaternion, dir: Vector3, ref: Vector3): Quaternion {
-  _y.copy(dir).normalize();
-  _z.copy(ref).addScaledVector(_y, -ref.dot(_y));
-  if (_z.lengthSq() < 1e-8) _z.set(1, 0, 0).cross(_y);
-  _z.normalize();
-  _x.crossVectors(_y, _z).normalize();
-  _m.makeBasis(_x, _y, _z);
-  return out.setFromRotationMatrix(_m);
-}
-
-interface BasePart {
-  bone: BoneName;
-  rings: readonly Ring[];
-  /** bagian bertubuh otot (diberi warna jaringan saat otot ditampilkan) */
-  covered?: boolean;
-  /** sumbu referensi penampang: anterior (default) atau "atas" lokal (telapak kaki) */
-  refUp?: boolean;
-}
-
-const SIDED = (s: Side): BasePart[] => [
-  { bone: `clavicle_${s}`, rings: LIMB_PROFILES.clavicle, covered: true },
-  { bone: `upperArm_${s}`, rings: LIMB_PROFILES.upperArm, covered: true },
-  { bone: `forearm_${s}`, rings: LIMB_PROFILES.forearm, covered: true },
-  { bone: `hand_${s}`, rings: LIMB_PROFILES.hand },
-  { bone: `thigh_${s}`, rings: LIMB_PROFILES.thigh, covered: true },
-  { bone: `shank_${s}`, rings: LIMB_PROFILES.shank, covered: true },
-  { bone: `foot_${s}`, rings: LIMB_PROFILES.foot, refUp: true },
-];
-
-const BASE_PARTS: BasePart[] = [
-  { bone: 'pelvis', rings: CORE_PROFILES.pelvis, covered: true },
-  { bone: 'lumbar', rings: CORE_PROFILES.lumbar, covered: true },
-  { bone: 'thorax', rings: CORE_PROFILES.thorax, covered: true },
-  { bone: 'neck', rings: CORE_PROFILES.neck },
-  { bone: 'head', rings: CORE_PROFILES.head },
-  ...SIDED('l'),
-  ...SIDED('r'),
-];
+/**
+ * Model tubuh tunggal untuk seluruh aplikasi: satu kulit tersambung (skin.ts) di-skin ke rig,
+ * ditambah otot sebagai tambalan permukaan yang menempel pada kulit (muscleShells.ts).
+ * Skeleton, geometri, dan aset dibagi antar-instans; hanya warna & tulang yang per-instans.
+ */
 
 const BLOB_TEXTURE = (() => {
   try {
@@ -78,12 +37,105 @@ const BLOB_TEXTURE = (() => {
     grad.addColorStop(1, 'rgba(0,0,0,0)');
     g.fillStyle = grad;
     g.fillRect(0, 0, 64, 64);
-    const tex = new CanvasTexture(c);
-    return tex;
+    return new CanvasTexture(c);
   } catch {
     return null;
   }
 })();
+
+const PEEL_DEPTH = 0.016;
+
+interface Rig {
+  bones: Bone[];
+  skeleton: Skeleton;
+  skin: SkinnedMesh;
+  muscles: SkinnedMesh;
+  skinGeo: BufferGeometry;
+  muscleGeo: BufferGeometry;
+  skinMat: MeshStandardMaterial;
+  muscleMat: MeshStandardMaterial;
+  peel: { value: number };
+}
+
+function createRig(): Rig {
+  const body = getBodyAsset();
+  const shells = getMuscleShells();
+
+  const bones = BONES.map(() => new Bone());
+  const inverses = BONES.map((b, i) => {
+    const m = boneFrame(new Matrix4(), REST_SKELETON[b], b);
+    const bone = bones[i] as Bone;
+    bone.position.copy(REST_SKELETON[b].start);
+    boneQuat(bone.quaternion, REST_SKELETON[b], b);
+    return m.invert();
+  });
+  const skeleton = new Skeleton(bones, inverses);
+
+  const skinGeo = new BufferGeometry();
+  skinGeo.setAttribute('position', new BufferAttribute(body.positions, 3));
+  skinGeo.setAttribute('normal', new BufferAttribute(body.normals, 3));
+  skinGeo.setAttribute('skinIndex', new BufferAttribute(body.skinIndex, 4));
+  skinGeo.setAttribute('skinWeight', new BufferAttribute(body.skinWeight, 4));
+  skinGeo.setAttribute(
+    'color',
+    new BufferAttribute(new Float32Array((body.positions.length / 3) * 3), 3),
+  );
+  skinGeo.setIndex(new BufferAttribute(body.indices, 1));
+
+  const muscleGeo = new BufferGeometry();
+  muscleGeo.setAttribute('position', new BufferAttribute(shells.positions, 3));
+  muscleGeo.setAttribute('normal', new BufferAttribute(shells.normals, 3));
+  muscleGeo.setAttribute('skinIndex', new BufferAttribute(shells.skinIndex, 4));
+  muscleGeo.setAttribute('skinWeight', new BufferAttribute(shells.skinWeight, 4));
+  muscleGeo.setAttribute('aDepth', new BufferAttribute(shells.depth, 1));
+  muscleGeo.setAttribute('aM', new BufferAttribute(shells.member, 1));
+  muscleGeo.setAttribute(
+    'color',
+    new BufferAttribute(new Float32Array((shells.positions.length / 3) * 3), 3),
+  );
+  muscleGeo.setIndex(new BufferAttribute(shells.indices, 1));
+
+  const skinMat = new MeshStandardMaterial({ vertexColors: true, roughness: 0.85, metalness: 0 });
+  const muscleMat = new MeshStandardMaterial({ vertexColors: true, roughness: 0.55, metalness: 0 });
+  const peel = { value: 0 };
+  muscleMat.onBeforeCompile = (shader) => {
+    shader.uniforms.uPeel = peel;
+    shader.vertexShader = shader.vertexShader
+      .replace(
+        '#include <common>',
+        '#include <common>\nattribute float aDepth;\nattribute float aM;\nvarying float vM;\nuniform float uPeel;',
+      )
+      .replace('void main() {', 'void main() {\n  vM = aM;')
+      .replace(
+        '#include <skinning_vertex>',
+        `#include <skinning_vertex>\ntransformed -= normalize(objectNormal) * aDepth * uPeel * ${PEEL_DEPTH.toFixed(4)};`,
+      );
+    shader.fragmentShader = shader.fragmentShader
+      .replace('#include <common>', '#include <common>\nvarying float vM;')
+      .replace('void main() {', 'void main() {\n  if (vM < 0.5) discard;');
+  };
+
+  const skin = new SkinnedMesh(skinGeo, skinMat);
+  skin.bind(skeleton, new Matrix4());
+  skin.frustumCulled = false;
+  skin.raycast = () => undefined;
+  const muscles = new SkinnedMesh(muscleGeo, muscleMat);
+  muscles.bind(skeleton, new Matrix4());
+  muscles.frustumCulled = false;
+  muscles.raycast = () => undefined;
+  return { bones, skeleton, skin, muscles, skinGeo, muscleGeo, skinMat, muscleMat, peel };
+}
+
+function ownerOfTriangle(ranges: { triStart: number; triCount: number }[], tri: number): number {
+  let lo = 0;
+  let hi = ranges.length - 1;
+  while (lo < hi) {
+    const mid = (lo + hi + 1) >> 1;
+    if ((ranges[mid] as { triStart: number }).triStart <= tri) lo = mid;
+    else hi = mid - 1;
+  }
+  return lo;
+}
 
 export function ProceduralBody({
   skeleton,
@@ -97,174 +149,162 @@ export function ProceduralBody({
   onSelect,
   showMuscles = true,
 }: BodyModelProps) {
+  use(loadBodyAssets()); // menunda (Suspense) sampai aset tubuh siap
   const theme = useSceneTheme();
   const invalidate = useThree((s) => s.invalidate);
-  const baseRefs = useRef<(Mesh | null)[]>([]);
-  const muscleRefs = useRef<(Mesh | null)[]>([]);
-
-  const baseGeometries = useMemo(() => BASE_PARTS.map((p) => loft(p.rings)), []);
+  const root = useRef<Group>(null);
   const blob = useRef<Mesh>(null);
-  const baseMaterial = useMemo(
-    () => new MeshStandardMaterial({ roughness: 0.85, metalness: 0.0 }),
-    [],
-  );
-  const tissueMaterial = useMemo(
-    () => new MeshStandardMaterial({ roughness: 0.9, metalness: 0.0 }),
-    [],
-  );
-  const muscleMaterials = useMemo(
-    () => MUSCLE_MESHES.map(() => new MeshStandardMaterial({ roughness: 0.55, metalness: 0.0 })),
-    [],
-  );
+  const pick = useRef<Mesh>(null);
+  const pickedFor = useRef<unknown>(null);
+  const rig = useMemo(createRig, []);
+  const shells = useMemo(getMuscleShells, []);
+  const body = useMemo(getBodyAsset, []);
 
+  const pickGeo = useMemo(() => {
+    const g = new BufferGeometry();
+    g.setAttribute('position', new BufferAttribute(new Float32Array(shells.positions.length), 3));
+    g.setIndex(new BufferAttribute(shells.indices, 1));
+    return g;
+  }, [shells]);
+  useEffect(() => () => pickGeo.dispose(), [pickGeo]);
+
+  const peeled = showMuscles && minLayer >= 2;
+
+  // warna kulit: kepala/tangan/kaki abu manekin; badan & anggota bernuansa jaringan bila otot tampil
   useEffect(() => {
-    baseMaterial.color.set(theme.mannequin);
-    // Saat lapisan luar dikupas, badan manekin dibuat tembus pandang agar otot dalam terlihat.
-    const peeled = showMuscles && minLayer >= 2;
-    baseMaterial.transparent = peeled;
-    baseMaterial.opacity = peeled ? (minLayer === 3 ? 0.14 : 0.28) : 1;
-    baseMaterial.depthWrite = !peeled;
-    baseMaterial.needsUpdate = true;
-    // Di antara otot terlihat jaringan gelap (bukan manekin abu-abu) agar otot tampak menempel.
-    tissueMaterial.color.set(showMuscles ? theme.tissue : theme.mannequin);
-    tissueMaterial.transparent = peeled;
-    tissueMaterial.opacity = baseMaterial.opacity;
-    tissueMaterial.depthWrite = !peeled;
-    tissueMaterial.needsUpdate = true;
+    const mannequin = new Color(theme.mannequin);
+    const tissue = new Color(showMuscles ? theme.tissue : theme.mannequin);
+    const c = new Color();
+    const attr = rig.skinGeo.getAttribute('color') as BufferAttribute;
+    for (let i = 0; i < body.cover.length; i++) {
+      c.copy(mannequin).lerp(tissue, body.cover[i] as number);
+      attr.setXYZ(i, c.r, c.g, c.b);
+    }
+    attr.needsUpdate = true;
+    rig.skinMat.transparent = peeled;
+    rig.skinMat.opacity = peeled ? (minLayer === 3 ? 0.14 : 0.28) : 1;
+    rig.skinMat.depthWrite = !peeled;
+    rig.skinMat.needsUpdate = true;
     invalidate();
-  }, [baseMaterial, tissueMaterial, theme, minLayer, showMuscles, invalidate]);
+  }, [rig, body, theme, showMuscles, peeled, minLayer, invalidate]);
 
-  // Warna otot: dihitung ulang hanya saat status berubah, bukan tiap frame.
+  // warna otot, dihitung ulang hanya saat status berubah
   useEffect(() => {
     const hasIntensity = !!intensities && Object.keys(intensities).length > 0;
     const accent = new Color(theme.accent);
     const hl = new Color(theme.highlight);
-    MUSCLE_MESHES.forEach((def, i) => {
-      const mat = muscleMaterials[i];
-      if (!mat) return;
-      const level: Intensity = intensities?.[def.muscleId] ?? 0;
-      let color: string;
-      if (level > 0) color = theme.intensity[level];
-      else if (hasIntensity && dimInactive) color = theme.intensity[0];
-      else color = def.layer >= 2 ? theme.muscleDeep : theme.muscle;
-      mat.color.set(color);
-      const isSel = selected === def.muscleId;
-      const isHov = hovered === def.muscleId;
-      mat.emissive.copy(isSel ? accent : isHov ? hl : new Color(0x000000));
-      mat.emissiveIntensity = isSel ? 0.55 : isHov ? 0.18 : 0;
+    const colors = shells.ranges.map((r) => {
+      const level: Intensity = intensities?.[r.muscleId] ?? 0;
+      let hex: string;
+      if (level > 0) hex = theme.intensity[level];
+      else if (hasIntensity && dimInactive) hex = theme.intensity[0];
+      else hex = r.layer >= 2 ? theme.muscleDeep : theme.muscle;
+      const col = new Color(hex);
+      if (selected === r.muscleId) col.lerp(accent, 0.75);
+      else if (hovered === r.muscleId) col.lerp(hl, 0.25);
+      return col;
     });
+    const attr = rig.muscleGeo.getAttribute('color') as BufferAttribute;
+    for (let i = 0; i < shells.owner.length; i++) {
+      const col = colors[shells.owner[i] as number] as Color;
+      attr.setXYZ(i, col.r, col.g, col.b);
+    }
+    attr.needsUpdate = true;
     invalidate();
-  }, [intensities, selected, hovered, dimInactive, theme, muscleMaterials, invalidate]);
+  }, [rig, shells, intensities, selected, hovered, dimInactive, theme, invalidate]);
 
-  useEffect(
+  // lapisan: otot superfisial disembunyikan saat dikupas, otot dalam digeser ke bawah kulit
+  useEffect(() => {
+    const start = shells.layerStart[minLayer];
+    const total = shells.indices.length;
+    rig.muscleGeo.setDrawRange(start, total - start);
+    rig.peel.value = peeled ? 1 : 0;
+    rig.muscles.visible = showMuscles;
+    pickGeo.setDrawRange(start, total - start);
+    invalidate();
+  }, [rig, shells, pickGeo, minLayer, peeled, showMuscles, invalidate]);
+
+  useLayoutEffect(
     () => () => {
-      baseMaterial.dispose();
-      tissueMaterial.dispose();
-      muscleMaterials.forEach((m) => m.dispose());
-      baseGeometries.forEach((g) => g.dispose());
+      rig.skinGeo.dispose();
+      rig.muscleGeo.dispose();
+      rig.skinMat.dispose();
+      rig.muscleMat.dispose();
+      rig.skeleton.dispose();
     },
-    [baseMaterial, tissueMaterial, muscleMaterials, baseGeometries],
+    [rig],
   );
 
+  const tmp = useMemo(() => new Vector3(), []);
   useFrame(() => {
     const sk = skeleton.current;
-    BASE_PARTS.forEach((p, i) => {
-      const mesh = baseRefs.current[i];
-      if (!mesh) return;
-      const seg = sk[p.bone];
-      const dir = _x.copy(seg.end).sub(seg.start);
-      const ref = (p.refUp ? Y : Z).clone().applyQuaternion(seg.quat);
-      orient(mesh.quaternion, dir, ref);
-      mesh.position.copy(seg.start);
+    BONES.forEach((name, i) => {
+      const bone = rig.bones[i] as Bone;
+      const seg = sk[name];
+      bone.position.copy(seg.start);
+      boneQuat(bone.quaternion, seg, name);
     });
     if (blob.current) {
       const fl = sk.foot_l.start;
       const fr = sk.foot_r.start;
       blob.current.position.set((fl.x + fr.x) / 2, 0.004, (fl.z + fr.z) / 2);
     }
-    MUSCLE_MESHES.forEach((def, i) => {
-      const mesh = muscleRefs.current[i];
-      if (!mesh) return;
-      const boneA = resolveBone(def.belly.a.bone, def.side);
-      const boneB = resolveBone(def.belly.b.bone, def.side);
-      const segA = sk[boneA];
-      const segB = sk[boneB];
-      const pa = anchorPoint(
-        segA,
-        def.side,
-        def.belly.a.off,
-        def.belly.a.t,
-        !def.belly.a.bone.endsWith('_S'),
-      );
-      const pb = anchorPoint(
-        segB,
-        def.side,
-        def.belly.b.off,
-        def.belly.b.t,
-        !def.belly.b.bone.endsWith('_S'),
-      );
-      const dir = pb.clone().sub(pa);
-      const len = dir.length();
-      const ref = Z.clone().applyQuaternion(segA.quat);
-      orient(mesh.quaternion, dir, ref);
-      if (def.belly.twist) {
-        _tw.setFromAxisAngle(Y, def.belly.twist * (def.side === 'l' ? 1 : -1));
-        mesh.quaternion.multiply(_tw);
+    // geometri untuk picking: salinan statis pose saat ini (pose Peta Otot tidak berubah)
+    const pm = pick.current;
+    if (interactive && pm && pickedFor.current !== sk) {
+      root.current?.updateMatrixWorld(true);
+      rig.skeleton.update();
+      const pos = pm.geometry.getAttribute('position') as BufferAttribute;
+      for (let i = 0; i < pos.count; i++) {
+        rig.muscles.getVertexPosition(i, tmp);
+        pos.setXYZ(i, tmp.x, tmp.y, tmp.z);
       }
-      mesh.position.copy(pa).lerp(pb, 0.5);
-      mesh.scale.set(def.belly.r[0], Math.max(len / 2, 0.01), def.belly.r[1]);
-    });
+      pos.needsUpdate = true;
+      pm.geometry.computeBoundingSphere();
+      pm.geometry.computeBoundingBox();
+      pickedFor.current = sk;
+    }
   });
 
-  const pointer = interactive
-    ? (id: string) => ({
-        onPointerOver: (e: ThreeEvent<PointerEvent>) => {
-          e.stopPropagation();
-          onHover?.(id);
-        },
-        onPointerOut: (e: ThreeEvent<PointerEvent>) => {
-          e.stopPropagation();
-          onHover?.(null);
-        },
-        onClick: (e: ThreeEvent<MouseEvent>) => {
-          e.stopPropagation();
-          onSelect?.(id, e);
-        },
-      })
-    : () => ({});
+  const idAt = (e: ThreeEvent<PointerEvent | MouseEvent>): string | null => {
+    if (e.faceIndex == null) return null;
+    return shells.ranges[ownerOfTriangle(shells.ranges, e.faceIndex)]?.muscleId ?? null;
+  };
 
   return (
-    <group>
-      {BASE_PARTS.map((p, i) => (
-        <mesh
-          key={p.bone}
-          ref={(m) => {
-            baseRefs.current[i] = m;
-          }}
-          geometry={baseGeometries[i]}
-          material={p.covered ? tissueMaterial : baseMaterial}
-        />
+    <group ref={root}>
+      {rig.bones.map((b) => (
+        <primitive key={b.uuid} object={b} />
       ))}
+      <primitive object={rig.skin} />
+      <primitive object={rig.muscles} />
+      {interactive && showMuscles && (
+        <mesh
+          ref={pick}
+          geometry={pickGeo}
+          onPointerMove={(e) => {
+            e.stopPropagation();
+            onHover?.(idAt(e));
+          }}
+          onPointerOut={(e) => {
+            e.stopPropagation();
+            onHover?.(null);
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            const id = idAt(e);
+            if (id) onSelect?.(id, e);
+          }}
+        >
+          <meshBasicMaterial colorWrite={false} depthWrite={false} />
+        </mesh>
+      )}
       {BLOB_TEXTURE && (
         <mesh ref={blob} rotation={[-Math.PI / 2, 0, 0]} renderOrder={-1}>
           <planeGeometry args={[0.9, 0.9]} />
           <meshBasicMaterial map={BLOB_TEXTURE} transparent depthWrite={false} />
         </mesh>
       )}
-      {showMuscles &&
-        MUSCLE_MESHES.map((def, i) => (
-          <mesh
-            key={def.key}
-            name={def.muscleId}
-            ref={(m) => {
-              muscleRefs.current[i] = m;
-            }}
-            visible={def.layer >= minLayer}
-            geometry={UNIT_SPHERE}
-            material={muscleMaterials[i]}
-            {...pointer(def.muscleId)}
-          />
-        ))}
     </group>
   );
 }

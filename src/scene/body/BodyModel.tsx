@@ -1,12 +1,7 @@
-import { lazy } from 'react';
-import { BODY_MODEL_SOURCE } from './bodyModelConfig';
 import { ProceduralBody } from './ProceduralBody';
 import type { BodyModelProps } from './types';
 
-const GltfBody = lazy(() => import('./GltfBody'));
-
-/** Titik masuk tunggal: halaman memakai <BodyModel>, implementasi dipilih lewat konfigurasi. */
+/** Titik masuk tunggal: semua halaman memakai model kulit-tunggal yang sama (lihat skin.ts). */
 export function BodyModel(props: BodyModelProps) {
-  if (BODY_MODEL_SOURCE === 'gltf') return <GltfBody {...props} />;
   return <ProceduralBody {...props} />;
 }

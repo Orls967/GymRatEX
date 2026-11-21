@@ -94,7 +94,7 @@ function Pair({ fe }: { fe: FormError }) {
           <LoadProp
             kind={barKind}
             getPosition={() => ref.current.bar}
-            plateScale={fe.demo === 'bench' ? 0.6 : 0.85}
+            plateScale={fe.demo === 'bench' ? 0.5 : 0.62}
             barLength={fe.view === 'side' ? 2 : 1.3}
             ghost={fe.view === 'side'}
           />

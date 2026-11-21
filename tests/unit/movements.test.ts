@@ -69,3 +69,24 @@ describe('rig & gerakan', () => {
     expect(phaseAt(3, 3)).toBeCloseTo(0, 6);
   });
 });
+
+import { Vector3 as V3 } from 'three';
+import { DEFAULT_PARAMS as DP2, movementFrame as mf2 } from '../../src/lib/movements';
+
+describe('tangan memegang barbel', () => {
+  it('squat: genggaman kiri/kanan tepat di batang pada semua fase', () => {
+    for (const ph of [0, 0.25, 0.5, 0.75, 1]) {
+      const fr = mf2('squat', DP2.squat, ph);
+      if (!fr.bar) throw new Error('bar');
+      for (const [side, sg] of [
+        ['l', 1],
+        ['r', -1],
+      ] as const) {
+        const h = fr.skeleton[`hand_${side}`];
+        const mid = h.start.clone().lerp(h.end, 0.5);
+        const target = fr.bar.clone().add(new V3(sg * 0.42, -0.01, 0));
+        expect(mid.distanceTo(target)).toBeLessThan(0.05);
+      }
+    }
+  });
+});

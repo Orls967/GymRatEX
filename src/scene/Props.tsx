@@ -23,8 +23,8 @@ export function LoadProp({
   getPosition,
   kind,
   spread = 0.42,
-  plateScale = 0.85,
-  barLength = 2.0,
+  plateScale = 0.62,
+  barLength = 1.75,
   ghost = false,
 }: BarProps) {
   const ref = useRef<Group>(null);

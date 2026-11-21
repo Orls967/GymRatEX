@@ -27,7 +27,7 @@
 5. [Tech stack](#tech-stack)
 6. [Struktur proyek](#struktur-proyek)
 7. [Bahasa & tema](#bahasa--tema)
-8. [Model 3D & cara mengganti ke glTF](#model-3d--cara-mengganti-ke-gltf)
+8. [Model 3D](#model-3d)
 9. [Model biomekanika & batasannya](#model-biomekanika--batasannya)
 10. [Privasi](#privasi)
 11. [Offline](#offline)
@@ -449,7 +449,7 @@ melewati `npx playwright install`. Fitur webcam butuh konteks aman (HTTPS atau `
 src/content   data otot, latihan, glosarium, kesalahan form, Tentang — dwibahasa {id, en}, divalidasi Zod
 src/lib       logika murni & teruji: rig (FK), IK, gerakan, biomekanika, sudut sendi, pose 2D,
               hitung repetisi, umpan balik form, pencarian, auto-link glosarium
-src/scene     komponen R3F: Stage, CameraRig, BodyModel (prosedural / glTF), props barbel, zona rawan
+src/scene     komponen R3F: Stage, CameraRig, BodyModel (kulit tunggal prosedural), props barbel, zona rawan
 src/ui        komponen UI: layout, kontrol, grafik momen, pencarian, auto-link
 src/pages     satu file per modul (lazy-load)
 src/store     Zustand: preferensi (bahasa, tema), Studio Form
@@ -470,26 +470,27 @@ docs/         catatan progres & screenshot
   di `src/index.css`; scene 3D membaca CSS variable yang sama dan punya preset cahaya per tema. Kontras teks
   ≥ 4,5:1 di kedua tema; palet grafik divalidasi untuk buta warna.
 
-## Model 3D & cara mengganti ke glTF
+## Model 3D
 
-Halaman hanya memakai `<BodyModel>` dengan kontrak `BodyModelProps` (`src/scene/body/types.ts`): skeleton,
-intensitas per ID otot, otot terpilih/hover, lapisan minimum. Implementasi default `ProceduralBody` membentuk
-setiap otot sebagai elipsoid di antara dua jangkar tulang (`src/scene/body/muscleGeometry.ts`), sehingga otot
-otomatis mengikuti animasi rig di Studio Form dan Benar vs Salah.
+Semua halaman 3D (Peta Otot, Pustaka Latihan, Studio Form, Benar vs Salah, hero beranda) memakai satu
+komponen `<BodyModel>` dengan kontrak `BodyModelProps` (`src/scene/body/types.ts`): skeleton, intensitas per ID
+otot, otot terpilih/hover, lapisan minimum. Tidak ada aset model eksternal, jadi tidak ada lisensi pihak ketiga.
 
-**Mengganti ke model anatomi glTF:**
+- **Kulit tunggal** (`skin.ts`, `bodyShapes.ts`): tiap tulang punya profil penampang elips; profil diubah menjadi
+  fungsi jarak, dilebur halus (smooth-union) sehingga bahu, pinggul, dan leher menyatu, lalu permukaannya
+  diekstrak (surface nets, ≈ 13 rb titik) dalam pose istirahat dan di-skin (GPU) ke rig yang sama dengan
+  generator gerakan. Dibangun sekali per sesi di Web Worker (`bodyWorker.ts`, `assets.ts`).
+- **Otot sebagai area permukaan** (`muscleShells.ts`): tiap otot adalah bagian kulit di atas perut otot,
+  sedikit ditebalkan sepanjang normal, dengan bentuk menurut jenisnya (gelendong, kipas, lembaran, pita).
+  Tepi digambar halus per-piksel di shader. Posisi berasal dari jangkar di `muscleGeometry.ts`. Otot dalam
+  digeser ke bawah kulit saat lapisan dikupas.
+- **Gerakan**: `src/lib/movements.ts` + `rig.ts`. Pada squat, lengan dihitung dengan IK 3D (termasuk rotasi
+  eksternal bahu) agar tangan tepat memegang batang barbel.
 
-1. Siapkan aset berlisensi bebas (mis. CC0 / CC BY), kompres dengan Draco (dan KTX2 untuk tekstur), simpan di
-   `public/models/anatomy.glb`. Atur skala agar tinggi ≈ 1,78 m dengan kaki di y = 0 (atau isi `scale`/`offset`).
-2. Isi `GLTF_MAPPING.muscles` di `src/scene/body/gltfMapping.ts`: ID otot GymRat → nama mesh di file
-   (biasanya kiri & kanan), mis. `'pectoralis-major': ['Pectoralis_major_L', 'Pectoralis_major_R']`.
-   ID otot yang tersedia ada di `src/content/muscles.ts`.
-3. Ubah `BODY_MODEL_SOURCE` di `src/scene/body/bodyModelConfig.ts` menjadi `'gltf'`.
-4. Catat kredit & lisensi di `src/content/about.ts` → `licenses`.
-
-Decoder Draco di-host lokal (`public/decoders/draco/`, disalin dari three.js saat `npm install`) — tidak ada CDN.
-Model glTF saat ini ditampilkan statis; agar ikut beranimasi, petakan tulang glTF ke nama tulang rig (`bones` di
-mapping) dan terapkan quaternion dari `computeSkeleton()` ke tulang tersebut.
+Keterbatasan: ini stilisasi, bukan anatomi klinis. Skinning linear dapat membuat bahu tampak sedikit menekuk
+saat lengan terangkat tinggi; jari tidak dimodelkan; otot tidak berubah bentuk saat berkontraksi.
+Untuk mengganti dengan model anatomi berlisensi bebas, implementasikan ulang `ProceduralBody` dengan kontrak
+yang sama; model statis tidak cocok untuk Studio Form kecuali punya rig yang bisa dipetakan ke `rig.ts`.
 
 ## Model biomekanika & batasannya
 

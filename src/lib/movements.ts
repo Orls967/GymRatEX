@@ -1,4 +1,4 @@
-import { Vector3 } from 'three';
+import { Quaternion, Vector3 } from 'three';
 import {
   BONE_LENGTH as L,
   computeSkeleton,
@@ -100,6 +100,121 @@ const ANKLE_Y = L.ankleHeight;
 export const MIDFOOT_OFFSET = 0.05;
 const ARM_LEN = L.upperArm + L.forearm + L.hand * 0.5;
 
+const AX = new Vector3(1, 0, 0);
+const AY = new Vector3(0, 1, 0);
+const AZ = new Vector3(0, 0, 1);
+const HAND_GRIP = 0.045;
+
+/** Titik genggaman (tengah telapak) dari sudut bahu/siku, sesuai FK di rig.ts. */
+function gripPoint(
+  thoraxQ: Quaternion,
+  shoulder: Vector3,
+  sg: number,
+  x: readonly number[],
+  out: Vector3,
+): Vector3 {
+  const armQ = thoraxQ
+    .clone()
+    .multiply(new Quaternion().setFromAxisAngle(AX, -(x[0] as number)))
+    .multiply(new Quaternion().setFromAxisAngle(AZ, sg * (x[1] as number)))
+    .multiply(new Quaternion().setFromAxisAngle(AY, sg * (x[3] as number)));
+  const foreQ = armQ.clone().multiply(new Quaternion().setFromAxisAngle(AX, -(x[2] as number)));
+  out.set(0, -L.upperArm, 0).applyQuaternion(armQ).add(shoulder);
+  return out.add(new Vector3(0, -(L.forearm + HAND_GRIP), 0).applyQuaternion(foreQ));
+}
+
+export interface ArmSolution {
+  flex: number;
+  abd: number;
+  elbow: number;
+  rot: number;
+}
+
+const ARM_LO = [-1.4, 0, 0, -0.3];
+const ARM_HI = [3.0, 2.8, 2.6, 1.7];
+
+/** Solusi linear (JᵀJ+D)Δ=Jᵀe via eliminasi Gauss, n kecil. */
+function solveLinear(A: number[][], b: number[]): number[] {
+  const n = b.length;
+  for (let c = 0; c < n; c++) {
+    let piv = c;
+    for (let r = c + 1; r < n; r++)
+      if (Math.abs((A[r] as number[])[c] as number) > Math.abs((A[piv] as number[])[c] as number))
+        piv = r;
+    [A[c], A[piv]] = [A[piv] as number[], A[c] as number[]];
+    [b[c], b[piv]] = [b[piv] as number, b[c] as number];
+    for (let r = c + 1; r < n; r++) {
+      const m = ((A[r] as number[])[c] as number) / ((A[c] as number[])[c] as number);
+      for (let k = c; k < n; k++)
+        (A[r] as number[])[k] =
+          ((A[r] as number[])[k] as number) - m * ((A[c] as number[])[k] as number);
+      b[r] = (b[r] as number) - m * (b[c] as number);
+    }
+  }
+  const d = new Array<number>(n).fill(0);
+  for (let r = n - 1; r >= 0; r--) {
+    let sum = b[r] as number;
+    for (let k = r + 1; k < n; k++) sum -= ((A[r] as number[])[k] as number) * (d[k] as number);
+    d[r] = sum / ((A[r] as number[])[r] as number);
+  }
+  return d;
+}
+
+/**
+ * IK lengan 3D (Gauss-Newton teredam) dengan "prior" pose alami: cari fleksi/abduksi/rotasi bahu + siku
+ * sehingga genggaman tepat di `target`, sedekat mungkin ke `prior`. Dipakai agar tangan benar-benar memegang barbel.
+ */
+function reachGrip(
+  thoraxQ: Quaternion,
+  shoulder: Vector3,
+  side: Side,
+  target: Vector3,
+  prior: readonly [number, number, number, number],
+  priorW: readonly [number, number, number, number] = [0.004, 0.004, 0, 0.006],
+): ArmSolution {
+  const sg = side === 'l' ? 1 : -1;
+  const x = [...prior];
+  const f = new Vector3();
+  const f2 = new Vector3();
+  const N = 4;
+  for (let it = 0; it < 40; it++) {
+    gripPoint(thoraxQ, shoulder, sg, x, f);
+    const e = [target.x - f.x, target.y - f.y, target.z - f.z];
+    if (Math.hypot(...e) < 0.0015 && it > 6) break;
+    const J: number[][] = [[], [], []];
+    for (let k = 0; k < N; k++) {
+      const xs = [...x];
+      xs[k] = (xs[k] as number) + 1e-4;
+      gripPoint(thoraxQ, shoulder, sg, xs, f2);
+      (J[0] as number[])[k] = (f2.x - f.x) / 1e-4;
+      (J[1] as number[])[k] = (f2.y - f.y) / 1e-4;
+      (J[2] as number[])[k] = (f2.z - f.z) / 1e-4;
+    }
+    const A: number[][] = [];
+    const b: number[] = [];
+    for (let r = 0; r < N; r++) {
+      A[r] = [];
+      for (let c = 0; c < N; c++) {
+        let sum = 0;
+        for (let k = 0; k < 3; k++)
+          sum += ((J[k] as number[])[r] as number) * ((J[k] as number[])[c] as number);
+        (A[r] as number[])[c] = sum + (r === c ? 1e-4 + (priorW[r] as number) : 0);
+      }
+      let g = 0;
+      for (let k = 0; k < 3; k++) g += ((J[k] as number[])[r] as number) * (e[k] as number);
+      b[r] = g - (priorW[r] as number) * ((x[r] as number) - (prior[r] as number));
+    }
+    const d = solveLinear(A, b);
+    for (let k = 0; k < N; k++)
+      x[k] = clamp(
+        (x[k] as number) + clamp(d[k] as number, -0.4, 0.4),
+        ARM_LO[k] as number,
+        ARM_HI[k] as number,
+      );
+  }
+  return { flex: x[0] as number, abd: x[1] as number, elbow: x[2] as number, rot: x[3] as number };
+}
+
 /** Vektor sagital dari pusat pinggul ke sendi bahu untuk sudut segmen torso tertentu. */
 function trunkToShoulder(pelvisTilt: number, lumbarFlex: number, thoracicFlex: number): P2 {
   const a1 = pelvisTilt;
@@ -173,14 +288,29 @@ function squat(prm: MovementParams, phase: number, f: Faults): MovementFrame {
     setLeg(pose, side, hip, knee, ankle, 0);
     pose.hip[side].abd = abd + 0.12 * Math.sin(t);
     pose.kneeValgus[side] = valg;
-    // tangan memegang barbel di punggung atas
     pose.shoulder[side] = { flex: -0.25, abd: 1.25 };
     pose.elbow[side] = 2.1;
   }
   pose.neckFlex = -pose.pelvisTilt * 0.5;
-  const fr = finish(pose, null, balanced, xm);
+  let fr = finish(pose, null, balanced, xm);
   const bar = fr.skeleton.thorax.start.clone().lerp(fr.skeleton.thorax.end, 0.86);
   bar.add(new Vector3(0, 0, -barBack).applyQuaternion(fr.skeleton.thorax.quat));
+  // tangan memegang barbel: IK lengan ke titik genggaman di kiri/kanan batang
+  const thoraxQ = fr.skeleton.thorax.quat;
+  for (const side of ['l', 'r'] as const) {
+    const sg = side === 'l' ? 1 : -1;
+    const grip = bar.clone().add(new Vector3(sg * 0.42, -0.01, 0));
+    const sol = reachGrip(
+      thoraxQ,
+      fr.skeleton[`upperArm_${side}`].start,
+      side,
+      grip,
+      [-0.15, 1.25, 1.9, 1.3],
+    );
+    pose.shoulder[side] = { flex: sol.flex, abd: sol.abd, rot: sol.rot };
+    pose.elbow[side] = sol.elbow;
+  }
+  fr = finish(pose, null, balanced, xm);
   fr.bar = prm.load > 0 ? bar : null;
   return fr;
 }

@@ -179,10 +179,10 @@ export default function StudioPage() {
               getPosition={() => (params.load > 0 ? frameRef.current.bar : null)}
             />
             <CameraRig
-              target={[0, 0.9, 0]}
+              target={[0, pattern === 'ohp' ? 1.0 : 0.9, 0]}
               direction={[1, 0.22, 0.85]}
               distance={3.8}
-              fitHeight={2.3}
+              fitHeight={pattern === 'ohp' ? 2.6 : 2.15}
               nonce={pattern}
               enablePan
             />

@@ -27,5 +27,3 @@ export interface BodyModelProps {
   /** Tampilkan otot sama sekali (Studio bisa memakai manekin polos). */
   showMuscles?: boolean;
 }
-
-export type BodyModelKind = 'procedural' | 'gltf';

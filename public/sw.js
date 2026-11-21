@@ -3,7 +3,7 @@
    - navigasi: network-first, jatuh ke cache bila offline
    - aset lain (termasuk WASM & model pose saat pertama dipakai): cache-first + isi cache saat runtime
    Hanya permintaan ke origin sendiri yang ditangani. */
-const VERSION = 'gymrat-v3';
+const VERSION = 'gymrat-v4';
 const SCOPE = self.registration.scope;
 
 self.addEventListener('install', (event) => {

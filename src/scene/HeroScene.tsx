@@ -74,11 +74,10 @@ export default function HeroScene({ pattern, active, label }: Props) {
         getPosition={() => (params.load > 0 ? frameRef.current.bar : null)}
       />
       <CameraRig
-        target={[0, 0.88, 0]}
+        target={[0, 0.92, 0]}
         direction={[0.75, 0.18, 1]}
         distance={4}
-        fitHeight={2.0}
-        autoRotate={active}
+        fitHeight={2.3}
         pageScroll
         maxDistance={7}
         nonce="hero"

@@ -13,8 +13,8 @@ export const ABOUT = AboutContent.parse({
   ],
   limits: [
     {
-      id: 'Tubuh 3D adalah stilisasi prosedural: bentuk, ukuran, dan perlekatan otot disederhanakan menjadi elipsoid di antara titik jangkar. Bukan model anatomi yang akurat.',
-      en: 'The 3D body is a procedural stylization: muscle shape, size and attachments are simplified to ellipsoids between anchor points. It is not an accurate anatomical model.',
+      id: 'Tubuh 3D adalah stilisasi prosedural: satu kulit tersambung yang dibentuk dari profil penampang tiap tulang, dengan otot digambar sebagai area permukaan (gelendong, kipas, lembaran, pita) yang letaknya disederhanakan dari titik jangkar. Tidak ada lapisan jaringan sebenarnya, dan lengan yang terangkat tinggi dapat tampak sedikit menekuk di bahu. Bukan model anatomi yang akurat.',
+      en: 'The 3D body is a procedural stylization: one continuous skin built from per-bone cross-section profiles, with muscles drawn as surface regions (spindle, fan, sheet, strap) whose placement is simplified from anchor points. There are no real tissue layers, and raised arms can look slightly pinched at the shoulder. It is not an accurate anatomical model.',
     },
     {
       id: 'Pembagian otot “utama/sinergis/stabilisator” adalah generalisasi. Kontribusi nyata berubah dengan teknik, rentang gerak, dan individu.',
@@ -91,8 +91,8 @@ export const ABOUT = AboutContent.parse({
       name: 'Model tubuh prosedural GymRat',
       license: 'MIT',
       note: {
-        id: 'Dibuat lewat kode di proyek ini, tanpa aset eksternal.',
-        en: 'Generated in code in this project, no external assets.',
+        id: 'Dibuat lewat kode di proyek ini (kulit dibangun dari fungsi jarak lalu di-skin ke rig); tanpa aset atau model eksternal.',
+        en: 'Generated in code in this project (skin built from a distance field, then skinned to the rig); no external assets or models.',
       },
     },
   ],

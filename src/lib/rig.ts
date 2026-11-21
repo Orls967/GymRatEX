@@ -26,6 +26,8 @@ export interface LimbAngles {
   flex: number;
   /** Abduksi (+) menjauhi garis tengah */
   abd: number;
+  /** Rotasi sumbu panjang (+ = eksternal), opsional; dipakai bahu agar siku bisa menekuk ke belakang. */
+  rot?: number;
 }
 
 export interface Pose {
@@ -145,7 +147,8 @@ export function computeSkeleton(pose: Pose): Skeleton {
     const armQ = thoraxQ
       .clone()
       .multiply(qAxis(X, -sh.flex))
-      .multiply(qAxis(Z, sg * sh.abd));
+      .multiply(qAxis(Z, sg * sh.abd))
+      .multiply(qAxis(Y, sg * (sh.rot ?? 0)));
     const upperArm = segment(clav.end, armQ, DOWN, L.upperArm);
     const foreQ = armQ.clone().multiply(qAxis(X, -pose.elbow[s]));
     const forearm = segment(upperArm.end, foreQ, DOWN, L.forearm);

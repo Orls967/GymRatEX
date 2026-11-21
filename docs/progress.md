@@ -59,5 +59,11 @@ Format: fase, status, catatan singkat. Data yang belum dicek silang ditandai `ne
 ## Catatan & langkah berikutnya
 
 - Aktifkan GitHub Pages: Settings → Pages → Source: **GitHub Actions**. Deploy berjalan saat push ke `main`.
-- Model tubuh masih stilisasi elipsoid; jalur glTF siap (lihat README).
+- Model tubuh stilisasi kulit-tunggal (lihat README, bagian Model 3D).
 - Kandidat berikutnya: verifikasi entri bertanda, lebih banyak pola gerak di Studio (bench, row), umpan balik webcam tampak depan/samping otomatis.
+
+## Penyegaran desain & model 3D
+
+- Beranda jadi landing page (hero 3D, alur belajar lima langkah, pendukung); transisi halaman singkat dengan dukungan reduced-motion.
+- Model tubuh diganti total: kulit tunggal (SDF + surface nets + GPU skinning) dan otot sebagai area permukaan menurut jenis (gelendong/kipas/lembaran/pita). Jalur glTF dihapus.
+- Rig bahu mendapat rotasi sumbu panjang opsional; squat memakai IK lengan 3D agar tangan memegang barbel.
